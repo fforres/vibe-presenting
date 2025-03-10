@@ -8,9 +8,9 @@ import { z } from "zod";
  * The actual implementation is in the executions object below
  */
 const getWeatherInformation = tool({
-  description: "show the weather in a given city to the user",
-  parameters: z.object({ city: z.string() }),
-  // Omitting execute function makes this tool require human confirmation
+	description: "show the weather in a given city to the user",
+	parameters: z.object({ city: z.string() }),
+	// Omitting execute function makes this tool require human confirmation
 });
 
 /**
@@ -19,53 +19,53 @@ const getWeatherInformation = tool({
  * This is suitable for low-risk operations that don't need oversight
  */
 const getLocalTime = tool({
-  description: "get the local time for a specified location",
-  parameters: z.object({ location: z.string() }),
-  execute: async ({ location }) => {
-    console.log(`Getting local time for ${location}`);
-    return "10am";
-  },
+	description: "get the local time for a specified location",
+	parameters: z.object({ location: z.string() }),
+	execute: async ({ location }) => {
+		console.log(`Getting local time for ${location}`);
+		return "10am";
+	},
 });
 
 const scheduleTask = tool({
-  description:
-    "schedule a task to be executed at a later time. 'when' can be a date, a delay in seconds, or a cron pattern.",
-  parameters: z.object({
-    type: z.enum(["scheduled", "delayed", "cron"]),
-    when: z.union([z.number(), z.string()]),
-    payload: z.string(),
-  }),
-  execute: async ({ type, when, payload }) => {
-    // we can now read the agent context from the ALS store
-    const agent = agentContext.getStore();
-    if (!agent) {
-      throw new Error("No agent found");
-    }
-    try {
-      agent.schedule(
-        type === "scheduled"
-          ? new Date(when) // scheduled
-          : type === "delayed"
-          ? when // delayed
-          : when, // cron
-        "executeTask",
-        payload
-      );
-    } catch (error) {
-      console.error("error scheduling task", error);
-      return `Error scheduling task: ${error}`;
-    }
-    return `Task scheduled for ${when}`;
-  },
+	description:
+		"schedule a task to be executed at a later time. 'when' can be a date, a delay in seconds, or a cron pattern.",
+	parameters: z.object({
+		type: z.enum(["scheduled", "delayed", "cron"]),
+		when: z.union([z.number(), z.string()]),
+		payload: z.string(),
+	}),
+	execute: async ({ type, when, payload }) => {
+		// we can now read the agent context from the ALS store
+		const agent = agentContext.getStore();
+		if (!agent) {
+			throw new Error("No agent found");
+		}
+		try {
+			agent.schedule(
+				type === "scheduled"
+					? new Date(when) // scheduled
+					: type === "delayed"
+						? when // delayed
+						: when, // cron
+				"executeTask",
+				payload,
+			);
+		} catch (error) {
+			console.error("error scheduling task", error);
+			return `Error scheduling task: ${error}`;
+		}
+		return `Task scheduled for ${when}`;
+	},
 });
 /**
  * Export all available tools
  * These will be provided to the AI model to describe available capabilities
  */
 export const tools = {
-  getWeatherInformation,
-  getLocalTime,
-  scheduleTask,
+	getWeatherInformation,
+	getLocalTime,
+	scheduleTask,
 };
 
 /**
@@ -74,8 +74,8 @@ export const tools = {
  * Each function here corresponds to a tool above that doesn't have an execute function
  */
 export const executions = {
-  getWeatherInformation: async ({ city }: { city: string }) => {
-    console.log(`Getting weather information for ${city}`);
-    return `The weather in ${city} is sunny`;
-  },
+	getWeatherInformation: async ({ city }: { city: string }) => {
+		console.log(`Getting weather information for ${city}`);
+		return `The weather in ${city} is sunny`;
+	},
 };

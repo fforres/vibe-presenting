@@ -1,1 +1,1 @@
-export const CreateUI = () => {}
+export const CreateUI = () => {};
