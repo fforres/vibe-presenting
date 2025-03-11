@@ -82,6 +82,9 @@ The presentation should be well-structured and easy to follow.
 The presentation should be 10-15 slides long.
 The presentation should be 10-15 minutes long.
 The presentation should be well-structured and easy to follow.
+
+I need to not create generic slides but actual topics that I should be talking and discussing. Like, tell me what I should be saying.
+
 `,
 			messages: [
 				{
@@ -102,6 +105,7 @@ Presentation Description: ${message.description}`,
 				...this.state,
 				content: {
 					...(this.state.content ? this.state.content : {}),
+					// @ts-expect-error It's hard to type this.
 					slides: slides,
 				},
 			});

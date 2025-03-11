@@ -40,6 +40,7 @@ export const SlideSchema = z.object({
 	bulletPoints: z.array(z.string()).default([]),
 	imagePrompt: z.string().optional(),
 	imageUrl: z.string().optional(),
+	speakerNotes: z.string(),
 	order: z.number(),
 });
 
