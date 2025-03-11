@@ -10,6 +10,7 @@ import {
   OutgoingMessageSchema,
   PresentationsInitInputSchema,
 } from "@/agents/message-schemas";
+import SidebarLayout from "@/layouts/sidebar_layout";
 export const DynamicRouteChange = () => {
   const [state, setState] = useState<PresentationAgentState | null>(null);
   const agent = useSkywardAgent({
@@ -49,10 +50,13 @@ export const DynamicRouteChange = () => {
   if (!state) {
     return <div>Loading...</div>;
   }
-  if (!state.activePresentation) {
-    return <Index state={state} />;
-  }
-  if (state.activePresentation) {
-    return <SinglePresentation id={state.activePresentation.id} />;
-  }
+  return (
+    <SidebarLayout state={state} agent={agent}>
+      {state.activePresentation ? (
+        <SinglePresentation id={state.activePresentation.id} />
+      ) : (
+        <Index state={state} />
+      )}
+    </SidebarLayout>
+  );
 };

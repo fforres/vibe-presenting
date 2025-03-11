@@ -11,8 +11,6 @@ const root = createRoot(document.getElementById("app")!);
 
 root.render(
   <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-    <SidebarLayout>
-      <DynamicRouteChange />
-    </SidebarLayout>
+    <DynamicRouteChange />
   </ThemeProvider>
 );

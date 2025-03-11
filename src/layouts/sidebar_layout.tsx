@@ -20,15 +20,13 @@ import {
 
 export default function SidebarLayout({
   children,
+  state,
+  agent,
 }: {
   children: React.ReactNode;
+  state: PresentationAgentState;
+  agent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 }) {
-  const [state, setState] = useState<PresentationAgentState>({
-    status: "idle",
-    activePresentation: null,
-    presentations: [],
-  });
-
   // For the blinking text effect
   const [showBlink, setShowBlink] = useState(true);
 
@@ -40,22 +38,6 @@ export default function SidebarLayout({
 
     return () => clearInterval(timer);
   }, []);
-
-  const agent = useSkywardAgent<PresentationAgentState>({
-    agent: "presentations",
-    onOpen(event) {
-      agent?.send(
-        JSON.stringify(
-          PresentationsInitInputSchema.parse({
-            type: "presentations-init",
-          })
-        )
-      );
-    },
-    onStateUpdate(state, source) {
-      setState(state);
-    },
-  });
 
   return (
     <SidebarProvider>
@@ -202,7 +184,7 @@ export default function SidebarLayout({
       </SidebarInset>
 
       {/* Add this to your CSS for any custom animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes blink {
           0%,
           49% {

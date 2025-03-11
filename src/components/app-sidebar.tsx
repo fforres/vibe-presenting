@@ -36,6 +36,7 @@ export function AppSidebar({
 }) {
   const { theme, setTheme } = useTheme();
   const [showBlink, setShowBlink] = useState(true);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   // Toggle blinking elements for 90s effect
   useEffect(() => {
@@ -50,8 +51,22 @@ export function AppSidebar({
     return {
       navMain: [
         {
+          title: "Home",
+          isActive: state.activePresentation === null && !createModalOpen,
+          onClick: () => {
+            agent?.send(
+              JSON.stringify(
+                SetActivePresentationInputSchema.parse({
+                  type: "set-active-presentation",
+                  id: null,
+                })
+              )
+            );
+          },
+        },
+        {
           title: "New Presentation",
-          isActive: state.activePresentation === null,
+          isActive: createModalOpen,
           onClick: () => {
             setCreateModalOpen(true);
           },
@@ -66,13 +81,11 @@ export function AppSidebar({
         },
       ],
     };
-  }, [state.presentations, state.activePresentation]);
+  }, [state.presentations, state.activePresentation, agent, createModalOpen]);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
-
-  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   return (
     <>
