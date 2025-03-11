@@ -6,12 +6,42 @@ import { Toaster } from "@/components/ui/sonner";
 import { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { useState } from "react";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
+import {
+  OutgoingMessageSchema,
+  PresentationsInitInputSchema,
+} from "@/agents/message-schemas";
 export const DynamicRouteChange = () => {
   const [state, setState] = useState<PresentationAgentState | null>(null);
   const agent = useSkywardAgent({
     agent: "presentations",
     onStateUpdate(state: PresentationAgentState) {
       setState(state);
+    },
+    onOpen(event) {
+      agent?.send(
+        JSON.stringify(
+          PresentationsInitInputSchema.parse({
+            type: "presentations-init",
+          })
+        )
+      );
+    },
+    onMessage(message) {
+      const parsedMessage = OutgoingMessageSchema.parse(
+        JSON.parse(message.data)
+      );
+      if (parsedMessage.type === "initial-connections") {
+        setState((prev) => {
+          if (!prev) {
+            return null;
+          }
+          return {
+            ...prev,
+            connectionCount: parsedMessage.data.connectionCount,
+          };
+        });
+      }
+      console.log("message", message);
     },
   });
 
@@ -20,7 +50,7 @@ export const DynamicRouteChange = () => {
     return <div>Loading...</div>;
   }
   if (!state.activePresentation) {
-    return <Index />;
+    return <Index state={state} />;
   }
   if (state.activePresentation) {
     return <SinglePresentation id={state.activePresentation.id} />;

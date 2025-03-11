@@ -2,30 +2,14 @@ import { CreatePresentationForm } from "@/components/create-presentation-form";
 import { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { PresentationsInitInputSchema } from "@/agents/message-schemas";
 import { useEffect, useState } from "react";
+import type { PresentationAgentState } from "@/agents/presentations-agent";
 
-export const Index = () => {
-  // Initialize presentations when the page loads
-  const agent = useSkywardAgent({
-    agent: "presentations",
-    onOpen(event) {
-      agent?.send(
-        JSON.stringify(
-          PresentationsInitInputSchema.parse({
-            type: "presentations-init",
-          })
-        )
-      );
-    },
-  });
-
-  // Remove the toggle effect for the marquee
-  // We'll keep it visible all the time now
-
+export const Index = ({ state }: { state: PresentationAgentState }) => {
   return (
     <div className="w-full max-w-3xl mx-auto p-3 sm:p-6 space-y-6">
       {/* Animated rainbow border - responsive padding */}
       <div
-        className="border-4 sm:border-8 border-dashed animate-pulse p-2 sm:p-4"
+        className="border-4 sm:border-8 border-dashed p-2 sm:p-4"
         style={{
           borderImageSource:
             "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)",
@@ -90,7 +74,7 @@ export const Index = () => {
               className="bg-black text-white px-2 py-1 text-xs"
               style={{ fontFamily: "monospace" }}
             >
-              Visitors: 000012345
+              Visitors: {state.connectionCount}
             </div>
             <div className="bg-gray-200 border border-gray-400 px-2 py-1 text-xs">
               Last updated: {new Date().toLocaleDateString()}

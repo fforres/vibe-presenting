@@ -86,6 +86,13 @@ export const CreatedPresentationOutputSchema = z.object({
 	id: z.string(),
 });
 
+export const InitialConnectionsOutputSchema = z.object({
+	type: z.literal("initial-connections"),
+	data: z.object({
+		connectionCount: z.number(),
+	}),
+});
+
 // Combined output message schema
 export const OutgoingMessageSchema = z.discriminatedUnion("type", [
 	SchedulesOutputSchema,
@@ -94,6 +101,7 @@ export const OutgoingMessageSchema = z.discriminatedUnion("type", [
 	ScheduleOutputSchema,
 	AllPresentationsOutputSchema,
 	CreatedPresentationOutputSchema,
+	InitialConnectionsOutputSchema,
 ]);
 
 export type OutgoingMessage = z.infer<typeof OutgoingMessageSchema>;
