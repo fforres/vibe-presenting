@@ -7,7 +7,7 @@ import {
 	type ToolExecutionOptions,
 	type ToolSet,
 } from "ai";
-import { z } from "zod";
+import type { z } from "zod";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { APPROVAL } from "../shared";
 import type { Chat } from "@/server";

@@ -1,181 +1,166 @@
-import { useState, useRef, useEffect } from "react";
-import { AudioVisualizer } from "../components/AudioVisualizer";
-import { useAudioAnalysis } from "../hooks/useAudioAnalysis";
-import { Button } from "@/components/ui/button";
+import { CreatePresentationForm } from "@/components/create-presentation-form";
+import { useSkywardAgent } from "@/hooks/use-skyward-agent";
+import { PresentationsInitInputSchema } from "@/agents/message-schemas";
+import { useEffect, useState } from "react";
 
 export const Index = () => {
-  const [transcript, setTranscript] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  // Remove Web Speech API reference
-  // const recognitionRef = useRef<any | null>(null);
-
-  // Use our custom hook for audio analysis - now handling media stream internally
-  const {
-    audioData,
-    volume,
-    mediaStream,
-    startRecording: startAudioRecording,
-    stopRecording: stopAudioRecording,
-    cleanup: cleanupAudio,
-    error: audioError,
-  } = useAudioAnalysis();
-
-  const isRecording = Boolean(mediaStream);
-  // Set error from audio hook
-  useEffect(() => {
-    if (audioError) {
-      setError(audioError);
-    }
-  }, [audioError]);
-
-  // Remove Web Speech API initialization effect
-
-  // Reference to store the media recorder
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-
-  const startRecording = async () => {
-    setError(null);
-    setTranscript("");
-
-    try {
-      // Start audio recording - now handled by the hook
-      await startAudioRecording();
-
-      if (mediaStream) {
-        // Create a new MediaRecorder with the stream
-        const mediaRecorder = new MediaRecorder(mediaStream);
-        mediaRecorderRef.current = mediaRecorder;
-
-        // Set up the stream to the server
-        let streamToServer: ReadableStreamDefaultController<any> | null = null;
-
-        // Start a fetch request with a writable stream
-        fetch("/audio/stream", {
-          method: "POST",
-          headers: {
-            "Content-Type": "audio/webm",
-          },
-          body: new ReadableStream({
-            start(controller) {
-              streamToServer = controller;
-            },
-          }),
-        })
-          .then(async (response) => {
-            if (!response.ok) {
-              throw new Error(
-                `API returned ${response.status}: ${await response.text()}`
-              );
-            }
-            return response.json();
+  // Initialize presentations when the page loads
+  const agent = useSkywardAgent({
+    agent: "presentations",
+    onOpen(event) {
+      agent?.send(
+        JSON.stringify(
+          PresentationsInitInputSchema.parse({
+            type: "presentations-init",
           })
-          .then((data: { transcript: string }) => {
-            if (data.transcript) {
-              setTranscript(data.transcript);
-            }
-          })
-          .catch((err) => {
-            setError(
-              `Error processing audio: ${
-                err instanceof Error ? err.message : String(err)
-              }`
-            );
-          })
-          .finally(() => {
-            setIsProcessing(false);
-          });
-
-        // Handle data available event to stream audio chunks to the server
-        mediaRecorder.ondataavailable = (event) => {
-          if (event.data.size > 0 && streamToServer !== null) {
-            // Convert blob to array buffer and then to Uint8Array
-            event.data.arrayBuffer().then((buffer) => {
-              // streamToServer?.write(new Uint8Array(buffer));
-              streamToServer?.enqueue(new Uint8Array(buffer));
-            });
-          }
-        };
-
-        // Handle recording stop
-        mediaRecorder.onstop = () => {
-          // Close the stream to the server when recording stops
-          if (streamToServer) {
-            streamToServer.close();
-          }
-        };
-
-        // Start recording
-        mediaRecorder.start(100); // Collect data in 100ms chunks
-        // setIsRecording(true);
-      }
-    } catch (err) {
-      setError(
-        `Error starting recording: ${
-          err instanceof Error ? err.message : String(err)
-        }`
+        )
       );
-    }
-  };
+    },
+  });
 
-  const stopRecording = async () => {
-    // setIsRecording(false);
-    setIsProcessing(true);
+  // For the marquee text animation
+  const [showMarquee, setShowMarquee] = useState(true);
 
-    // Stop the media recorder if it exists
-    if (
-      mediaRecorderRef.current &&
-      mediaRecorderRef.current.state !== "inactive"
-    ) {
-      // Stop the recorder - this will trigger the onstop event
-      mediaRecorderRef.current.stop();
-    }
+  // Toggle the "Under Construction" gif visibility
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setShowMarquee((prev) => !prev);
+    }, 5000);
 
-    // Stop audio recording from the hook
-    stopAudioRecording();
-  };
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6">
-      <div className="flex justify-center">
-        <Button
-          size="lg"
-          variant="secondary"
-          onClick={isRecording ? stopRecording : startRecording}
-        >
-          {isRecording
-            ? "Stop Recording"
-            : isProcessing
-            ? "Processing..."
-            : "Start Recording"}
-        </Button>
-      </div>
+    <div className="w-full max-w-3xl mx-auto p-3 sm:p-6 space-y-6">
+      {/* Animated rainbow border - responsive padding */}
+      <div
+        className="border-4 sm:border-8 border-dashed animate-pulse p-2 sm:p-4"
+        style={{
+          borderImageSource:
+            "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)",
+          borderImageSlice: 1,
+        }}
+      >
+        <div className="text-center">
+          {/* Retro font and styling - responsive text size */}
+          <h1
+            className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 break-words"
+            style={{
+              fontFamily: "'Comic Sans MS', cursive, sans-serif",
+              color: "#FF00FF",
+              textShadow: "1px 1px 0 #00FFFF, 2px 2px 0 #0000FF",
+              letterSpacing: "1px",
+              lineHeight: "1.2",
+            }}
+          >
+            <span style={{ color: "red" }}>V</span>
+            <span style={{ color: "orange" }}>i</span>
+            <span style={{ color: "yellow" }}>b</span>
+            <span style={{ color: "green" }}>e</span>
+            <span> </span>
+            <span style={{ color: "blue" }}>P</span>
+            <span style={{ color: "indigo" }}>r</span>
+            <span style={{ color: "violet" }}>e</span>
+            <span style={{ color: "red" }}>s</span>
+            <span style={{ color: "orange" }}>e</span>
+            <span style={{ color: "yellow" }}>n</span>
+            <span style={{ color: "green" }}>t</span>
+            <span style={{ color: "blue" }}>i</span>
+            <span style={{ color: "indigo" }}>n</span>
+            <span style={{ color: "violet" }}>g</span>
+          </h1>
 
-      {isRecording && (
-        <AudioVisualizer
-          audioData={Array.from(audioData)}
-          isRecording={isRecording}
-          volume={volume}
-        />
-      )}
+          {/* Marquee element - responsive text size */}
+          {showMarquee && (
+            <div className="overflow-hidden mb-2 sm:mb-4">
+              <div className="whitespace-nowrap animate-marquee">
+                <span
+                  className="text-base sm:text-xl font-bold"
+                  style={{ color: "#FF0000" }}
+                >
+                  ★★★ Welcome to Vibe Presenting! The BEST presentation tool on
+                  the web! ★★★
+                </span>
+              </div>
+            </div>
+          )}
 
-      {error && (
-        <div className="p-4 bg-destructive/10 border border-destructive rounded-md text-destructive">
-          {error}
-        </div>
-      )}
-
-      <div className="p-4 h-60 overflow-y-auto bg-card text-card-foreground border rounded-md">
-        <h2 className="text-lg font-semibold mb-2">Transcription:</h2>
-        {transcript ? (
-          <p className="whitespace-pre-line">{transcript}</p>
-        ) : (
-          <p className="text-muted-foreground italic">
-            {isRecording ? "Listening..." : "Transcription will appear here..."}
+          <p
+            className="mb-3 sm:mb-6 font-bold text-sm sm:text-base px-2"
+            style={{ fontFamily: "'Courier New', monospace" }}
+          >
+            Vibe Presenting is a{" "}
+            <span style={{ color: "#FF00FF" }}>RADICAL</span> tool that helps
+            you create and manage
+            <span style={{ color: "#00FFFF" }}> awesome</span> presentations!
           </p>
-        )}
+
+          {/* Hit counter and visitor stats - responsive layout */}
+          <div className="flex flex-wrap justify-center items-center gap-2 mb-3 sm:mb-4">
+            <div
+              className="bg-black text-white px-2 py-1 text-xs"
+              style={{ fontFamily: "monospace" }}
+            >
+              Visitors: 000012345
+            </div>
+            <div className="bg-gray-200 border border-gray-400 px-2 py-1 text-xs">
+              Last updated: {new Date().toLocaleDateString()}
+            </div>
+          </div>
+
+          {/* Under construction gif - responsive sizing */}
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="bg-yellow-300 px-2 sm:px-4 py-1 sm:py-2 border-2 border-black animate-pulse">
+              <span
+                className="font-bold text-sm sm:text-base"
+                style={{ fontFamily: "'Comic Sans MS', cursive" }}
+              >
+                🚧 UNDER CONSTRUCTION 🚧
+              </span>
+            </div>
+          </div>
+
+          {/* Guestbook link - responsive text and layout */}
+          <div className="mb-3 sm:mb-6 flex flex-wrap justify-center gap-2">
+            <a
+              href="#"
+              className="text-blue-600 underline hover:no-underline text-sm sm:text-base"
+              style={{ fontFamily: "'Times New Roman', serif" }}
+            >
+              📝 Sign our guestbook!
+            </a>
+            <span className="hidden sm:inline mx-2">|</span>
+            <a
+              href="#"
+              className="text-blue-600 underline hover:no-underline text-sm sm:text-base"
+              style={{ fontFamily: "'Times New Roman', serif" }}
+            >
+              📧 Email the webmaster
+            </a>
+          </div>
+        </div>
       </div>
+
+      {/* Add this to your CSS or create a style tag */}
+      <style jsx>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }
+        .animate-marquee {
+          display: inline-block;
+          animation: marquee 15s linear infinite;
+        }
+        @media (max-width: 640px) {
+          .animate-marquee {
+            animation: marquee 10s linear infinite;
+          }
+        }
+      `}</style>
     </div>
   );
 };

@@ -62,7 +62,7 @@ audioApp.post("/stream", async (c) => {
 			const finalTranscript = await transcribeAudio(audioBlob);
 
 			if (finalTranscript) {
-				transcription += " " + finalTranscript;
+				transcription += ` ${finalTranscript}`;
 			}
 		}
 

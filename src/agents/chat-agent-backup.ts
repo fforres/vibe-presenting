@@ -1,4 +1,4 @@
-import type { Schedule } from "agents-sdk";
+import { Agent, type Schedule } from "agents-sdk";
 import { AIChatAgent } from "agents-sdk/ai-chat-agent";
 import {
 	createDataStreamResponse,
@@ -14,13 +14,11 @@ import type { Env } from "@/server";
 /**
  * Chat Agent implementation that handles real-time AI chat interactions
  */
-export class Chat extends AIChatAgent<Env> {
+export class Chat extends Agent<Env> {
 	/**
 	 * Handles incoming chat messages and manages the response stream
 	 * @param onFinish - Callback function executed when streaming completes
 	 */
-
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	async onChatMessage(onFinish: StreamTextOnFinishCallback<any>) {
 		// Create a streaming response that handles both text and tool outputs
 		return agentContext.run(this, async () => {
