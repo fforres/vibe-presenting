@@ -20,6 +20,10 @@
       {
         "name": "Presentations",
         "class_name": "Presentations"
+      },
+      {
+        "name": "SinglePresentationAgent",
+        "class_name": "SinglePresentationAgent"
       }
     ]
   },
@@ -31,6 +35,10 @@
     {
       "tag": "v2",
       "new_sqlite_classes": ["Presentations"]
+    },
+    {
+      "tag": "v3",
+      "new_sqlite_classes": ["SinglePresentationAgent"]
     }
   ],
   "observability": {

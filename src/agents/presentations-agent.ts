@@ -143,12 +143,19 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			console.log("parsedMessage", parsedMessage);
 
 			if (parsedMessage.type === "create-presentation") {
-				// Handle create-conversation message
+				// Handle create-  message
 				// ...
-				const { Chat } = this.env;
+				const { SinglePresentationAgent } = this.env;
 				const id = generateId();
 				this.createConversation({
 					id,
+					description: parsedMessage.description,
+					name: parsedMessage.name,
+				});
+				const agent = await getAgentByName(SinglePresentationAgent, id);
+				await agent.initialize({
+					type: "init-presentation",
+					presentationId: id,
 					description: parsedMessage.description,
 					name: parsedMessage.name,
 				});
@@ -161,7 +168,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 					),
 				);
 
-				console.log("CREATED CONVERSATION", id);
+				console.log("Created Presentation", id);
 			}
 
 			if (parsedMessage.type === "presentations-init") {

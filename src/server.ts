@@ -8,6 +8,7 @@ export type Env = {
 	OPENAI_API_KEY: string;
 	Chat: AgentNamespace<Agents.Chat>;
 	Presentations: AgentNamespace<Agents.Presentations>;
+	SinglePresentationAgent: AgentNamespace<Agents.SinglePresentationAgent>;
 };
 
 export default {

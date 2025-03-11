@@ -15,7 +15,6 @@ interface CreatePresentationFormProps {
 }
 
 export const CreatePresentationForm = ({
-  className,
   onSuccess,
 }: CreatePresentationFormProps) => {
   const [name, setName] = useState("");
@@ -74,16 +73,16 @@ export const CreatePresentationForm = ({
   };
 
   return (
-    <div className={className}>
+    <div className="w-full max-w-5xl mx-auto">
       {error && (
         <div className="p-4 mb-4 bg-destructive/10 border border-destructive rounded-md text-destructive">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label htmlFor="name" className="text-sm font-medium">
+          <label htmlFor="name" className="text-lg font-medium">
             Presentation Name
           </label>
           <Input
@@ -96,22 +95,30 @@ export const CreatePresentationForm = ({
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="description" className="text-sm font-medium">
+          <label htmlFor="description" className="text-lg font-medium">
             Presentation Description
           </label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe what this presentation is about"
-            rows={4}
-            disabled={isSubmitting}
-          />
+          <div className="border rounded-md overflow-hidden">
+            <Textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe what this presentation is about in detail. You can include topics you want to cover, key points, target audience, and any specific requirements. The more information you provide, the better your presentation structure will be."
+              className="resize-none"
+              disabled={isSubmitting}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground mt-2">
+            Pro tip: Add as much detail as possible. This text will be analyzed
+            to generate your presentation structure.
+          </p>
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Creating..." : "Create Presentation"}
-        </Button>
+        <div className="flex justify-end">
+          <Button type="submit" size="lg" disabled={isSubmitting}>
+            {isSubmitting ? "Creating..." : "Create Presentation"}
+          </Button>
+        </div>
       </form>
     </div>
   );
