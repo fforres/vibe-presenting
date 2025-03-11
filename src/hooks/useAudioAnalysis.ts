@@ -21,9 +21,9 @@ export function useAudioAnalysis() {
 			streamRef.current = stream;
 
 			// Initialize audio context
-			const audioContext = new (
-				window.AudioContext || (window as any).webkitAudioContext
-			)();
+			const audioContext =
+				new // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+				(window.AudioContext || (window as any).webkitAudioContext)();
 			audioContextRef.current = audioContext;
 
 			// Create analyzer
@@ -65,7 +65,6 @@ export function useAudioAnalysis() {
 				// Normalize to 0-100 range for easier interpretation
 				const normalizedVolume = Math.min(100, Math.max(0, rms * 2));
 
-				console.log("Current volume:", normalizedVolume);
 				setVolume(normalizedVolume);
 
 				// Still get frequency data for visualization
@@ -89,7 +88,9 @@ export function useAudioAnalysis() {
 	// Function to stop recording
 	const stopRecording = useCallback(() => {
 		if (streamRef.current) {
-			streamRef.current.getTracks().forEach((track) => track.stop());
+			for (const track of streamRef.current.getTracks()) {
+				track.stop();
+			}
 			streamRef.current = null;
 		}
 
@@ -155,7 +156,9 @@ export function useAudioAnalysis() {
 		}
 
 		if (streamRef.current) {
-			streamRef.current.getTracks().forEach((track) => track.stop());
+			for (const track of streamRef.current.getTracks()) {
+				track.stop();
+			}
 			streamRef.current = null;
 		}
 
@@ -163,7 +166,7 @@ export function useAudioAnalysis() {
 		dataArrayRef.current = null;
 		setAudioData(new Uint8Array(0));
 		setVolume(0);
-	}, []);
+	}, [stopRecording]);
 
 	// Clean up when component unmounts
 	useEffect(() => {

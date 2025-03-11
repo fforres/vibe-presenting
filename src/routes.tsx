@@ -42,13 +42,23 @@ export const DynamicRouteChange = () => {
           };
         });
       }
-      console.log("message", message);
     },
   });
 
-  console.log("state", state);
   if (!state) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center p-6 rounded-lg shadow-md bg-white">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">
+            Loading your content
+          </h2>
+          <p className="text-gray-600">
+            Please wait while we prepare your experience...
+          </p>
+        </div>
+      </div>
+    );
   }
   return (
     <SidebarLayout state={state} agent={agent}>

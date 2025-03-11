@@ -17,9 +17,6 @@ const toolsRequiringConfirmation: (keyof typeof tools)[] = [
 ];
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const { theme, setTheme } = useTheme();
   const [showDebug, setShowDebug] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -33,8 +30,6 @@ export default function Chat() {
   useEffect(() => {
     scrollToBottom();
   }, []);
-
-  console.log("theme", theme);
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -199,6 +194,7 @@ export default function Chat() {
                         {m.parts?.map((part, i) => {
                           if (part.type === "reasoning") {
                             return (
+                              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                               <div key={i}>
                                 <Card
                                   className={`p-3 rounded-md ${
@@ -225,6 +221,7 @@ export default function Chat() {
                           }
                           if (part.type === "text") {
                             return (
+                              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                               <div key={i}>
                                 <Card
                                   className={`p-3 rounded-md ${
@@ -276,6 +273,7 @@ export default function Chat() {
                             ) {
                               return (
                                 <Card
+                                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                                   key={i}
                                   className="p-4 my-3 bg-secondary/30 border-secondary/50 rounded-md"
                                 >
@@ -329,19 +327,17 @@ export default function Chat() {
                                   </div>
                                 </Card>
                               );
-                            } else {
-                              return null;
-                              // return (
-                              //   <Card
-                              //     key={i}
-                              //     className="p-3 rounded-2xl bg-secondary border-secondary"
-                              //   >
-                              //     <pre className="text-xs">
-                              //       {JSON.stringify(toolInvocation, null, 2)}
-                              //     </pre>
-                              //   </Card>
-                              // );
                             }
+                            // return (
+                            //   <Card
+                            //     key={i}
+                            //     className="p-3 rounded-2xl bg-secondary border-secondary"
+                            //   >
+                            //     <pre className="text-xs">
+                            //       {JSON.stringify(toolInvocation, null, 2)}
+                            //     </pre>
+                            //   </Card>
+                            // );
                           }
                           return null;
                           // return (

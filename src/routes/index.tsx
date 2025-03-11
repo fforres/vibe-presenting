@@ -59,13 +59,30 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
           </div>
 
           <p
-            className="mb-3 sm:mb-6 font-bold text-sm sm:text-base px-2"
+            className="mb-3 sm:mb-6 font-bold text-sm sm:text-base px-2 leading-relaxed"
             style={{ fontFamily: "'Courier New', monospace" }}
           >
             Vibe Presenting is a{" "}
-            <span style={{ color: "#FF00FF" }}>RADICAL</span> tool that helps
-            you create and manage
-            <span style={{ color: "#00FFFF" }}> awesome</span> presentations!
+            <span
+              style={{
+                color: "#FF00FF",
+                backgroundColor: "#00FFFF",
+                padding: "3px",
+              }}
+            >
+              RADICAL
+            </span>{" "}
+            tool that helps you create and manage{" "}
+            <span
+              style={{
+                color: "#00FFFF",
+                backgroundColor: "#FF00FF",
+                padding: "3px",
+              }}
+            >
+              AWESOME
+            </span>{" "}
+            presentations!
           </p>
 
           {/* Hit counter and visitor stats - responsive layout */}
