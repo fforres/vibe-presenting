@@ -8,7 +8,6 @@ import {
   OutgoingMessageSchema,
 } from "@/agents/message-schemas";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
 
 interface CreatePresentationFormProps {
   className?: string;
@@ -19,7 +18,6 @@ export const CreatePresentationForm = ({
   className,
   onSuccess,
 }: CreatePresentationFormProps) => {
-  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);

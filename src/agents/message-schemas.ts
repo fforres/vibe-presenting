@@ -41,7 +41,7 @@ export const PresentationsInitInputSchema = z.object({
 
 export const SetActivePresentationInputSchema = z.object({
 	type: z.literal("set-active-presentation"),
-	id: z.string(),
+	id: z.union([z.string(), z.null()]),
 });
 
 // Combined input message schema

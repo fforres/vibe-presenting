@@ -18,17 +18,8 @@ export const Index = () => {
     },
   });
 
-  // For the marquee text animation
-  const [showMarquee, setShowMarquee] = useState(true);
-
-  // Toggle the "Under Construction" gif visibility
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setShowMarquee((prev) => !prev);
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, []);
+  // Remove the toggle effect for the marquee
+  // We'll keep it visible all the time now
 
   return (
     <div className="w-full max-w-3xl mx-auto p-3 sm:p-6 space-y-6">
@@ -69,21 +60,19 @@ export const Index = () => {
             <span style={{ color: "indigo" }}>n</span>
             <span style={{ color: "violet" }}>g</span>
           </h1>
-
-          {/* Marquee element - responsive text size */}
-          {showMarquee && (
-            <div className="overflow-hidden mb-2 sm:mb-4">
-              <div className="whitespace-nowrap animate-marquee">
-                <span
-                  className="text-base sm:text-xl font-bold"
-                  style={{ color: "#FF0000" }}
-                >
-                  ★★★ Welcome to Vibe Presenting! The BEST presentation tool on
-                  the web! ★★★
-                </span>
-              </div>
+          {/* Fixed marquee element - continuous animation */}
+          <div className="overflow-hidden mb-2 sm:mb-4 py-1">
+            <div className="marquee-container">
+              <span
+                className="text-base sm:text-xl font-bold inline-block whitespace-nowrap"
+                style={{ color: "#FF0000" }}
+              >
+                ★★★ Welcome to Vibe Presenting! The BEST presentation tool on
+                the web! ★★★ Welcome to Vibe Presenting! The Bestest
+                presentation tool on the web! ★★★
+              </span>
             </div>
-          )}
+          </div>
 
           <p
             className="mb-3 sm:mb-6 font-bold text-sm sm:text-base px-2"
@@ -123,6 +112,7 @@ export const Index = () => {
           {/* Guestbook link - responsive text and layout */}
           <div className="mb-3 sm:mb-6 flex flex-wrap justify-center gap-2">
             <a
+              // biome-ignore lint/a11y/useValidAnchor: <explanation>
               href="#"
               className="text-blue-600 underline hover:no-underline text-sm sm:text-base"
               style={{ fontFamily: "'Times New Roman', serif" }}
@@ -131,7 +121,7 @@ export const Index = () => {
             </a>
             <span className="hidden sm:inline mx-2">|</span>
             <a
-              href="#"
+              href="mailto:felipe@skyward.ai"
               className="text-blue-600 underline hover:no-underline text-sm sm:text-base"
               style={{ fontFamily: "'Times New Roman', serif" }}
             >
@@ -141,9 +131,15 @@ export const Index = () => {
         </div>
       </div>
 
-      {/* Add this to your CSS or create a style tag */}
-      <style jsx>{`
-        @keyframes marquee {
+      {/* Updated CSS for continuous marquee animation */}
+      <style>{`
+        .marquee-container {
+          display: inline-block;
+          white-space: nowrap;
+          animation: marquee-scroll 20s linear infinite;
+        }
+
+        @keyframes marquee-scroll {
           0% {
             transform: translateX(100%);
           }
@@ -151,13 +147,10 @@ export const Index = () => {
             transform: translateX(-100%);
           }
         }
-        .animate-marquee {
-          display: inline-block;
-          animation: marquee 15s linear infinite;
-        }
+
         @media (max-width: 640px) {
-          .animate-marquee {
-            animation: marquee 10s linear infinite;
+          .marquee-container {
+            animation: marquee-scroll 15s linear infinite;
           }
         }
       `}</style>

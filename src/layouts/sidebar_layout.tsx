@@ -1,3 +1,7 @@
+import { PresentationsInitInputSchema } from "@/agents/message-schemas";
+import type { PresentationAgentState } from "@/agents/presentations-agent";
+import { useSkywardAgent } from "@/hooks/use-skyward-agent";
+import { useState } from "react";
 import { useMatch } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
 import {
@@ -20,10 +24,31 @@ export default function SidebarLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const matches = useMatch("/presentation/:id");
+  const [state, setState] = useState<PresentationAgentState>({
+    status: "idle",
+    activePresentation: null,
+    presentations: [],
+  });
+  const agent = useSkywardAgent<PresentationAgentState>({
+    agent: "presentations",
+    onOpen(event) {
+      // console.log("onOpen", event);
+      agent?.send(
+        JSON.stringify(
+          PresentationsInitInputSchema.parse({
+            type: "presentations-init",
+          })
+        )
+      );
+    },
+    onStateUpdate(state, source) {
+      setState(state);
+    },
+  });
+
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar state={state} agent={agent} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center gap-2 px-3">
@@ -31,14 +56,17 @@ export default function SidebarLayout({
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                {matches?.params.id ? (
+                {/* {matches?.params.id ? ( */}
+                {state.activePresentation ? (
                   <>
                     <BreadcrumbItem className="hidden md:block">
                       <BreadcrumbLink href="#">Presentation</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>
-                      <BreadcrumbPage>{matches?.params.id}</BreadcrumbPage>
+                      <BreadcrumbPage>
+                        {state.activePresentation?.name}
+                      </BreadcrumbPage>
                     </BreadcrumbItem>
                   </>
                 ) : (

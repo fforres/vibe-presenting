@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 import { MoonIcon, PlusIcon, SunIcon } from "lucide-react";
 import {
   Sidebar,
@@ -16,8 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/features/theme-provider";
-import { Link, useNavigate, useParams } from "react-router";
-import { useSkywardAgent } from "@/hooks/use-skyward-agent";
+import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
 import {
   PresentationsInitInputSchema,
@@ -26,32 +25,16 @@ import {
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { CreatePresentationModal } from "@/components/create-presentation-modal";
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  state,
+  agent,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & {
+  state: PresentationAgentState;
+  agent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
+}) {
   const { theme, setTheme } = useTheme();
-  const { id } = useParams();
-  const [state, setState] = React.useState<PresentationAgentState>({
-    status: "idle",
-    activePresentation: null,
-    presentations: [],
-  });
-  const agent = useSkywardAgent<PresentationAgentState>({
-    agent: "presentations",
-    name: id,
-    onOpen(event) {
-      // console.log("onOpen", event);
-      agent?.send(
-        JSON.stringify(
-          PresentationsInitInputSchema.parse({
-            type: "presentations-init",
-          })
-        )
-      );
-    },
-    onStateUpdate(state, source) {
-      setState(state);
-    },
-  });
+
   const data = useMemo(() => {
     return {
       navMain: [
@@ -192,7 +175,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
-                <Link to="/">
+                <a href="https://skyward.ai" target="_blank" rel="noreferrer">
                   <span className="font-medium inline-flex items-center gap-1 justify-center">
                     By
                     <div className="size-5 shrink-0">
@@ -213,7 +196,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     Skyward
                   </span>
                   {/* <span className="">v1.0.0</span> */}
-                </Link>
+                </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
