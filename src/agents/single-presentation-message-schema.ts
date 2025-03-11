@@ -61,7 +61,7 @@ export type PresentationContent = z.infer<typeof PresentationContentSchema>;
 export type SinglePresentationAgentState = {
 	presentationId: string | null;
 	content: PresentationContent | null;
-	status: "idle" | "loading" | "error" | "success";
+	status: "initializing" | "ready" | "loading" | "error" | "success";
 	history: Array<{
 		id: string;
 		type: string;

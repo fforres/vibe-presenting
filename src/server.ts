@@ -21,7 +21,6 @@ export default {
 		// );
 		try {
 			const url = new URL(request.url);
-			console.log("request", url.pathname);
 			if (url.pathname.startsWith("/agents")) {
 				const response = await routeAgentRequest(request, env);
 				if (!response) {

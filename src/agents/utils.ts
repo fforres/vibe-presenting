@@ -131,3 +131,10 @@ export async function processToolCalls<
 //     return typeof maybeTool.execute !== "function";
 //   }) as string[];
 // }
+
+export const presentationDescription = `This is a presentation about AI agents, and the impact that these agent architectures are going to have in the way that we create software.
+You are tasked with developing a presentation that explores new software and application architectures in a future where AI and large language models (LLMs) are ubiquitous.
+The presentation should emphasize modern development patterns using technologies like Cloudflare Durable Objects, Cloudflare Agents, and a recently created Agent framework.
+These technologies support isolation and componentization of business logic, durable execution (with per-agent SQLite instances), and a streamlined user-data interaction that boosts speed and efficiency.
+
+`;

@@ -15,6 +15,8 @@ import {
 	PresentationContentOutputSchema,
 	SlideGeneratedOutputSchema,
 	type SinglePresentationOutgoingMessage,
+	PresentationContentSchema,
+	SlideSchema,
 } from "@/agents/single-presentation-message-schema";
 import type { Env } from "@/server";
 import {
@@ -24,9 +26,10 @@ import {
 	type WSMessage,
 	getAgentByName,
 } from "agents-sdk";
-import { generateId, streamText } from "ai";
-import type { z } from "zod";
-import { createOpenAI } from "@ai-sdk/openai";
+import { generateId, streamObject } from "ai";
+import { z } from "zod";
+import { createOpenAI, openai } from "@ai-sdk/openai";
+import { presentationDescription } from "@/agents/utils";
 /**
  * SinglePresentation Agent implementation that handles presentation content generation and management
  */
@@ -42,16 +45,88 @@ export class SinglePresentationAgent extends Agent<
 		this.setState({
 			presentationId: null,
 			content: null,
-			status: "idle",
+			status: "initializing",
 			history: [],
 		});
+	}
+
+	async initialize(message: z.infer<typeof InitPresentationSchema>) {
+		this.setStatus("initializing");
+		console.log("initializing!!!!");
+		// Update state
+		this.setState({
+			...this.state,
+			presentationId: message.presentationId,
+			content: {
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+				id: message.presentationId,
+				name: message.name,
+				description: message.description,
+				slides: [],
+			},
+		});
+
+		const openai = createOpenAI({
+			apiKey: this.env.OPENAI_API_KEY,
+		});
+		const { partialObjectStream } = streamObject({
+			model: openai("gpt-4o"),
+			system: `You are a presentation expert that helps create well-structured presentations.
+You will be given a presentation name and description.
+
+You will then generate a well-structured presentation slides.
+Each slide should have a title, topic, description, bullet points, and an image prompt.
+
+The presentation should be well-structured and easy to follow.
+The presentation should be 10-15 slides long.
+The presentation should be 10-15 minutes long.
+The presentation should be well-structured and easy to follow.
+`,
+			messages: [
+				{
+					role: "user",
+					content: `Presentation Name: ${message.name}\n
+Presentation Description: ${message.description}`,
+				},
+			],
+			schema: z.object({
+				slides: z.array(SlideSchema),
+			}),
+		});
+
+		for await (const chunk of partialObjectStream) {
+			console.log("chunk", chunk);
+			const slides = chunk.slides ?? [];
+			this.setState({
+				...this.state,
+				content: {
+					...(this.state.content ? this.state.content : {}),
+					slides: slides,
+				},
+			});
+		}
 	}
 
 	onConnect(
 		connection: Connection,
 		ctx: ConnectionContext,
 	): void | Promise<void> {
+		console.log("this.name", this.name);
 		super.onConnect(connection, ctx);
+		if (!this.state.presentationId) {
+			this.setState({
+				...this.state,
+				presentationId: this.name,
+			});
+
+			this.initialize({
+				type: "init-presentation",
+				presentationId: this.name,
+				description: presentationDescription,
+				name: "AI Agents",
+			});
+		}
 		this.connections[connection.id] = connection;
 	}
 
@@ -66,6 +141,7 @@ export class SinglePresentationAgent extends Agent<
 	}
 
 	setStatus(status: SinglePresentationAgentState["status"]) {
+		console.log("setting status", status);
 		this.setState({
 			...this.state,
 			status,
@@ -146,47 +222,6 @@ export class SinglePresentationAgent extends Agent<
 		}
 
 		this.setStatus("idle");
-	}
-
-	async initialize(message: z.infer<typeof InitPresentationSchema>) {
-		// Initialize or load presentation content
-		let presentationContent: PresentationContent;
-		if (
-			this.state.content &&
-			this.state.presentationId === message.presentationId
-		) {
-			// Use existing content if we already have it
-			presentationContent = this.state.content;
-		} else {
-			// Create new content structure
-			presentationContent = {
-				id: message.presentationId,
-				name: "New Presentation",
-				description: "New Presentation Description",
-				slides: [],
-				createdAt: Date.now(),
-				updatedAt: Date.now(),
-			};
-			// Generate initial slide if empty
-			if (presentationContent.slides.length === 0) {
-				const titleSlide: Slide = {
-					id: generateId(),
-					title: presentationContent.name,
-					topic: "introduction",
-					description: presentationContent.description,
-					bulletPoints: [],
-					order: 0,
-				};
-				presentationContent.slides.push(titleSlide);
-			}
-		}
-		// Update state
-		this.setState({
-			...this.state,
-			presentationId: message.presentationId,
-			content: presentationContent,
-		});
-		// Send response
 	}
 
 	async handleAnalyzeText(

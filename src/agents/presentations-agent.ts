@@ -1,30 +1,20 @@
-import {
-	Agent,
-	getAgentByName,
-	type Connection,
-	type ConnectionContext,
-	type Schedule,
-	type WSMessage,
-} from "agents-sdk";
-import { AIChatAgent } from "agents-sdk/ai-chat-agent";
-import {
-	createDataStreamResponse,
-	generateId,
-	streamText,
-	type StreamTextOnFinishCallback,
-} from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
-import { agentContext, processToolCalls } from "./utils";
-import { tools, executions } from "./tools";
 import type { Chat, Env } from "@/server";
 import {
-	type IncomingMessage,
-	type OutgoingMessage,
+	Agent,
+	type Connection,
+	type ConnectionContext,
+	type WSMessage,
+	getAgentByName,
+} from "agents-sdk";
+import { generateId } from "ai";
+import {
 	AllPresentationsOutputSchema,
 	CreatedPresentationOutputSchema,
 	IncomingMessageSchema,
+	type OutgoingMessage,
 	OutgoingMessageSchema,
 } from "./message-schemas";
+import { presentationDescription } from "@/agents/utils";
 
 export type ScheduledItem = {
 	id: string;
@@ -87,8 +77,8 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			presentations: [
 				{
 					id: generateId(),
-					name: "Test",
-					description: "",
+					name: "Agent framework",
+					description: presentationDescription,
 					createdAt: Date.now(),
 				},
 			],
@@ -140,8 +130,6 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			const parsedMessage = IncomingMessageSchema.parse(message);
 			this.setStatus("loading");
 
-			console.log("parsedMessage", parsedMessage);
-
 			if (parsedMessage.type === "create-presentation") {
 				// Handle create-  message
 				// ...
@@ -174,7 +162,6 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			if (parsedMessage.type === "presentations-init") {
 				// Handle all-conversations message
 				// ...
-				console.log("this.state.presentations", this.state.presentations);
 				this.setState({
 					...this.state,
 				});
