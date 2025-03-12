@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
 interface CreatePresentationFormProps {
   className?: string;
-  onSuccess?: (id: string) => void;
+  onSuccess?: () => void;
   agent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 }
 
@@ -51,6 +51,7 @@ export const CreatePresentationForm = ({
           })
         )
       );
+      onSuccess?.();
     } catch (err) {
       setError(
         `Error creating presentation: ${

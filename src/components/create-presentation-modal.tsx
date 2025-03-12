@@ -11,7 +11,7 @@ import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 interface CreatePresentationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess?: (id: string) => void;
+  onSuccess?: () => void;
   agent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 }
 
@@ -29,10 +29,10 @@ export function CreatePresentationModal({
         </DialogHeader>
         <CreatePresentationForm
           agent={agent}
-          onSuccess={(id) => {
+          onSuccess={() => {
             // Close the modal when a presentation is successfully created
             onOpenChange(false);
-            onSuccess?.(id);
+            onSuccess?.();
           }}
         />
       </DialogContent>

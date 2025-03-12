@@ -84,7 +84,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			],
 		});
 	}
-	createConversation({
+	createPresentation({
 		name,
 		description,
 		id,
@@ -93,18 +93,17 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 		description: string;
 		id: string;
 	}) {
+		const newPresentation = {
+			id,
+			name,
+			description,
+			createdAt: Date.now(),
+		};
 		this.setState({
 			...this.state,
-			presentations: [
-				...this.state.presentations,
-				{
-					id,
-					name,
-					description,
-					createdAt: Date.now(),
-				},
-			],
+			presentations: [...this.state.presentations, newPresentation],
 		});
+		return newPresentation;
 	}
 
 	setStatus(status: PresentationAgentState["status"]) {
@@ -135,7 +134,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 				// ...
 				const { SinglePresentationAgent } = this.env;
 				const id = generateId();
-				this.createConversation({
+				const createdPresentation = this.createPresentation({
 					id,
 					description: parsedMessage.description,
 					name: parsedMessage.name,
@@ -147,14 +146,11 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 					description: parsedMessage.description,
 					name: parsedMessage.name,
 				});
-				await connection.send(
-					JSON.stringify(
-						CreatedPresentationOutputSchema.parse({
-							type: "created-presentation",
-							id,
-						}),
-					),
-				);
+				this.setState({
+					...this.state,
+					activePresentation: createdPresentation,
+				});
+				this.ctx.waitUntil(agent.generateSlides());
 
 				console.log("Created Presentation", id);
 			}

@@ -120,7 +120,6 @@ Presentation Description: ${description}`,
 		connection: Connection,
 		ctx: ConnectionContext,
 	): void | Promise<void> {
-		console.log("this.name", this.name);
 		super.onConnect(connection, ctx);
 		if (!this.state.presentationId) {
 			this.setState({

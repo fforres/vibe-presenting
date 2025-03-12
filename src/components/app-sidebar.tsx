@@ -93,16 +93,6 @@ export function AppSidebar({
         agent={agent}
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
-        onSuccess={(id) => {
-          agent?.send(
-            JSON.stringify(
-              SetActivePresentationInputSchema.parse({
-                type: "set-active-presentation",
-                id,
-              })
-            )
-          );
-        }}
       />
       <Sidebar
         {...props}
@@ -344,7 +334,7 @@ export function AppSidebar({
       </Sidebar>
 
       {/* Add this to your CSS for any custom animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes blink {
           0%,
           49% {
