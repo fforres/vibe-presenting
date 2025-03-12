@@ -90,6 +90,7 @@ export function AppSidebar({
   return (
     <>
       <CreatePresentationModal
+        agent={agent}
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
         onSuccess={(id) => {

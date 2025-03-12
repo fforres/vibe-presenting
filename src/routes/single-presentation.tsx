@@ -189,8 +189,10 @@ FullScreenSlide.displayName = "FullScreenSlide";
 
 export const SinglePresentation = ({ id }: { id: string }) => {
   const [state, setState] = useState<SinglePresentationAgentState | null>(null);
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const [renderedSlides, setRenderedSlides] = useState<any[]>([]);
   const [isGenerating, setIsGenerating] = useState(true);
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const [selectedSlide, setSelectedSlide] = useState<any | null>(null);
   const slidesContainerRef = useRef<HTMLDivElement>(null);
 

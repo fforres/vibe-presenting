@@ -2,39 +2,29 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useSkywardAgent } from "@/hooks/use-skyward-agent";
+import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import {
   CreatePresentationInputSchema,
   OutgoingMessageSchema,
 } from "@/agents/message-schemas";
 import { toast } from "sonner";
-
+import type { PresentationAgentState } from "@/agents/presentations-agent";
 interface CreatePresentationFormProps {
   className?: string;
   onSuccess?: (id: string) => void;
+  agent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 }
 
 export const CreatePresentationForm = ({
   onSuccess,
+  agent,
 }: CreatePresentationFormProps) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState("Cloudflare Durable Objects");
+  const [description, setDescription] = useState(
+    "This is a presentation about cloudflare duraable objects. They are a new way to store data on the internet. They are a new way to store and process data on the Edge. Moreover, they power the new Agents framework."
+  );
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Connect to the presentations agent
-  const agent = useSkywardAgent({
-    agent: "presentations",
-    onMessage(message) {
-      const parsedMessage = OutgoingMessageSchema.parse(
-        JSON.parse(message.data)
-      );
-      if (parsedMessage.type === "created-presentation") {
-        toast.success("Presentation created successfully!");
-        onSuccess?.(parsedMessage.id);
-      }
-    },
-  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +42,7 @@ export const CreatePresentationForm = ({
       }
 
       // Send the create-presentation message to the agent
-      await agent?.send(
+      agent?.send(
         JSON.stringify(
           CreatePresentationInputSchema.parse({
             type: "create-presentation",

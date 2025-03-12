@@ -66,7 +66,11 @@ export class SinglePresentationAgent extends Agent<
 				slides: [],
 			},
 		});
+	}
 
+	async generateSlides() {
+		const name = this.state.content?.name;
+		const description = this.state.content?.description;
 		const openai = createOpenAI({
 			apiKey: this.env.OPENAI_API_KEY,
 		});
@@ -89,8 +93,8 @@ I need to not create generic slides but actual topics that I should be talking a
 			messages: [
 				{
 					role: "user",
-					content: `Presentation Name: ${message.name}\n
-Presentation Description: ${message.description}`,
+					content: `Presentation Name: ${name}\n
+Presentation Description: ${description}`,
 				},
 			],
 			schema: z.object({
