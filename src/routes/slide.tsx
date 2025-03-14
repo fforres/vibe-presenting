@@ -72,13 +72,13 @@ const TitleSlide = memo(
 		state: SinglePresentationAgentState;
 	}) => {
 		return (
-			<div className="flex flex-col items-center justify-center h-full text-center p-4 sm:p-6 md:p-8 bg-gradient-to-br from-blue-50 to-indigo-100">
-				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4 text-indigo-900">
+			<div className="flex flex-col items-center justify-center h-full text-center p-4 @sm:p-6 @md:p-8 bg-gradient-to-br from-blue-50 to-indigo-100">
+				<h1 className="text-2xl @sm:text-3xl @md:text-4xl font-bold mb-2 @sm:mb-4 text-indigo-900">
 					{slideData.title}
 				</h1>
-				{slideData.topic && (
-					<h2 className="text-xl sm:text-2xl text-indigo-700 mb-3 sm:mb-6">
-						{slideData.topic}
+				{slideData.subtitle && (
+					<h2 className="text-xl @sm:text-2xl text-indigo-700 mb-3 @sm:mb-6">
+						{slideData.subtitle}
 					</h2>
 				)}
 			</div>
@@ -112,17 +112,17 @@ const FullSizeImageSlide = memo(
 					/>
 				) : (
 					<div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-						<p className="text-gray-600 text-sm sm:text-base p-2 text-center">
+						<p className="text-gray-600 text-sm @sm:text-base p-2 text-center">
 							Image prompt: {slideData.image?.prompt}
 						</p>
 					</div>
 				)}
-				<div className="absolute inset-0 z-20 flex flex-col justify-center p-4 sm:p-6 md:p-10">
-					<h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-4 drop-shadow-md">
+				<div className="absolute inset-0 z-20 flex flex-col justify-center p-4 @sm:p-6 @md:p-10">
+					<h2 className="text-xl @sm:text-2xl @md:text-3xl font-bold text-white mb-2 @sm:mb-4 drop-shadow-md">
 						{slideData.title}
 					</h2>
 					{slideData.description && (
-						<p className="text-white text-base sm:text-lg md:text-xl drop-shadow-md">
+						<p className="text-white text-base @sm:text-lg @md:text-xl drop-shadow-md">
 							{slideData.description}
 						</p>
 					)}
@@ -142,22 +142,22 @@ const OneTextColumnSlide = memo(
 		state: SinglePresentationAgentState | null;
 	}) => {
 		return (
-			<div className="h-full p-4 sm:p-6 md:p-8 flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
-				<h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-4 text-slate-800">
+			<div className="h-full p-4 @sm:p-6 @md:p-8 flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
+				<h2 className="text-xl @sm:text-2xl @md:text-3xl font-bold mb-2 @sm:mb-4 text-slate-800">
 					{slideData.title}
 				</h2>
 				<div className="flex-grow overflow-auto">
 					{slideData.description && (
-						<p className="text-slate-700 mb-2 sm:mb-4 text-base sm:text-lg">
+						<p className="text-slate-700 mb-2 @sm:mb-4 text-base @sm:text-lg">
 							{slideData.description}
 						</p>
 					)}
-					<div className="prose prose-sm sm:prose max-w-none prose-slate">
+					<div className="prose prose-sm @sm:prose max-w-none prose-slate">
 						<Markdown content={slideData.markdownContent} />
 					</div>
 				</div>
 				{slideData.image && (
-					<div className="mt-2 sm:mt-4 h-24 sm:h-40">
+					<div className="mt-2 @sm:mt-4 h-24 @sm:h-40">
 						{slideData.image?.url ? (
 							<img
 								src={slideData.image.url}
@@ -166,7 +166,7 @@ const OneTextColumnSlide = memo(
 							/>
 						) : (
 							<div className="h-full bg-gray-100 flex items-center justify-center p-2 rounded-lg border border-gray-200">
-								<p className="text-xs sm:text-sm text-gray-600">
+								<p className="text-xs @sm:text-sm text-gray-600">
 									Image prompt: {slideData.image?.prompt}
 								</p>
 							</div>
@@ -188,20 +188,20 @@ const TwoTextColumnsSlide = memo(
 		state: SinglePresentationAgentState | null;
 	}) => {
 		return (
-			<div className="h-full p-4 sm:p-6 md:p-8 flex flex-col bg-gradient-to-br from-emerald-50 to-teal-100">
-				<h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-4 text-emerald-900">
+			<div className="h-full p-4 @sm:p-6 @md:p-8 flex flex-col bg-gradient-to-br from-emerald-50 to-teal-100">
+				<h2 className="text-xl @sm:text-2xl @md:text-3xl font-bold mb-2 @sm:mb-4 text-emerald-900">
 					{slideData.title}
 				</h2>
 				{slideData.description && (
-					<p className="text-emerald-800 mb-2 sm:mb-4 text-base sm:text-lg">
+					<p className="text-emerald-800 mb-2 @sm:mb-4 text-base @sm:text-lg">
 						{slideData.description}
 					</p>
 				)}
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 flex-grow overflow-auto">
-					<div className="prose prose-sm sm:prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 sm:p-4 rounded-lg">
+				<div className="grid grid-cols-1 @sm:grid-cols-2 gap-4 @sm:gap-8 flex-grow overflow-auto">
+					<div className="prose prose-sm @sm:prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 @sm:p-4 rounded-lg">
 						<Markdown content={slideData.markdownContentLeft} />
 					</div>
-					<div className="prose prose-sm sm:prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 sm:p-4 rounded-lg">
+					<div className="prose prose-sm @sm:prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 @sm:p-4 rounded-lg">
 						<Markdown content={slideData.markdownContentRight} />
 					</div>
 				</div>
@@ -220,22 +220,22 @@ const TwoColumnsWithImageSlide = memo(
 		state: SinglePresentationAgentState | null;
 	}) => {
 		return (
-			<div className="h-full p-4 sm:p-6 md:p-8 flex flex-col bg-gradient-to-br from-amber-50 to-orange-100">
-				<h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-4 text-amber-900">
+			<div className="h-full p-4 @sm:p-6 @md:p-8 flex flex-col bg-gradient-to-br from-amber-50 to-orange-100">
+				<h2 className="text-xl @sm:text-2xl @md:text-3xl font-bold mb-2 @sm:mb-4 text-amber-900">
 					{slideData.title}
 				</h2>
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 flex-grow overflow-auto">
-					<div className="flex flex-col bg-white bg-opacity-70 p-2 sm:p-4 rounded-lg">
+				<div className="grid grid-cols-1 @sm:grid-cols-2 gap-4 @sm:gap-8 flex-grow overflow-auto">
+					<div className="flex flex-col bg-white bg-opacity-70 p-2 @sm:p-4 rounded-lg">
 						{slideData.description && (
-							<p className="text-amber-800 mb-2 sm:mb-4 text-base sm:text-lg">
+							<p className="text-amber-800 mb-2 @sm:mb-4 text-base @sm:text-lg">
 								{slideData.description}
 							</p>
 						)}
-						<div className="prose prose-sm sm:prose max-w-none prose-amber">
+						<div className="prose prose-sm @sm:prose max-w-none prose-amber">
 							<Markdown content={slideData.markdownContent} />
 						</div>
 					</div>
-					<div className="flex items-center justify-center mt-4 sm:mt-0">
+					<div className="flex items-center justify-center mt-4 @sm:mt-0">
 						{slideData.image?.url ? (
 							<img
 								src={slideData.image.url}
@@ -243,8 +243,8 @@ const TwoColumnsWithImageSlide = memo(
 								className="max-w-full max-h-full object-contain rounded-lg shadow-md"
 							/>
 						) : (
-							<div className="w-full h-full bg-white bg-opacity-70 flex items-center justify-center p-2 sm:p-4 rounded-lg border border-amber-200">
-								<p className="text-xs sm:text-sm text-amber-700">
+							<div className="w-full h-full bg-white bg-opacity-70 flex items-center justify-center p-2 @sm:p-4 rounded-lg border border-amber-200">
+								<p className="text-xs @sm:text-sm text-amber-700">
 									Image prompt: {slideData.image?.prompt}
 								</p>
 							</div>
@@ -267,11 +267,11 @@ const UnknownSlideDesign = memo(
 		state: SinglePresentationAgentState | null;
 	}) => {
 		return (
-			<div className="p-4 sm:p-8 bg-gray-50 h-full">
-				<h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4 text-red-600">
+			<div className="p-4 @sm:p-8 bg-gray-50 h-full">
+				<h2 className="text-xl @sm:text-2xl font-bold mb-2 @sm:mb-4 text-red-600">
 					Unknown slide design: {slideData.design}
 				</h2>
-				<pre className="bg-white p-2 sm:p-4 rounded-lg shadow-inner overflow-auto border border-gray-200 text-xs sm:text-sm">
+				<pre className="bg-white p-2 @sm:p-4 rounded-lg shadow-inner overflow-auto border border-gray-200 text-xs @sm:text-sm">
 					{JSON.stringify(slideData, null, 2)}
 				</pre>
 			</div>
@@ -311,19 +311,13 @@ export const SingleSlide = memo(
 			null,
 		);
 
-		const agent = useSkywardAgent<SinglePresentationAgentState>({
+		useSkywardAgent<SinglePresentationAgentState>({
 			agent: "single-presentation-agent",
 			name: id,
 			onStateUpdate(newState: SinglePresentationAgentState) {
 				setState(newState);
 			},
 		});
-
-		console.log(
-			"generalState?.presentation?.slides",
-			generalState?.presentation?.slides,
-			id,
-		);
 
 		// If slide data is not found, show a placeholder
 		if (!slide || !state) {
@@ -337,7 +331,7 @@ export const SingleSlide = memo(
 		// Render the appropriate slide component based on design with 16:9 aspect ratio wrapper
 		return (
 			<>
-				<div className="w-full max-w-6xl mx-auto relative">
+				<div className="w-full h-full max-w-6xl mx-auto relative flex flex-col items-center justify-center">
 					<div className="aspect-video w-full bg-white shadow-lg rounded-lg overflow-hidden">
 						{(() => {
 							switch (slide.design) {

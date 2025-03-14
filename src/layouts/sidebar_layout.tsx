@@ -42,7 +42,7 @@ export default function SidebarLayout({
 	return (
 		<SidebarProvider>
 			<AppSidebar state={state} agent={agent} />
-			<SidebarInset>
+			<SidebarInset className="@container">
 				{/* 90s style header with gradient background */}
 				<header
 					className="flex h-16 shrink-0 items-center gap-2 border-b relative overflow-hidden"

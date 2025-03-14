@@ -91,6 +91,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 					{
 						id: "el-landing",
 						title: "Arquitectura de aplicaciones en un mundo post AI",
+						subtitle: "(Or how i learned to stop worrying and love the agents)",
 						topic: "El landing",
 						description:
 							"Ideas, patrones y 'Rants' sobre desarrollar software AI-First. (Pensamientos al rededor de `Sync Engines`, `el Edge` y `LLMs`) ",
