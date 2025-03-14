@@ -7,12 +7,12 @@ import type {
 	TwoColumnsWithImageSlideSchema,
 	TwoTextColumnsSlideSchema,
 } from "@/agents/single-presentation-message-schema";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSkywardAgent } from "@/hooks/use-skyward-agent";
+import { MessageSquareText } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { MessageSquareText } from "lucide-react";
 
 const remarkPlugins = [remarkGfm];
 
