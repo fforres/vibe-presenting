@@ -91,7 +91,11 @@ export const DynamicRouteChange = () => {
 	return (
 		<SidebarLayout state={state} agent={agent}>
 			{state.activeSlide ? (
-				<SingleSlide id={state.activeSlide} generalState={state} />
+				<SingleSlide
+					id={state.activeSlide}
+					generalState={state}
+					slidesAgent={agent}
+				/>
 			) : (
 				<Index state={state} />
 			)}

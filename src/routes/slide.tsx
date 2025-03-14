@@ -21,6 +21,8 @@ import {
 import { memo, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { usePresentationKeyboardNavigation } from "@/hooks/use-presentation-keyboard-navigation";
+import { Textarea } from "@/components/ui/textarea";
 
 const remarkPlugins = [remarkGfm];
 
@@ -78,9 +80,13 @@ const CollaborationSheet = () => {
 				<SparklesIcon className="h-5 w-5 text-gray-700" />
 			</SheetTrigger>
 			<SheetContent side="right">
-				<div className="p-4">
+				<div className="p-4 flex flex-col flex-1 h-full">
 					<h3 className="text-lg font-semibold mb-4">Collaboration Mode 🔥</h3>
-					<div className="prose prose-sm">TextArea</div>
+					<div className="flex flex-1">{/* s */}</div>
+					<Textarea
+						className="resize-none"
+						placeholder="Que no te quedó claro?"
+					/>
 				</div>
 			</SheetContent>
 		</Sheet>
@@ -425,9 +431,11 @@ export const SingleSlide = memo(
 	({
 		id,
 		generalState,
+		slidesAgent,
 	}: {
 		id: string;
 		generalState: PresentationAgentState;
+		slidesAgent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 	}) => {
 		const slide = useMemo(() => {
 			const slide = generalState?.presentation?.slides.find(
@@ -451,9 +459,11 @@ export const SingleSlide = memo(
 			},
 		});
 
-		console.log(
-			"generalState.config.collaboration",
-			generalState.config.collaboration,
+		// Add keyboard navigation
+		usePresentationKeyboardNavigation(
+			generalState,
+			slidesAgent,
+			!!slide, // Only enable when slide is loaded
 		);
 
 		// If slide data is not found, show a placeholder

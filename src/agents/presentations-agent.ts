@@ -566,7 +566,6 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 				});
 			}
 			if (parsedMessage.type === "toggle-collaboration") {
-				console.log("parsedMessage", parsedMessage);
 				this.setState({
 					...this.state,
 					config: {
@@ -574,6 +573,40 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 						collaboration: parsedMessage.enabled ? "active" : "inactive",
 					},
 				});
+			}
+			// Handle navigate-next-slide message
+			if (parsedMessage.type === "navigate-next-slide") {
+				const { currentSlideId } = parsedMessage;
+				const slides = this.state.presentation.slides;
+				const currentIndex = slides.findIndex(
+					(slide) => slide.id === currentSlideId,
+				);
+
+				if (currentIndex !== -1 && currentIndex < slides.length - 1) {
+					// Move to the next slide
+					const nextSlideId = slides[currentIndex + 1].id;
+					this.setState({
+						...this.state,
+						activeSlide: nextSlideId,
+					});
+				}
+			}
+			// Handle navigate-previous-slide message
+			if (parsedMessage.type === "navigate-previous-slide") {
+				const { currentSlideId } = parsedMessage;
+				const slides = this.state.presentation.slides;
+				const currentIndex = slides.findIndex(
+					(slide) => slide.id === currentSlideId,
+				);
+
+				if (currentIndex > 0) {
+					// Move to the previous slide
+					const previousSlideId = slides[currentIndex - 1].id;
+					this.setState({
+						...this.state,
+						activeSlide: previousSlideId,
+					});
+				}
 			}
 			// case "delete-schedule":
 			// 	// Handle delete-schedule message

@@ -50,6 +50,16 @@ export const ToggleCollaborationInputSchema = z.object({
 	enabled: z.boolean(),
 });
 
+export const NavigateNextSlideInputSchema = z.object({
+	type: z.literal("navigate-next-slide"),
+	currentSlideId: z.string(),
+});
+
+export const NavigatePreviousSlideInputSchema = z.object({
+	type: z.literal("navigate-previous-slide"),
+	currentSlideId: z.string(),
+});
+
 // Combined input message schema
 export const IncomingMessageSchema = z.discriminatedUnion("type", [
 	ScheduleInputSchema,
@@ -58,6 +68,8 @@ export const IncomingMessageSchema = z.discriminatedUnion("type", [
 	SetActiveSlideInputSchema,
 	PresentationsInitInputSchema,
 	ToggleCollaborationInputSchema,
+	NavigateNextSlideInputSchema,
+	NavigatePreviousSlideInputSchema,
 ]);
 
 export type IncomingMessage = z.infer<typeof IncomingMessageSchema>;
