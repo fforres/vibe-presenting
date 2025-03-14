@@ -7,7 +7,7 @@ import { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import SidebarLayout from "@/layouts/sidebar_layout";
 import { Index } from "@/routes/index";
 import { SingleSlide } from "@/routes/slide";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export const DynamicRouteChange = () => {
 	const [state, setState] = useState<PresentationAgentState | null>(null);
 	const agent = useSkywardAgent({
@@ -41,6 +41,18 @@ export const DynamicRouteChange = () => {
 			}
 		},
 	});
+
+	useEffect(() => {
+		// preload every image in the presentation slides.
+		if (state?.presentation?.slides) {
+			for (const slide of state.presentation.slides) {
+				if (slide.design === "full-size-image" && slide.image.url) {
+					const image = new Image();
+					image.src = slide.image.url;
+				}
+			}
+		}
+	}, [state?.presentation?.slides]);
 
 	if (!state) {
 		return (

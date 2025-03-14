@@ -38,6 +38,8 @@ export type PresentationAgentState = {
 	status: "idle" | "loading" | "error" | "success";
 	config: {
 		sidebarNavigation: "active" | "inactive";
+		collaboration: "active" | "inactive";
+		speakerNotes: "public" | "private";
 	};
 	presentation: Presentation;
 };
@@ -78,13 +80,17 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 		this.setState({
 			connectionCount: 0,
 			status: "idle",
-			activeSlide: null,
+			activeSlide: "sobre-mi",
+			// activeSlide: null,
 			config: {
 				sidebarNavigation: "inactive",
+				collaboration: "inactive",
+				speakerNotes: "private",
 			},
 			presentation: {
 				id: generateId(),
-				name: "Agent framework",
+				// id: generateId(),
+				name: "Arquitectura de aplicaciones en un mundo post AI",
 				description: presentationDescription,
 				createdAt: Date.now(),
 				slides: [
@@ -103,13 +109,20 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 					},
 					{
 						id: "sobre-mi",
-						title: "Sobre mi",
+						title: "Hola, soy Felipe Torres 👋",
 						topic: "Sobre mi",
-						description: "Una introducción sobre mi y mi background.",
 						markdownContent: `
-- **Felipe Torres (x.com/fforres)**.
-- CTO @ Skyward.AI.
-- (Previously, @ OpenAI).
+- *A.K.A. FForres*
+- CTO @ [Skyward.AI](https://skyward.ai)
+- (Previously, @ [OpenAI](https://openai.com), [Brex](https://brex.com), [Segment](https://segment.com))
+- 1 Esposa, 2 Gatos
+- ❤️: AI, The Web, JS, TS, good UX, local-first.
+- 😡: Crypto/Scams,
+
+Socials
+- ~~X:~~ Twitter [twitter.com/fforres](https://twitter.com/fforres)
+- [github.com/fforres](https://github.com/fforres)
+- [linkedin.com/in/fforres](https://linkedin.com/in/fforres)
 						`,
 						image: {
 							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/6cb81b67-8c30-49de-3d9b-e06361a90600/public",

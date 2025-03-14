@@ -2,10 +2,10 @@ import type { PresentationAgentState } from "@/agents/presentations-agent";
 
 export const Index = ({ state }: { state: PresentationAgentState }) => {
 	return (
-		<div className="w-full max-w-3xl mx-auto p-3 sm:p-6 space-y-6">
+		<div className="w-full max-w-3xl mx-auto space-y-6 flex flex-col justify-center h-full">
 			{/* Animated rainbow border - responsive padding */}
 			<div
-				className="border-4 sm:border-8 border-dashed p-2 sm:p-4"
+				className="border-4 @sm:border-8 border-dashed p-2 @sm:p-4"
 				style={{
 					borderImageSource:
 						"linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)",
@@ -15,7 +15,7 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 				<div className="text-center">
 					{/* Retro font and styling - responsive text size */}
 					<h1
-						className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 break-words"
+						className="text-4xl @sm:text-6xl font-bold mb-4 @sm:mb-6 break-words"
 						style={{
 							fontFamily: "'Comic Sans MS', cursive, sans-serif",
 							color: "#FF00FF",
@@ -41,10 +41,10 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 						<span style={{ color: "violet" }}>g</span>
 					</h1>
 					{/* Fixed marquee element - continuous animation */}
-					<div className="overflow-hidden mb-2 sm:mb-4 py-1">
+					<div className="overflow-hidden mb-4 @sm:mb-6 py-1">
 						<div className="marquee-container">
 							<span
-								className="text-base sm:text-xl font-bold inline-block whitespace-nowrap"
+								className="text-base @sm:text-xl font-bold inline-block whitespace-nowrap"
 								style={{ color: "#FF0000" }}
 							>
 								★★★ Welcome to Vibe Presenting! The BEST presentation tool on
@@ -55,7 +55,7 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 					</div>
 
 					<p
-						className="mb-3 sm:mb-6 font-bold text-sm sm:text-base px-2 leading-relaxed"
+						className="mb-4 @sm:mb-6 font-bold text-sm @sm:text-base leading-relaxed"
 						style={{ fontFamily: "'Courier New', monospace" }}
 					>
 						Vibe Presenting is a{" "}
@@ -82,7 +82,7 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 					</p>
 
 					{/* Hit counter and visitor stats - responsive layout */}
-					<div className="flex flex-wrap justify-center items-center gap-2 mb-3 sm:mb-4">
+					<div className="flex flex-wrap justify-center items-center gap-2 mb-4 @sm:mb-6">
 						<div
 							className="bg-black text-white px-2 py-1 text-xs"
 							style={{ fontFamily: "monospace" }}
@@ -95,10 +95,10 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 					</div>
 
 					{/* Under construction gif - responsive sizing */}
-					<div className="flex justify-center mb-3 sm:mb-4">
-						<div className="bg-yellow-300 px-2 sm:px-4 py-1 sm:py-2 border-2 border-black animate-pulse">
+					<div className="flex justify-center mb-3 @sm:mb-4">
+						<div className="bg-yellow-300 px-2 @sm:px-4 py-1 @sm:py-2 border-2 border-black animate-pulse">
 							<span
-								className="font-bold text-sm sm:text-base"
+								className="font-bold text-sm @sm:text-base"
 								style={{ fontFamily: "'Comic Sans MS', cursive" }}
 							>
 								🚧 UNDER CONSTRUCTION 🚧
@@ -107,19 +107,19 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 					</div>
 
 					{/* Guestbook link - responsive text and layout */}
-					<div className="mb-3 sm:mb-6 flex flex-wrap justify-center gap-2">
+					<div className="mb-3 @sm:mb-6 flex flex-wrap justify-center gap-2">
 						<a
 							// biome-ignore lint/a11y/useValidAnchor: <explanation>
 							href="#"
-							className="text-blue-600 underline hover:no-underline text-sm sm:text-base"
+							className="text-blue-600 underline hover:no-underline text-sm @sm:text-base"
 							style={{ fontFamily: "'Times New Roman', serif" }}
 						>
 							📝 Sign our guestbook!
 						</a>
-						<span className="hidden sm:inline mx-2">|</span>
+						<span className="hidden @sm:inline mx-2">|</span>
 						<a
 							href="mailto:felipe@skyward.ai"
-							className="text-blue-600 underline hover:no-underline text-sm sm:text-base"
+							className="text-blue-600 underline hover:no-underline text-sm @sm:text-base"
 							style={{ fontFamily: "'Times New Roman', serif" }}
 						>
 							📧 Email the webmaster

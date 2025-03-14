@@ -45,6 +45,30 @@ export const FullSizeImageSlideSchema = z.object({
 	design: z.literal("full-size-image"),
 });
 
+// New slide type: Big centered image with text at the bottom
+export const BigImageWithCaptionSlideSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	topic: z.string(),
+	caption: z.string(),
+	image: ImageSchema,
+	speakerNotes: z.string().optional(),
+	design: z.literal("big-image-with-caption"),
+});
+
+// New slide type: Background image with overlaid text
+export const BackgroundImageWithTextSlideSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	topic: z.string(),
+	overlayText: z.string(),
+	textPosition: z.enum(["center", "top", "bottom"]).default("center"),
+	textColor: z.string().default("#FFFFFF"),
+	image: ImageSchema,
+	speakerNotes: z.string().optional(),
+	design: z.literal("background-image-with-text"),
+});
+
 export const OneTextColumnSlideSchema = z.object({
 	id: z.string(),
 	title: z.string(),
@@ -71,7 +95,7 @@ export const TwoColumnsWithImageSlideSchema = z.object({
 	id: z.string(),
 	title: z.string(),
 	topic: z.string(),
-	description: z.string(),
+	description: z.string().optional(),
 	markdownContent: z.string(),
 	image: ImageSchema,
 	speakerNotes: z.string().optional(),
@@ -95,6 +119,8 @@ export const SlideSchema = z.discriminatedUnion("design", [
 	TwoTextColumnsSlideSchema,
 	TwoColumnsWithImageSlideSchema,
 	TitleSlideSchema,
+	BigImageWithCaptionSlideSchema,
+	BackgroundImageWithTextSlideSchema,
 ]);
 
 export type Slide = z.infer<typeof SlideSchema>;

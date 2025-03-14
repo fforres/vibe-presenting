@@ -129,7 +129,7 @@ export default function SidebarLayout({
 											color: "#9400D3",
 										}}
 									>
-										New Presentation
+										{state.presentation.name}
 										{showBlink && (
 											<span className="ml-1 text-red-600 animate-pulse">!</span>
 										)}
