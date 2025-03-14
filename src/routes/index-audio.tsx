@@ -49,6 +49,7 @@ export const Index = () => {
 				mediaRecorderRef.current = mediaRecorder;
 
 				// Set up the stream to the server
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				let streamToServer: ReadableStreamDefaultController<any> | null = null;
 
 				// Start a fetch request with a writable stream
@@ -71,9 +72,9 @@ export const Index = () => {
 						}
 						return response.json();
 					})
-					.then((data: { transcript: string }) => {
-						if (data.transcript) {
-							setTranscript(data.transcript);
+					.then((data) => {
+						if ((data as { transcript: string }).transcript) {
+							setTranscript((data as { transcript: string }).transcript);
 						}
 					})
 					.catch((err) => {

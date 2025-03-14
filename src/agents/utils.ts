@@ -35,6 +35,7 @@ function isValidToolName<K extends PropertyKey, T extends object>(
 export async function processToolCalls<
 	Tools extends ToolSet,
 	ExecutableTools extends {
+		// biome-ignore lint/complexity/noBannedTypes: <explanation>
 		[Tool in keyof Tools as Tools[Tool] extends { execute: Function }
 			? never
 			: Tool]: Tools[Tool];
@@ -51,6 +52,7 @@ export async function processToolCalls<
 		[K in keyof Tools & keyof ExecutableTools]?: (
 			args: z.infer<ExecutableTools[K]["parameters"]>,
 			context: ToolExecutionOptions,
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		) => Promise<any>;
 	};
 }): Promise<Message[]> {
@@ -70,7 +72,8 @@ export async function processToolCalls<
 			if (!(toolName in executions) || toolInvocation.state !== "result")
 				return part;
 
-			let result;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			let result: any | string;
 
 			if (toolInvocation.result === APPROVAL.YES) {
 				// Get the tool and check if the tool has an execute function.

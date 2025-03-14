@@ -9,6 +9,7 @@
 		"deploy": "vite build && wrangler deploy",
 		"lint": "NODE_OPTIONS='--max-old-space-size=8192' biome check",
 		"typecheck": "tsc --noEmit",
+		"biome": "biome",
 		"test": "vitest"
 	},
 	"keywords": ["cloudflare", "ai", "agents"],

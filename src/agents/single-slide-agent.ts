@@ -122,6 +122,8 @@ export class SingleSlideAgent extends AIChatAgent<Env> {
 	 * Handles incoming chat messages about slide improvements
 	 * @param onFinish - Callback function executed when streaming completes
 	 */
+
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	async onChatMessage(onFinish: StreamTextOnFinishCallback<any>) {
 		return agentContext.run(this, async () => {
 			const dataStreamResponse = createDataStreamResponse({

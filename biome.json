@@ -18,6 +18,7 @@
 	},
 	"linter": {
 		"enabled": true,
+		"ignore": ["dist"],
 		"rules": {
 			"recommended": true
 		}
