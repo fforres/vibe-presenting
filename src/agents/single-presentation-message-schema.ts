@@ -41,7 +41,7 @@ export const FullSizeImageSlideSchema = z.object({
 	description: z.string().optional(),
 	markdownContent: z.array(z.string()).default([]),
 	image: ImageSchema,
-	speakerNotes: z.string(),
+	speakerNotes: z.string().optional(),
 	design: z.literal("full-size-image"),
 });
 
@@ -52,7 +52,7 @@ export const OneTextColumnSlideSchema = z.object({
 	description: z.string(),
 	markdownContent: z.string(),
 	image: ImageSchema.optional(),
-	speakerNotes: z.string(),
+	speakerNotes: z.string().optional(),
 	design: z.literal("one-text-column"),
 });
 
@@ -63,7 +63,7 @@ export const TwoTextColumnsSlideSchema = z.object({
 	description: z.string(),
 	markdownContentLeft: z.string(),
 	markdownContentRight: z.string(),
-	speakerNotes: z.string(),
+	speakerNotes: z.string().optional(),
 	design: z.literal("two-text-columns"),
 });
 
@@ -74,7 +74,7 @@ export const TwoColumnsWithImageSlideSchema = z.object({
 	description: z.string(),
 	markdownContent: z.string(),
 	image: ImageSchema,
-	speakerNotes: z.string(),
+	speakerNotes: z.string().optional(),
 	design: z.literal("two-columns-with-image"),
 });
 
@@ -84,7 +84,7 @@ export const TitleSlideSchema = z.object({
 	subtitle: z.string().optional(),
 	topic: z.string(),
 	description: z.string().optional(),
-	speakerNotes: z.string(),
+	speakerNotes: z.string().optional(),
 	design: z.literal("title"),
 });
 

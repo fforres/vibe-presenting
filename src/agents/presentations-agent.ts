@@ -111,7 +111,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 - (Previously, @ OpenAI).
 						`,
 						image: {
-							url: "https://pbs.twimg.com/profile_images/1712858545920000000/00000000000000000000000000000000.jpg",
+							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/6cb81b67-8c30-49de-3d9b-e06361a90600/public",
 						},
 						speakerNotes:
 							"Hello everyone! Before we dive into Cloudflare Durable Objects, I'd like to take a moment to introduce myself. I'm passionate about cloud technologies and have been working with serverless architectures for several years. My journey with Cloudflare technologies has been particularly exciting, and I'm looking forward to sharing my knowledge with you today.",
@@ -158,7 +158,12 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						topic: "Advantages",
 						description:
 							"Exploring the benefits of using Durable Objects in web applications.",
-						markdownContent: `
+						markdownContentLeft: `
+- Low latency data access
+- Scalability and flexibility
+- Improved data consistency
+						`,
+						markdownContentRight: `
 - Low latency data access
 - Scalability and flexibility
 - Improved data consistency
@@ -191,7 +196,12 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						topic: "Applications",
 						description:
 							"Exploring various use cases where Durable Objects can be effectively utilized.",
-						markdownContent: `
+						markdownContentLeft: `
+- Real-time chat applications
+- Gaming leaderboards
+- Collaborative editing tools
+						`,
+						markdownContentRight: `
 - Real-time chat applications
 - Gaming leaderboards
 - Collaborative editing tools
@@ -241,7 +251,12 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						topic: "Security",
 						description:
 							"Addressing security and privacy concerns related to Durable Objects.",
-						markdownContent: `
+						markdownContentLeft: `
+- Data encryption
+- Access control mechanisms
+- Compliance with data protection regulations
+						`,
+						markdownContentRight: `
 - Data encryption
 - Access control mechanisms
 - Compliance with data protection regulations
@@ -256,7 +271,12 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						topic: "Challenges",
 						description:
 							"Discussing the challenges and limitations of using Durable Objects.",
-						markdownContent: `
+						markdownContentLeft: `
+- Complexity in implementation
+- Potential latency issues
+- Cost considerations
+						`,
+						markdownContentRight: `
 - Complexity in implementation
 - Potential latency issues
 - Cost considerations
