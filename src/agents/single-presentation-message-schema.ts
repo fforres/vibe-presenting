@@ -39,7 +39,6 @@ export const FullSizeImageSlideSchema = z.object({
 	title: z.string(),
 	topic: z.string(),
 	description: z.string().optional(),
-	markdownContent: z.array(z.string()).default([]),
 	image: ImageSchema,
 	speakerNotes: z.string().optional(),
 	design: z.literal("full-size-image"),

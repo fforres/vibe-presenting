@@ -11,6 +11,7 @@ import type {
 } from "@/agents/single-presentation-message-schema";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSkywardAgent } from "@/hooks/use-skyward-agent";
+import { cn } from "@/lib/utils";
 import {
 	LightbulbIcon,
 	MessageSquareText,
@@ -97,11 +98,11 @@ const TitleSlide = memo(
 	}) => {
 		return (
 			<div className="flex flex-col items-center justify-center h-full text-center p-4 @sm:p-6 @md:p-8 bg-gradient-to-br from-blue-50 to-indigo-100">
-				<h1 className="text-2xl @sm:text-3xl @md:text-4xl font-bold mb-2 @sm:mb-4 text-indigo-900">
+				<h1 className="text-lg @sm:text-xl @md:text-2xl @lg:text-2xl @xl:text-4xl font-bold mb-2 @sm:mb-4 text-indigo-900">
 					{slideData.title}
 				</h1>
 				{slideData.subtitle && (
-					<h2 className="text-xl @sm:text-2xl text-indigo-700 mb-3 @sm:mb-6">
+					<h2 className="text-base @sm:text-base @md:text-base @lg:text-xl @xl:text-2xl px-10 text-indigo-700 mb-3 @sm:mb-6">
 						{slideData.subtitle}
 					</h2>
 				)}
@@ -121,7 +122,11 @@ const FullSizeImageSlide = memo(
 	}) => {
 		return (
 			<div className="relative h-full">
-				<div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
+				<div
+					className={cn("absolute inset-0 z-10", {
+						"bg-black/50": slideData.title,
+					})}
+				/>
 				{slideData.image?.url ? (
 					<img
 						src={slideData.image.url}

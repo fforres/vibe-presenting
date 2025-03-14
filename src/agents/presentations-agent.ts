@@ -10,7 +10,6 @@ import {
 import { generateId } from "ai";
 import {
 	AllPresentationsOutputSchema,
-	CreatedPresentationOutputSchema,
 	IncomingMessageSchema,
 	type OutgoingMessage,
 	OutgoingMessageSchema,
@@ -80,7 +79,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 		this.setState({
 			connectionCount: 0,
 			status: "idle",
-			activeSlide: "sobre-mi",
+			activeSlide: "why-there-is-ai-first-software-now",
 			// activeSlide: null,
 			config: {
 				sidebarNavigation: "inactive",
@@ -95,16 +94,12 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 				createdAt: Date.now(),
 				slides: [
 					{
-						id: "el-landing",
-						title: "Arquitectura de aplicaciones en un mundo post AI",
-						subtitle: "(Or how i learned to stop worrying and love the agents)",
-						topic: "El landing",
-						description:
-							"Ideas, patrones y 'Rants' sobre desarrollar software AI-First. (Pensamientos al rededor de `Sync Engines`, `el Edge` y `LLMs`) ",
+						id: "Hi",
+						title: "Hi 👋",
+						topic: "Hi",
 						// "Ideas, patterns and Rants for deveopint AI-First software. (Thoughts around Sync Engines, Edge Inference and LLMs) ",
-						// Nueva propuesta: Veremos ideas y patrones modernos para el desarrollo de aplicaciones “AI First” aprovechando Sync Engines, Edge Inference y modelos de lenguaje. Exploraremos casos prácticos que facilitan escalabilidad horizontal sin afectar negativamente en performance. Una solución concreta para desarrolladores.
-						speakerNotes:
-							"Welcome to this presentation on Cloudflare Durable Objects. Today, we'll explore what Durable Objects are, why they are important, and how they fit into the modern web architecture. Let's start by defining what Durable Objects are and their significance in data storage and processing.",
+						// Nueva propuesta: Veremos ideas y patrones modernos para el desarrollo de aplicaciones "AI First" aprovechando Sync Engines, Edge Inference y modelos de lenguaje. Exploraremos casos prácticos que facilitan escalabilidad horizontal sin afectar negativamente en performance. Una solución concreta para desarrolladores.
+						speakerNotes: "Say hi to the audience",
 						design: "title",
 					},
 					{
@@ -119,7 +114,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 - ❤️: AI, The Web, JS, TS, good UX, local-first.
 - 😡: Crypto/Scams,
 
-Socials
+### Socials
 - ~~X:~~ Twitter [twitter.com/fforres](https://twitter.com/fforres)
 - [github.com/fforres](https://github.com/fforres)
 - [linkedin.com/in/fforres](https://linkedin.com/in/fforres)
@@ -127,201 +122,348 @@ Socials
 						image: {
 							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/6cb81b67-8c30-49de-3d9b-e06361a90600/public",
 						},
-						speakerNotes:
-							"Hello everyone! Before we dive into Cloudflare Durable Objects, I'd like to take a moment to introduce myself. I'm passionate about cloud technologies and have been working with serverless architectures for several years. My journey with Cloudflare technologies has been particularly exciting, and I'm looking forward to sharing my knowledge with you today.",
+						speakerNotes: "",
 						design: "two-columns-with-image",
 					},
 					{
-						id: "ai-first-app",
-						title: "Que es una 'AI-First' app?",
-						topic: "WTF Is AI-First?",
-						description: "Una introducción sobre mi y mi background.",
-						markdownContent: `
-- My name and professional background
-- Experience with web technologies
-- Passion for cloud computing and serverless architecture
-						`,
-						image: {
-							prompt: "Professional portrait with technology background",
-						},
-						speakerNotes:
-							"Hello everyone! Before we dive into Cloudflare Durable Objects, I'd like to take a moment to introduce myself. I'm passionate about cloud technologies and have been working with serverless architectures for several years. My journey with Cloudflare technologies has been particularly exciting, and I'm looking forward to sharing my knowledge with you today.",
-						design: "two-columns-with-image",
-					},
-					{
-						id: "2",
-						title: "What are Cloudflare Durable Objects?",
-						topic: "Definition and Functionality",
+						id: "el-landing",
+						title: "Arquitectura de aplicaciones en un mundo post AI",
+						subtitle:
+							"(Ranteos. Cosas que aprendí construyendo Skyward.AI, y pa donde veo que va la cosa)",
+						topic: "El landing",
 						description:
-							"Understanding the core concept and functionality of Durable Objects.",
-						markdownContent: `
-- Stateful serverless compute platform
-- Data storage and processing at the Edge
-- Unique data consistency model
+							"Ideas, patrones y 'Rants' sobre desarrollar software AI-First. (Pensamientos al rededor de `Sync Engines`, `el Edge` y `LLMs`) ",
+						// "Ideas, patterns and Rants for deveopint AI-First software. (Thoughts around Sync Engines, Edge Inference and LLMs) ",
+						// Nueva propuesta: Veremos ideas y patrones modernos para el desarrollo de aplicaciones "AI First" aprovechando Sync Engines, Edge Inference y modelos de lenguaje. Exploraremos casos prácticos que facilitan escalabilidad horizontal sin afectar negativamente en performance. Una solución concreta para desarrolladores.
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "thesis-1",
+						title: "Implementar AI === Implementar una base de datos",
+						topic: "Thesis 1",
+						subtitle: "Thesis 1",
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "thesis-2",
+						title:
+							"El accesso a deep-reasoning models va ser (estúpidamente) barato.",
+						topic: "Thesis 2",
+						subtitle: "Thesis 2",
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "thesis-3",
+						title: `Gente "no-dev" va a crear software a medida.`,
+						topic: "Thesis 3",
+						subtitle: "Thesis 3",
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "so-what",
+						title: "Como diferencio mi software de la competencia?",
+						description: "",
+						topic: "FML. What's our Moat then?",
+						markdownContentLeft: `1. ## Si AI estará en todos lados.
+2. ## Si el acceso a "pensar" sera barato.
+3. ## Si la gente podra crear sus propias soluciones.
+
 						`,
+						markdownContentRight: `
+# 🤔🤔🤔
+# Cual es el MOAT?
+
+						`,
+						design: "two-text-columns",
+					},
+					{
+						id: "agents",
+						title: "Agents",
+						topic: "Agents",
+						subtitle: "The 'AI-First' way to build software",
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "wtf-is-an-agent",
+						title: "¿Qué diablos es un Agent?",
+						topic: "WTF is an Agent?",
+						markdownContent: `
+### Un programa autónomo que puede:
+  - Interactuar con su entorno
+  - Obtener data de fuentes externas
+  - Usar esa data para realizar acciones
+  - (MCP)
+
+### Características :
+  - "Razonamiento" (LLMs para decidir)
+  - Herramientas predefinidas (APIs, BDD, agentes)
+  - Autonomía (opera sin intervención constante)
+  - Persistencia (mantiene estado)
+`,
 						image: {
-							prompt: "Diagram of serverless architecture with data nodes",
+							prompt:
+								"Diagram showing an AI agent system with perception, reasoning, and action components interacting with various tools and APIs",
 						},
 						speakerNotes:
-							"Cloudflare Durable Objects are a stateful serverless compute platform that allows you to store and process data at the Edge. They offer a unique data consistency model, which is crucial for applications that require real-time data processing and storage.",
+							"Un agent es fundamentalmente diferente de un simple chatbot o una aplicación tradicional con IA. Es un sistema autónomo que combina la capacidad de razonamiento de los LLMs con la habilidad de interactuar con herramientas externas y mantener un estado persistente. Los agents pueden trabajar en segundo plano, tomar decisiones complejas y ejecutar tareas sin necesidad de supervisión constante. Esto los hace ideales para automatizar flujos de trabajo complejos que antes requerían intervención humana.",
+						design: "two-columns-with-image",
+					},
+					// asdadss
+					{
+						id: "wtf-is-ai-first",
+						title: "Que diablos es AI-First‽‽",
+						topic: "WTF is AI-First ‽‽",
+						markdownContent: `
+- ### IA es el componente fundamental de la solucion.
+- ### No es una característica añadida, sino el núcleo de la arquitectura.
+- ### Un problema: Falta de determinismo en la AI generativa.
+- ### Agent-Based
+`,
+						image: {
+							prompt:
+								"Modern AI application architecture diagram with neural networks integrated into core systems",
+						},
+						speakerNotes: "",
+						design: "two-columns-with-image",
+					},
+					{
+						id: "is-there-actually-a-moat",
+						title: "Entonces... Hay un Moat?",
+						description: "",
+						topic: "Entonces... Hay un Moat?",
+						markdownContent: `
+
+### Si, y es:
+
+## 1. Data Privada
+## 2. Buen UX
+## 3. Buen AX
+						`,
+						image: {
+							prompt:
+								"A diagram of a moat with a drawbridge and a castle on top",
+						},
+						design: "two-columns-with-image",
+					},
+					{
+						id: "good-ux-for-ai-first-software",
+						title: "Buen UX / Buen AX (AI-First Software)",
+						topic: "Good UX / Good AX (AI-First Software)",
+						description: "",
+						markdownContentLeft: `
+### UX — User Experience
+Lo mismo que hace bueno al software tradicional.
+- Entender y priorizar las necesidades y objetivos del usuario.
+- Resuelve?
+- Es simple de usar? Es facil de entender?
+- Es eficiente/es rapido?
+            `,
+						markdownContentRight: `
+### AX — Agent Experience
+- Mathias Billmann (CEO Netlify)
+- [Introducing AX: Why Agent Experience Matters](https://biilmann.blog/articles/introducing-ax/)
+- [The Era of Agent Experience (AX)](https://www.netlify.com/blog/the-era-of-agent-experience-ax/)
+
+> La experiencia que los agentes tienen, cuando trabajan con el contenido que producimos, o los sistemas que exponemos.
+
+`,
+						design: "two-text-columns",
+					},
+					{
+						id: "separator",
+						title: "====== BREAK ======",
+						topic: "====== BREAK ======",
+						subtitle: "Preguntas? Consultas? Reclamos?",
+						design: "title",
+					},
+					{
+						id: "summary",
+						title: "Consolidando ideas",
+						topic: "Summary",
+						description: "",
+						markdownContentLeft: `
+### Tenemos que
+- AI va a ser base de muchisimo software.
+- LLMs habilitan crear software "on-demand".
+- AI-First software va en subida.
+- Agentes es el core de AI-First software.
+- Todo esto implica muchísimos más agentes.
+- Los Moats de un buen software de AI son:
+  - Data Privada, buen UX y buen AX
+
+`,
+						markdownContentRight: `
+### El equipo @ Skyward.AI analizó:
+- Que es lo mas frustrante de trabajar con Llms.
+- Que no es tan frustrante, pero que nos gustaría que pasara.
+- Que es lo que nos encanta de trabajar con Llms.
+- En el panorama futuro. Que debería cambiar?
+`,
+						design: "two-text-columns",
+					},
+					{
+						id: "good-ux-ax-is-not-a-nice-to-have",
+						title: "Buen UX y AX son jugadas de arquitectura",
+						subtitle: "Y performance",
+						topic: "Good UX y AX no son 'nice-to-have'",
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "lets-talk-architecture",
+						title: "¿El Edge?",
+						topic: "¿El Edge?",
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "lets-talk-architecture-2",
+						title: "¿El Edge?",
+						subtitle:
+							"Es un paradigma de computación distribuida. El compute y storage se mueven más cerca de la fuente de datos. (Y no estan en un US-WEST-1).",
+						topic: "¿El Edge? (What is it?)",
+						speakerNotes: "",
+						design: "title",
+					},
+					{
+						id: "cloudflare-edge",
+						title: "",
+						topic: "Cloudflare",
+						speakerNotes: "",
+						image: {
+							url: "https://analyticsindiamag.com/wp-content/uploads/2024/03/CF_MetaImage_1200x628-1.png",
+						},
+						design: "full-size-image",
+					},
+					{
+						id: "Architectura-Workers",
+						title: "Que es Cloudflare Workers?",
+						topic: "Cloudflare Workers",
+						description:
+							"'Isolados' de V8, que corren en el Edge de Cloudflare. (2017)",
+						markdownContent: `
+- Serverless en el Edge.
+- No hay "US-WEST-1", tiene un solo location. "Earth"
+- Un request es un worker. (No se comparte estado entre requests)
+- JavaScript/WASM (Python y Rust en Beta)
+- Escala muy muy rápido.
+- Barato (100K requests/month al dia Gratis. 10M/Mes por 5 USD).
+						`,
+						image: {
+							url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQFRyEgec0Yd-jLs4-0MWopr_wixbNoODIfg&s",
+						},
+						speakerNotes: "",
 						design: "one-text-column",
 					},
 					{
-						id: "3",
-						title: "Benefits of Using Durable Objects",
-						topic: "Advantages",
+						id: "Durable Objects",
+						title: "Que son los Durable Objects?",
+						topic: "Durable Objects",
 						description:
-							"Exploring the benefits of using Durable Objects in web applications.",
-						markdownContentLeft: `
-- Low latency data access
-- Scalability and flexibility
-- Improved data consistency
-						`,
-						markdownContentRight: `
-- Low latency data access
-- Scalability and flexibility
-- Improved data consistency
-						`,
-						speakerNotes:
-							"One of the key benefits of using Durable Objects is low latency data access, which is essential for real-time applications. They also offer scalability and flexibility, allowing your applications to grow without compromising performance. Additionally, Durable Objects improve data consistency, ensuring that your data is always up-to-date and reliable.",
-						design: "two-text-columns",
-					},
-					{
-						id: "4",
-						title: "How Durable Objects Work",
-						topic: "Technical Overview",
-						description:
-							"A technical overview of how Durable Objects function within the Cloudflare ecosystem.",
+							"Tipo de 'worker' que se ejecuta en el Edge de Cloudflare. (2021)",
 						markdownContent: `
-- Event-driven architecture
-- Data synchronization across nodes
-- Integration with Cloudflare Workers
-						`,
+- Es un tipo de worker.
+- Se instancia como una clase.
+- Cada instancia de la clase tiene un ID unico en el mundo.
+- Tienen sockets. Timers.
+- Cada Durable Object tiene un "durable storage" asociado. (POJO o SQLite)
+
+Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 						image: {
-							prompt: "Technical diagram of event-driven architecture",
+							url: "https://cf-assets.www.cloudflare.com/zkvhlag99gkb/41hmxqTyMhQIZ7scR0xi17/bee0d4adde9913c3c2495e1a0f37c109/Earth-desktop-background-copy-2_2x.png",
 						},
-						speakerNotes:
-							"Durable Objects operate on an event-driven architecture, which allows them to efficiently handle data synchronization across multiple nodes. They integrate seamlessly with Cloudflare Workers, providing a powerful platform for building scalable and efficient web applications.",
+						speakerNotes: "",
 						design: "two-columns-with-image",
 					},
 					{
-						id: "5",
-						title: "Use Cases for Durable Objects",
-						topic: "Applications",
-						description:
-							"Exploring various use cases where Durable Objects can be effectively utilized.",
-						markdownContentLeft: `
-- Real-time chat applications
-- Gaming leaderboards
-- Collaborative editing tools
-						`,
-						markdownContentRight: `
-- Real-time chat applications
-- Gaming leaderboards
-- Collaborative editing tools
-						`,
-						speakerNotes:
-							"Durable Objects are versatile and can be used in a variety of applications. Some common use cases include real-time chat applications, gaming leaderboards, and collaborative editing tools. These applications benefit from the low latency and data consistency that Durable Objects provide.",
-						design: "two-text-columns",
+						id: "separator 2",
+						title: "====== BREAK 2 ======",
+						topic: "====== BREAK 2 ======",
+						subtitle: "Preguntas? Consultas? Reclamos?",
+						design: "title",
 					},
 					{
-						id: "6",
-						title: "Durable Objects and the Edge",
-						topic: "Edge Computing",
-						description:
-							"Understanding the role of Durable Objects in Edge computing.",
+						id: "summary 2",
+						title: "Consolidando ideas",
+						topic: "Summary",
 						markdownContent: `
-- Processing data closer to users
-- Reducing server load
-- Enhancing user experience
-						`,
+- Agentes:
+    - Logica de negocios encapsulada
+    - Persistencia (mantiene estado)
+- Lo mas frustrante de LLMs es la latencia.
+- UX/AX no son negociables para nuestros usuarios.
+- Desbloquear buen UX/AX son architecture plays.
+- Cloudflare tiene las infaestructura para reducir latencia y escalar estupidamente.
+
+... Metamos agentes en Cloudflare!
+
+`,
 						image: {
-							prompt: "Map showing data processing at the Edge",
+							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/99d59b22-756d-4e18-c00a-549b7ad8e000/public",
 						},
-						speakerNotes:
-							"Durable Objects play a crucial role in Edge computing by processing data closer to users. This reduces server load and enhances the overall user experience by providing faster and more reliable data access.",
-						design: "one-text-column",
-					},
-					{
-						id: "7",
-						title: "The Agents Framework",
-						topic: "Integration with Agents",
-						description: "How Durable Objects power the new Agents framework.",
-						markdownContent: `
-- Foundation for building intelligent agents
-- Real-time data processing
-- Seamless integration with existing systems
-						`,
-						image: {
-							prompt: "Diagram of agents interacting with data",
-						},
-						speakerNotes:
-							"Durable Objects are the foundation for building intelligent agents within the new Agents framework. They enable real-time data processing and offer seamless integration with existing systems, making it easier to build and deploy intelligent applications.",
 						design: "two-columns-with-image",
 					},
 					{
-						id: "8",
-						title: "Security and Privacy Considerations",
-						topic: "Security",
-						description:
-							"Addressing security and privacy concerns related to Durable Objects.",
-						markdownContentLeft: `
-- Data encryption
-- Access control mechanisms
-- Compliance with data protection regulations
-						`,
-						markdownContentRight: `
-- Data encryption
-- Access control mechanisms
-- Compliance with data protection regulations
-						`,
-						speakerNotes:
-							"Security and privacy are paramount when dealing with data. Durable Objects offer data encryption and robust access control mechanisms to ensure that your data is secure. They also comply with data protection regulations, providing peace of mind when handling sensitive information.",
-						design: "two-text-columns",
+						id: "story-time",
+						title: "Story Time",
+						subtitle: "Cloudflare Launchpad + Rita",
+						topic: "Story Time",
+						design: "title",
 					},
 					{
-						id: "9",
-						title: "Challenges and Limitations",
-						topic: "Challenges",
-						description:
-							"Discussing the challenges and limitations of using Durable Objects.",
-						markdownContentLeft: `
-- Complexity in implementation
-- Potential latency issues
-- Cost considerations
-						`,
-						markdownContentRight: `
-- Complexity in implementation
-- Potential latency issues
-- Cost considerations
-						`,
-						speakerNotes:
-							"While Durable Objects offer many benefits, there are also challenges and limitations to consider. Implementing them can be complex, and there may be potential latency issues depending on your application's architecture. Additionally, cost considerations should be taken into account when planning to use Durable Objects.",
-						design: "two-text-columns",
+						id: "boom-synnergy",
+						title: "Boom! Sinergy!",
+						topic: "Boom! Sinergy!",
+						image: {
+							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/99d59b22-756d-4e18-c00a-549b7ad8e000/public",
+						},
+						caption: `
+        const agent = new DurableObject()
+  `,
+						design: "big-image-with-caption",
 					},
 					{
-						id: "10",
-						title: "Future of Cloudflare Durable Objects",
-						topic: "Future Prospects",
-						description:
-							"Exploring the future developments and potential of Durable Objects.",
+						id: "tradeoffs",
+						title: "Tradeoffs",
+						topic: "Tradeoffs",
+						description: "",
 						markdownContent: `
-- Continued innovation
-- Expansion of use cases
-- Integration with emerging technologies
-						`,
-						speakerNotes:
-							"The future of Cloudflare Durable Objects is bright, with continued innovation and expansion of use cases on the horizon. As technology evolves, Durable Objects will likely integrate with emerging technologies, offering even more possibilities for developers and businesses.",
-						design: "one-text-column",
+- Hay que pensar en sistemas distribuidos
+  - Max 1000 Subrequest Limits (a D1/R2/Fetch/Other Workers)
+- Hay que pensar en serverless
+- 1 request = 1 server. (Pero de verdad, no como en Lambdas)
+- Low-ish Level APIs. (AsyncLocalStorage)
+- No FS API.
+- Hay que preocuparse de performance.
+  - Debe iniciar en menos de 400ms.
+  - 128mb de memoria x request.
+  - 10mb por Script.
+
+            `,
+						image: {
+							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/8d35bab5-7f6b-4726-5cff-1e0d0ec4e500/public",
+						},
+						design: "two-columns-with-image",
+					},
+					{
+						id: "code-example",
+						title: "Code Example",
+						subtitle: "Fuck it, let look at some code",
+						topic: "Code Example",
+						description: "",
+						design: "title",
 					},
 					{
 						id: "11",
 						title: "Conclusion and Q&A",
 						topic: "Conclusion",
-						description:
-							"Wrapping up the presentation and opening the floor for questions.",
-						speakerNotes:
-							"In conclusion, Cloudflare Durable Objects represent a significant advancement in data storage and processing at the Edge. We've covered their benefits, use cases, and future prospects. Now, I'd like to open the floor for any questions you may have.",
+						description: "",
+						speakerNotes: "",
 						design: "title",
 					},
 				] satisfies Slide[],
