@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 type AudioVisualizerProps = {
 	audioData: number[];
@@ -73,7 +74,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
 			const dataIndex = Math.floor(
 				((i % audioData.length) / audioData.length) * audioData.length,
 			);
-			let dataPoint = Math.abs(audioData[dataIndex] || 0);
+			const dataPoint = Math.abs(audioData[dataIndex] || 0);
 
 			// Increase scaling factor for more dramatic movements
 			// Changed from 0.8 to 1.2

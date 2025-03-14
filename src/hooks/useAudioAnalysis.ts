@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useAudioAnalysis() {
 	const [audioData, setAudioData] = useState<Uint8Array>(new Uint8Array(0));

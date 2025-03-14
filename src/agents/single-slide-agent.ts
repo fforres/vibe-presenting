@@ -1,15 +1,15 @@
 import type { Env } from "@/server";
+import { createOpenAI } from "@ai-sdk/openai";
+import { getAgentByName } from "agents-sdk";
 import { AIChatAgent } from "agents-sdk/ai-chat-agent";
 import {
+	type StreamTextOnFinishCallback,
 	createDataStreamResponse,
 	generateId,
 	streamText,
-	type StreamTextOnFinishCallback,
 } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
-import { agentContext } from "./utils";
-import { getAgentByName } from "agents-sdk";
 import type { SinglePresentationAgent } from "./single-presentation-agent";
+import { agentContext } from "./utils";
 
 /**
  * Tools for the SingleSlideAgent to interact with slides

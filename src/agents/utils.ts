@@ -1,16 +1,16 @@
 // via https://github.com/vercel/ai/blob/main/examples/next-openai/app/api/use-chat-human-in-the-loop/utils.ts
 
-import { formatDataStreamPart, type Message } from "@ai-sdk/ui-utils";
+import { AsyncLocalStorage } from "node:async_hooks";
+import type { Chat } from "@/server";
+import { type Message, formatDataStreamPart } from "@ai-sdk/ui-utils";
 import {
-	convertToCoreMessages,
 	type DataStreamWriter,
 	type ToolExecutionOptions,
 	type ToolSet,
+	convertToCoreMessages,
 } from "ai";
 import type { z } from "zod";
-import { AsyncLocalStorage } from "node:async_hooks";
 import { APPROVAL } from "../shared";
-import type { Chat } from "@/server";
 
 // we use ALS to expose the agent context to the tools
 export const agentContext = new AsyncLocalStorage<Chat>();

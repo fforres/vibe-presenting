@@ -1,15 +1,15 @@
+import type { Env } from "@/server";
+import { createOpenAI } from "@ai-sdk/openai";
 import { Agent, type Schedule } from "agents-sdk";
 import { AIChatAgent } from "agents-sdk/ai-chat-agent";
 import {
+	type StreamTextOnFinishCallback,
 	createDataStreamResponse,
 	generateId,
 	streamText,
-	type StreamTextOnFinishCallback,
 } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
+import { executions, tools } from "./tools";
 import { agentContext, processToolCalls } from "./utils";
-import { tools, executions } from "./tools";
-import type { Env } from "@/server";
 
 /**
  * Chat Agent implementation that handles real-time AI chat interactions

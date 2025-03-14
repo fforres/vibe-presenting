@@ -1,3 +1,4 @@
+import { presentationDescription } from "@/agents/utils";
 import type { Chat, Env } from "@/server";
 import {
 	Agent,
@@ -14,7 +15,6 @@ import {
 	type OutgoingMessage,
 	OutgoingMessageSchema,
 } from "./message-schemas";
-import { presentationDescription } from "@/agents/utils";
 import type { Slide } from "./single-presentation-message-schema";
 
 export type ScheduledItem = {

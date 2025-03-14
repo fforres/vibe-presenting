@@ -1,4 +1,4 @@
-import { useAgent, type UseAgentOptions } from "agents-sdk/react";
+import { type UseAgentOptions, useAgent } from "agents-sdk/react";
 
 export const useSkywardAgent = <State>(
 	props: Omit<UseAgentOptions<State>, "host">,
