@@ -47,7 +47,7 @@ const Markdown = ({ content }: { content: string }) => {
 const SpeakerNotesSheet = ({ notes }: { notes: string }) => {
 	return (
 		<Sheet>
-			<SheetTrigger className="absolute bottom-4 right-4 z-30 bg-white bg-opacity-80 p-2 rounded-full shadow-md hover:bg-opacity-100 transition-all">
+			<SheetTrigger className="absolute bottom-4 right-4 z-30 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100 transition-all border shadow-2xl">
 				<MessageSquareText className="h-5 w-5 text-gray-700" />
 			</SheetTrigger>
 			<SheetContent side="right">
