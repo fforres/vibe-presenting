@@ -1,8 +1,4 @@
-import { PresentationsInitInputSchema } from "@/agents/message-schemas";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
-import { CreatePresentationForm } from "@/components/create-presentation-form";
-import { useSkywardAgent } from "@/hooks/use-skyward-agent";
-import { useEffect, useState } from "react";
 
 export const Index = ({ state }: { state: PresentationAgentState }) => {
 	return (
