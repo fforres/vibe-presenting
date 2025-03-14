@@ -44,6 +44,12 @@ export const SetActiveSlideInputSchema = z.object({
 	id: z.union([z.string(), z.null()]),
 });
 
+// Add this schema for toggling collaboration
+export const ToggleCollaborationInputSchema = z.object({
+	type: z.literal("toggle-collaboration"),
+	enabled: z.boolean(),
+});
+
 // Combined input message schema
 export const IncomingMessageSchema = z.discriminatedUnion("type", [
 	ScheduleInputSchema,
@@ -51,6 +57,7 @@ export const IncomingMessageSchema = z.discriminatedUnion("type", [
 	CreatePresentationInputSchema,
 	SetActiveSlideInputSchema,
 	PresentationsInitInputSchema,
+	ToggleCollaborationInputSchema,
 ]);
 
 export type IncomingMessage = z.infer<typeof IncomingMessageSchema>;
@@ -93,6 +100,15 @@ export const InitialConnectionsOutputSchema = z.object({
 	}),
 });
 
+// Add a new outgoing message type for config updates
+export const ConfigUpdatedOutputSchema = z.object({
+	type: z.literal("config-updated"),
+	data: z.object({
+		collaboration: z.enum(["active", "inactive"]),
+		// Add other config properties as needed
+	}),
+});
+
 // Combined output message schema
 export const OutgoingMessageSchema = z.discriminatedUnion("type", [
 	SchedulesOutputSchema,
@@ -102,6 +118,7 @@ export const OutgoingMessageSchema = z.discriminatedUnion("type", [
 	AllPresentationsOutputSchema,
 	CreatedPresentationOutputSchema,
 	InitialConnectionsOutputSchema,
+	ConfigUpdatedOutputSchema,
 ]);
 
 export type OutgoingMessage = z.infer<typeof OutgoingMessageSchema>;

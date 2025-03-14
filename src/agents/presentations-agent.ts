@@ -13,6 +13,7 @@ import {
 	IncomingMessageSchema,
 	type OutgoingMessage,
 	OutgoingMessageSchema,
+	ToggleCollaborationInputSchema,
 } from "./message-schemas";
 import type { Slide } from "./single-presentation-message-schema";
 
@@ -342,7 +343,7 @@ Lo mismo que hace bueno al software tradicional.
 					},
 					{
 						id: "Architectura-Workers",
-						title: "Que es Cloudflare Workers?",
+						title: "Que son los Cloudflare Workers?",
 						topic: "Cloudflare Workers",
 						description:
 							"'Isolados' de V8, que corren en el Edge de Cloudflare. (2017)",
@@ -355,10 +356,10 @@ Lo mismo que hace bueno al software tradicional.
 - Barato (100K requests/month al dia Gratis. 10M/Mes por 5 USD).
 						`,
 						image: {
-							url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQFRyEgec0Yd-jLs4-0MWopr_wixbNoODIfg&s",
+							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/c41afd99-e02c-41ed-be78-042f436b7400/public",
 						},
 						speakerNotes: "",
-						design: "one-text-column",
+						design: "two-columns-with-image",
 					},
 					{
 						id: "Durable Objects",
@@ -562,6 +563,16 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 				this.setState({
 					...this.state,
 					activeSlide: parsedMessage.id,
+				});
+			}
+			if (parsedMessage.type === "toggle-collaboration") {
+				console.log("parsedMessage", parsedMessage);
+				this.setState({
+					...this.state,
+					config: {
+						...this.state.config,
+						collaboration: parsedMessage.enabled ? "active" : "inactive",
+					},
 				});
 			}
 			// case "delete-schedule":

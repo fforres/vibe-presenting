@@ -52,7 +52,7 @@ const Markdown = ({ content }: { content: string }) => {
 };
 
 // Speaker Notes Sheet component
-const SpeakerNotesSheet = ({ notes }: { notes: string }) => {
+const SpeakerNotesSheet = ({ notes }: { notes?: string }) => {
 	return (
 		<Sheet>
 			<SheetTrigger className=" z-30 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100 transition-all border shadow-2xl">
@@ -62,7 +62,7 @@ const SpeakerNotesSheet = ({ notes }: { notes: string }) => {
 				<div className="p-4">
 					<h3 className="text-lg font-semibold mb-4">Speaker Notes</h3>
 					<div className="prose prose-sm">
-						<Markdown content={notes} />
+						<Markdown content={notes ?? ""} />
 					</div>
 				</div>
 			</SheetContent>
@@ -79,8 +79,8 @@ const CollaborationSheet = () => {
 			</SheetTrigger>
 			<SheetContent side="right">
 				<div className="p-4">
-					<h3 className="text-lg font-semibold mb-4">Collaboration Notes</h3>
-					<div className="prose prose-sm">asdasd</div>
+					<h3 className="text-lg font-semibold mb-4">Collaboration Mode 🔥</h3>
+					<div className="prose prose-sm">TextArea</div>
 				</div>
 			</SheetContent>
 		</Sheet>
@@ -451,6 +451,11 @@ export const SingleSlide = memo(
 			},
 		});
 
+		console.log(
+			"generalState.config.collaboration",
+			generalState.config.collaboration,
+		);
+
 		// If slide data is not found, show a placeholder
 		if (!slide || !state) {
 			return (
@@ -499,9 +504,7 @@ export const SingleSlide = memo(
 					</div>
 				</div>
 				<div className="flex gap-2 absolute bottom-4 right-4">
-					{slide.speakerNotes && (
-						<SpeakerNotesSheet notes={slide.speakerNotes} />
-					)}
+					<SpeakerNotesSheet notes={slide.speakerNotes} />
 					{generalState.config.collaboration === "active" && (
 						<CollaborationSheet />
 					)}

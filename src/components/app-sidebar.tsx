@@ -4,6 +4,7 @@ import {
 } from "@/agents/message-schemas";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
 import { CreatePresentationModal } from "@/components/create-presentation-modal";
+import { SettingsModal } from "@/components/settings-modal";
 import { Button } from "@/components/ui/button";
 import {
 	Sidebar,
@@ -22,7 +23,13 @@ import {
 import { useTheme } from "@/features/theme-provider";
 import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { cn } from "@/lib/utils";
-import { MoonIcon, PlusIcon, SunIcon } from "lucide-react";
+import {
+	CogIcon,
+	MoonIcon,
+	PlusIcon,
+	SettingsIcon,
+	SunIcon,
+} from "lucide-react";
 import type * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -37,6 +44,7 @@ export function AppSidebar({
 	const { theme, setTheme } = useTheme();
 	const [showBlink, setShowBlink] = useState(true);
 	const [createModalOpen, setCreateModalOpen] = useState(false);
+	const [settingsModalOpen, setSettingsModalOpen] = useState(false);
 
 	// Toggle blinking elements for 90s effect
 	useEffect(() => {
@@ -86,6 +94,11 @@ export function AppSidebar({
 				agent={agent}
 				open={createModalOpen}
 				onOpenChange={setCreateModalOpen}
+			/>
+			<SettingsModal
+				agent={agent}
+				open={settingsModalOpen}
+				onOpenChange={setSettingsModalOpen}
 			/>
 			<Sidebar
 				{...props}
@@ -256,20 +269,16 @@ export function AppSidebar({
 
 				<SidebarFooter className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 border-t-2 border-black">
 					<SidebarMenu>
-						{/* <SidebarMenuItem>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full h-9 w-9 cursor-pointer bg-white/50 hover:bg-white/70"
-                onClick={toggleTheme}
-              >
-                {theme === "dark" ? (
-                  <SunIcon className="h-5 w-5 text-yellow-600" />
-                ) : (
-                  <MoonIcon className="h-5 w-5 text-indigo-800" />
-                )}
-              </Button>
-            </SidebarMenuItem> */}
+						<SidebarMenuItem>
+							<Button
+								variant="ghost"
+								size="icon"
+								className="rounded-full h-9 w-9 cursor-pointer bg-white/50 hover:bg-white/70"
+								onClick={() => setSettingsModalOpen(true)}
+							>
+								<SettingsIcon className="size-5" />
+							</Button>
+						</SidebarMenuItem>
 						<SidebarMenuItem>
 							<SidebarMenuButton size="lg" asChild>
 								<a
