@@ -39,8 +39,8 @@ export const PresentationsInitInputSchema = z.object({
 	type: z.literal("presentations-init"),
 });
 
-export const SetActivePresentationInputSchema = z.object({
-	type: z.literal("set-active-presentation"),
+export const SetActiveSlideInputSchema = z.object({
+	type: z.literal("set-active-slide"),
 	id: z.union([z.string(), z.null()]),
 });
 
@@ -49,7 +49,7 @@ export const IncomingMessageSchema = z.discriminatedUnion("type", [
 	ScheduleInputSchema,
 	DeleteScheduleInputSchema,
 	CreatePresentationInputSchema,
-	SetActivePresentationInputSchema,
+	SetActiveSlideInputSchema,
 	PresentationsInitInputSchema,
 ]);
 

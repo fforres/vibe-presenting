@@ -1,6 +1,6 @@
 import { PresentationsInitInputSchema } from "@/agents/message-schemas";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
-import { useSkywardAgent } from "@/hooks/use-skyward-agent";
+import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { useState, useEffect } from "react";
 import { AppSidebar } from "~/components/app-sidebar";
 import {
@@ -86,7 +86,7 @@ export default function SidebarLayout({
             {/* Styled breadcrumb */}
             <Breadcrumb>
               <BreadcrumbList className="bg-white/80 px-2 py-1 rounded border border-gray-400">
-                {state.activePresentation ? (
+                {state.activeSlide ? (
                   <>
                     <BreadcrumbItem className="hidden md:block">
                       <BreadcrumbLink
@@ -108,7 +108,11 @@ export default function SidebarLayout({
                           color: "#9400D3",
                         }}
                       >
-                        {state.activePresentation?.name}
+                        {
+                          state.presentation.slides.find(
+                            (slide) => slide.id === state.activeSlide
+                          )?.title
+                        }
                         {showBlink && (
                           <span className="ml-1 text-red-600 animate-pulse">
                             !

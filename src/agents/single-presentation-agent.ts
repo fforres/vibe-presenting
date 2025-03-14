@@ -1,35 +1,28 @@
 import {
+	type AnalyzeTextSchema,
+	type DeleteSlideSchema,
+	ErrorOutputSchema,
+	type InitPresentationSchema,
+	type PresentationContent,
+	PresentationUpdatedOutputSchema,
+	type ReorderSlidesSchema,
 	type SinglePresentationAgentState,
 	SinglePresentationIncomingMessageSchema,
-	SinglePresentationOutgoingMessageSchema,
-	type InitPresentationSchema,
-	type AnalyzeTextSchema,
-	type UpdateSlideSchema,
-	type ReorderSlidesSchema,
-	type DeleteSlideSchema,
-	type GenerateNewSlideSchema,
-	ErrorOutputSchema,
-	type PresentationContent,
-	type Slide,
-	PresentationUpdatedOutputSchema,
-	PresentationContentOutputSchema,
-	SlideGeneratedOutputSchema,
 	type SinglePresentationOutgoingMessage,
-	PresentationContentSchema,
+	SinglePresentationOutgoingMessageSchema,
 	SlideSchema,
+	type UpdateSlideSchema,
 } from "@/agents/single-presentation-message-schema";
 import type { Env } from "@/server";
+import { createOpenAI } from "@ai-sdk/openai";
 import {
 	Agent,
 	type Connection,
 	type ConnectionContext,
 	type WSMessage,
-	getAgentByName,
 } from "agents-sdk";
 import { generateId, streamObject } from "ai";
 import { z } from "zod";
-import { createOpenAI, openai } from "@ai-sdk/openai";
-import { presentationDescription } from "@/agents/utils";
 /**
  * SinglePresentation Agent implementation that handles presentation content generation and management
  */
@@ -43,6 +36,7 @@ export class SinglePresentationAgent extends Agent<
 	constructor(env: any, agent: any) {
 		super(env, agent);
 		this.setState({
+			connectionCount: 0,
 			presentationId: null,
 			content: null,
 			status: "initializing",
@@ -50,9 +44,8 @@ export class SinglePresentationAgent extends Agent<
 		});
 	}
 
-	async initialize(message: z.infer<typeof InitPresentationSchema>) {
+	initialize(message: z.infer<typeof InitPresentationSchema>) {
 		this.setStatus("initializing");
-		console.log("initializing!!!!");
 		// Update state
 		this.setState({
 			...this.state,
@@ -60,15 +53,41 @@ export class SinglePresentationAgent extends Agent<
 			content: {
 				createdAt: Date.now(),
 				updatedAt: Date.now(),
-				id: message.presentationId,
 				name: message.name,
 				description: message.description,
 				slides: [],
 			},
 		});
 	}
+	onConnect(
+		connection: Connection,
+		ctx: ConnectionContext,
+	): void | Promise<void> {
+		super.onConnect(connection, ctx);
+		this.connections[connection.id] = connection;
+		this.setState({
+			...this.state,
+			connectionCount: this.state.connectionCount + 1,
+		});
+		// console.log("onConnect", connection, ctx);
+	}
+	onClose(
+		connection: Connection,
+		code: number,
+		reason: string,
+		wasClean: boolean,
+	): void | Promise<void> {
+		super.onClose(connection, code, reason, wasClean);
+		delete this.connections[connection.id];
+		this.setState({
+			...this.state,
+			connectionCount: Math.max(this.state.connectionCount - 1, 0),
+		});
+	}
 
 	async generateSlides() {
+		console.log("generating slides");
+		this.setStatus("loading");
 		const name = this.state.content?.name;
 		const description = this.state.content?.description;
 		const openai = createOpenAI({
@@ -114,37 +133,11 @@ Presentation Description: ${description}`,
 				},
 			});
 		}
-	}
 
-	onConnect(
-		connection: Connection,
-		ctx: ConnectionContext,
-	): void | Promise<void> {
-		super.onConnect(connection, ctx);
-		if (!this.state.presentationId) {
-			this.setState({
-				...this.state,
-				presentationId: this.name,
-			});
-
-			this.initialize({
-				type: "init-presentation",
-				presentationId: this.name,
-				description: presentationDescription,
-				name: "AI Agents",
-			});
-		}
-		this.connections[connection.id] = connection;
-	}
-
-	onClose(
-		connection: Connection,
-		code: number,
-		reason: string,
-		wasClean: boolean,
-	): void | Promise<void> {
-		super.onClose(connection, code, reason, wasClean);
-		delete this.connections[connection.id];
+		console.log("content");
+		console.log(JSON.stringify(this.state.content));
+		console.log("slides");
+		console.log(JSON.stringify(this.state.content?.slides));
 	}
 
 	setStatus(status: SinglePresentationAgentState["status"]) {
@@ -207,13 +200,13 @@ Presentation Description: ${description}`,
 					await this.handleDeleteSlide(connection, parsedMessage);
 					break;
 
-				case "generate-new-slide":
-					await this.handleGenerateNewSlide(
-						connection,
-						parsedMessage,
-						messageId,
-					);
-					break;
+				// case "generate-new-slide":
+				// 	await this.handleGenerateNewSlide(
+				// 		connection,
+				// 		parsedMessage,
+				// 		messageId,
+				// 	);
+				// 	break;
 			}
 		} catch (error) {
 			// Handle validation errors
@@ -227,8 +220,6 @@ Presentation Description: ${description}`,
 				),
 			);
 		}
-
-		this.setStatus("idle");
 	}
 
 	async handleAnalyzeText(
@@ -471,193 +462,6 @@ Presentation Description: ${description}`,
 		);
 	}
 
-	async handleGenerateNewSlide(
-		connection: Connection<unknown>,
-		message: z.infer<typeof GenerateNewSlideSchema>,
-		messageId: string,
-	) {
-		if (!this.state.content) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data: "No presentation initialized. Send init-presentation first.",
-					}),
-				),
-			);
-			return;
-		}
-
-		const openai = createOpenAI({
-			apiKey: this.env.OPENAI_API_KEY,
-		});
-
-		try {
-			// Generate context for the AI
-			const existingSlides = this.state.content.slides
-				.sort((a, b) => a.order - b.order)
-				.map((slide, index) => {
-					return `Slide ${index + 1}: "${slide.title}" - ${slide.description} - ${slide.bulletPoints.join(", ")}`;
-				})
-				.join("\n");
-
-			// Determine where to insert the new slide
-			let insertPosition = this.state.content.slides.length;
-			let contextMessage = "Add this slide at the end of the presentation.";
-
-			if (message.afterSlideId) {
-				const afterSlideIndex = this.state.content.slides.findIndex(
-					(s) => s.id === message.afterSlideId,
-				);
-				if (afterSlideIndex !== -1) {
-					insertPosition = afterSlideIndex + 1;
-					contextMessage = `Add this slide after "${this.state.content.slides[afterSlideIndex].title}".`;
-				}
-			}
-
-			// Generate a new slide
-			const response = await openai.chat.completions.create({
-				model: "gpt-4o",
-				messages: [
-					{
-						role: "system",
-						content: `You are a presentation expert that helps create well-structured slides.
-						The current presentation is titled "${this.state.content.name}" with the description: "${this.state.content.description}".
-
-						Here are the existing slides in the presentation:
-						${existingSlides}
-
-						${contextMessage}
-						${message.topic ? `The slide should focus on this topic: ${message.topic}` : "Generate an appropriate topic based on the presentation flow."}`,
-					},
-				],
-				functions: [
-					{
-						name: "generate_slide",
-						description: "Generate a new slide for the presentation",
-						parameters: {
-							type: "object",
-							properties: {
-								title: { type: "string", description: "Concise slide title" },
-								topic: {
-									type: "string",
-									description: "The main topic of this slide",
-								},
-								description: {
-									type: "string",
-									description: "Brief description of the slide content",
-								},
-								bulletPoints: {
-									type: "array",
-									items: { type: "string" },
-									description:
-										"Key points to include on the slide (3-5 points)",
-								},
-								imagePrompt: {
-									type: "string",
-									description: "Prompt to generate an image for this slide",
-								},
-							},
-							required: [
-								"title",
-								"topic",
-								"description",
-								"bulletPoints",
-								"imagePrompt",
-							],
-						},
-					},
-				],
-				function_call: { name: "generate_slide" },
-			});
-
-			const functionCall = response.choices[0]?.message?.function_call;
-
-			if (functionCall && functionCall.name === "generate_slide") {
-				const slideData = JSON.parse(functionCall.arguments);
-
-				// Create the new slide
-				const newSlide: Slide = {
-					id: generateId(),
-					title: slideData.title,
-					topic: slideData.topic,
-					description: slideData.description,
-					bulletPoints: slideData.bulletPoints,
-					imagePrompt: slideData.imagePrompt,
-					order: insertPosition,
-				};
-
-				// Update slides with the new slide and reorder
-				const updatedSlides = [...this.state.content.slides];
-
-				// Increment order for slides that come after the new slide
-				for (let i = 0; i < updatedSlides.length; i++) {
-					if (updatedSlides[i].order >= insertPosition) {
-						updatedSlides[i].order += 1;
-					}
-				}
-
-				// Add the new slide
-				updatedSlides.push(newSlide);
-
-				// Sort by order
-				updatedSlides.sort((a, b) => a.order - b.order);
-
-				// Update the presentation content
-				const updatedContent: PresentationContent = {
-					...this.state.content,
-					slides: updatedSlides,
-					updatedAt: Date.now(),
-				};
-
-				// Update state
-				this.setState({
-					...this.state,
-					content: updatedContent,
-					history: this.state.history.map((item) =>
-						item.id === messageId
-							? { ...item, response: JSON.stringify(slideData) }
-							: item,
-					),
-				});
-
-				// Send responses
-				await connection.send(
-					JSON.stringify(
-						SlideGeneratedOutputSchema.parse({
-							type: "slide-generated",
-							slide: newSlide,
-						}),
-					),
-				);
-
-				await connection.send(
-					JSON.stringify(
-						PresentationUpdatedOutputSchema.parse({
-							type: "presentation-updated",
-							data: updatedContent,
-						}),
-					),
-				);
-			} else {
-				throw new Error("Failed to generate new slide");
-			}
-		} catch (error) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data:
-							error instanceof Error
-								? error.message
-								: "Error generating new slide",
-					}),
-				),
-			);
-		}
-	}
-
-	// Helper method to send messages to all connections
 	broadcastMessage(message: SinglePresentationOutgoingMessage) {
 		const validatedMessage =
 			SinglePresentationOutgoingMessageSchema.parse(message);

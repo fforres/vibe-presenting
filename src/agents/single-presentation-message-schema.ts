@@ -21,24 +21,86 @@ export type PresentationAgentState = {
 	presentations: Presentation[];
 };
 
-// Define slide structure
-export const SlideSchema = z.object({
+// Define image object schema with validation
+export const ImageSchema = z
+	.object({
+		prompt: z.string().optional(),
+		url: z.string().optional(),
+	})
+	.refine((data) => data.prompt !== undefined || data.url !== undefined, {
+		message: "Either image prompt or image URL must be provided",
+	});
+
+export type Image = z.infer<typeof ImageSchema>;
+
+// Update slide design types
+export const FullSizeImageSlideSchema = z.object({
 	id: z.string(),
 	title: z.string(),
 	topic: z.string(),
 	description: z.string().optional(),
-	bulletPoints: z.array(z.string()).default([]),
-	imagePrompt: z.string().optional(),
-	imageUrl: z.string().optional(),
+	markdownContent: z.array(z.string()).default([]),
+	image: ImageSchema,
 	speakerNotes: z.string(),
-	order: z.number(),
+	design: z.literal("full-size-image"),
 });
+
+export const OneTextColumnSlideSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	topic: z.string(),
+	description: z.string(),
+	markdownContent: z.string(),
+	image: ImageSchema.optional(),
+	speakerNotes: z.string(),
+	design: z.literal("one-text-column"),
+});
+
+export const TwoTextColumnsSlideSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	topic: z.string(),
+	description: z.string(),
+	markdownContentLeft: z.string(),
+	markdownContentRight: z.string(),
+	speakerNotes: z.string(),
+	design: z.literal("two-text-columns"),
+});
+
+export const TwoColumnsWithImageSlideSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	topic: z.string(),
+	description: z.string(),
+	markdownContent: z.string(),
+	image: ImageSchema,
+	speakerNotes: z.string(),
+	design: z.literal("two-columns-with-image"),
+});
+
+export const TitleSlideSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	subtitle: z.string().optional(),
+	topic: z.string(),
+	description: z.string().optional(),
+	speakerNotes: z.string(),
+	design: z.literal("title"),
+});
+
+// Combined slide schema using discriminated union
+export const SlideSchema = z.discriminatedUnion("design", [
+	FullSizeImageSlideSchema,
+	OneTextColumnSlideSchema,
+	TwoTextColumnsSlideSchema,
+	TwoColumnsWithImageSlideSchema,
+	TitleSlideSchema,
+]);
 
 export type Slide = z.infer<typeof SlideSchema>;
 
 // Define presentation structure
 export const PresentationContentSchema = z.object({
-	id: z.string(),
 	name: z.string(),
 	description: z.string(),
 	slides: z.array(SlideSchema).default([]),
@@ -51,6 +113,7 @@ export type PresentationContent = z.infer<typeof PresentationContentSchema>;
 // Define agent state
 export type SinglePresentationAgentState = {
 	presentationId: string | null;
+	connectionCount: number;
 	content: PresentationContent | null;
 	status: "initializing" | "ready" | "loading" | "error" | "success";
 	history: Array<{
@@ -81,8 +144,13 @@ export const UpdateSlideSchema = z.object({
 	title: z.string().optional(),
 	topic: z.string().optional(),
 	description: z.string().optional(),
-	bulletPoints: z.array(z.string()).optional(),
-	imagePrompt: z.string().optional(),
+	markdownContent: z.string(),
+	image: z
+		.object({
+			prompt: z.string().optional(),
+			url: z.string().optional(),
+		})
+		.optional(),
 });
 
 export const ReorderSlidesSchema = z.object({

@@ -20,7 +20,7 @@ import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
 import {
   PresentationsInitInputSchema,
-  SetActivePresentationInputSchema,
+  SetActiveSlideInputSchema,
 } from "@/agents/message-schemas";
 import { useMemo, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -52,12 +52,12 @@ export function AppSidebar({
       navMain: [
         {
           title: "Home",
-          isActive: state.activePresentation === null && !createModalOpen,
+          isActive: state.activeSlide === null && !createModalOpen,
           onClick: () => {
             agent?.send(
               JSON.stringify(
-                SetActivePresentationInputSchema.parse({
-                  type: "set-active-presentation",
+                SetActiveSlideInputSchema.parse({
+                  type: "set-active-slide",
                   id: null,
                 })
               )
@@ -65,23 +65,16 @@ export function AppSidebar({
           },
         },
         {
-          title: "New Presentation",
-          isActive: createModalOpen,
-          onClick: () => {
-            setCreateModalOpen(true);
-          },
-        },
-        {
-          title: "Presentations",
-          items: state.presentations.map((presentation) => ({
-            id: presentation.id,
-            title: presentation.name,
-            isActive: state.activePresentation?.id === presentation.id,
+          title: "Slides",
+          items: state.presentation.slides.map((slide) => ({
+            id: slide.id,
+            title: slide.topic,
+            isActive: state.activeSlide === slide.id,
           })),
         },
       ],
     };
-  }, [state.presentations, state.activePresentation, agent, createModalOpen]);
+  }, [state.presentation, state.activeSlide, agent, createModalOpen]);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -121,8 +114,8 @@ export function AppSidebar({
               onClick={() => {
                 agent?.send(
                   JSON.stringify(
-                    SetActivePresentationInputSchema.parse({
-                      type: "set-active-presentation",
+                    SetActiveSlideInputSchema.parse({
+                      type: "set-active-slide",
                       id: null,
                     })
                   )
@@ -174,16 +167,6 @@ export function AppSidebar({
         </SidebarHeader>
 
         <SidebarContent className="relative">
-          {/* Background pattern */}
-          <div
-            className="absolute inset-0 opacity-5 pointer-events-none"
-            style={{
-              backgroundImage:
-                "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwIDJsMiA2aDZ2LTZoLTh6bTAgMTZsLTItNmgtNnY2aDh6IiBmaWxsPSIjMDAwIi8+PC9zdmc+')",
-              backgroundRepeat: "repeat",
-            }}
-          />
-
           <SidebarGroup>
             <SidebarMenu>
               {data.navMain.map((item) => (
@@ -246,8 +229,8 @@ export function AppSidebar({
                             onClick={() => {
                               agent?.send(
                                 JSON.stringify(
-                                  SetActivePresentationInputSchema.parse({
-                                    type: "set-active-presentation",
+                                  SetActiveSlideInputSchema.parse({
+                                    type: "set-active-slide",
                                     id: presentation.id,
                                   })
                                 )
@@ -273,7 +256,7 @@ export function AppSidebar({
 
         <SidebarFooter className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 border-t-2 border-black">
           <SidebarMenu>
-            <SidebarMenuItem>
+            {/* <SidebarMenuItem>
               <Button
                 variant="ghost"
                 size="icon"
@@ -286,7 +269,7 @@ export function AppSidebar({
                   <MoonIcon className="h-5 w-5 text-indigo-800" />
                 )}
               </Button>
-            </SidebarMenuItem>
+            </SidebarMenuItem> */}
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
                 <a
