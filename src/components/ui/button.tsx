@@ -9,6 +9,8 @@ const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
+				geocities:
+					"bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500",
 				default:
 					"bg-primary text-primary-foreground shadow hover:bg-primary/90",
 				destructive:

@@ -99,12 +99,13 @@ export function AppSidebar({
 				agent={agent}
 				open={settingsModalOpen}
 				onOpenChange={setSettingsModalOpen}
+				collaborationEnabled={false}
 			/>
 			<Sidebar
 				{...props}
 				variant="sidebar"
 				collapsible="offcanvas"
-				className="border-r-4 border-dashed"
+				className="border-r-4 border-dashed pr-2"
 				style={{
 					borderImageSource:
 						"linear-gradient(to bottom, #FF00FF, #00FFFF, #FFFF00)",
@@ -268,18 +269,8 @@ export function AppSidebar({
 				<SidebarRail className="bg-gradient-to-b from-gray-300 to-gray-400 border-r border-l border-gray-500" />
 
 				<SidebarFooter className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 border-t-2 border-black">
-					<SidebarMenu>
-						<SidebarMenuItem>
-							<Button
-								variant="ghost"
-								size="icon"
-								className="rounded-full h-9 w-9 cursor-pointer bg-white/50 hover:bg-white/70"
-								onClick={() => setSettingsModalOpen(true)}
-							>
-								<SettingsIcon className="size-5" />
-							</Button>
-						</SidebarMenuItem>
-						<SidebarMenuItem>
+					<SidebarMenu className="flex flex-row justify-between items-center gap-2">
+						<SidebarMenuItem className="flex-1">
 							<SidebarMenuButton size="lg" asChild>
 								<a
 									href="https://skyward.ai"
@@ -312,6 +303,16 @@ export function AppSidebar({
 								</a>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
+						<SidebarMenuItem>
+							<Button
+								variant="ghost"
+								size="icon"
+								className="rounded-full h-9 w-9 cursor-pointer bg-white/50 hover:bg-white/70"
+								onClick={() => setSettingsModalOpen(true)}
+							>
+								<SettingsIcon className="size-5" />
+							</Button>
+						</SidebarMenuItem>
 					</SidebarMenu>
 
 					{/* 90s copyright notice */}
@@ -319,8 +320,8 @@ export function AppSidebar({
 						className="text-[10px] text-center mt-2 mb-1 text-white"
 						style={{ fontFamily: "monospace", textShadow: "1px 1px 1px #000" }}
 					>
-						Copyright © 1999 <br />
-						Made with Notepad
+						Copyright © 1997 <br />
+						Made with Microsoft's Frontpage
 					</div>
 				</SidebarFooter>
 			</Sidebar>

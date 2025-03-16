@@ -55,7 +55,7 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 					</div>
 
 					<p
-						className="mb-4 @sm:mb-6 font-bold text-sm @sm:text-base leading-relaxed"
+						className="mb-4 @sm:mb-6 font-bold text-xl leading-relaxed"
 						style={{ fontFamily: "'Courier New', monospace" }}
 					>
 						Vibe Presenting is a{" "}
@@ -63,7 +63,7 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 							style={{
 								color: "#FF00FF",
 								backgroundColor: "#00FFFF",
-								padding: "3px",
+								padding: "4px",
 							}}
 						>
 							RADICAL
@@ -73,7 +73,7 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 							style={{
 								color: "#00FFFF",
 								backgroundColor: "#FF00FF",
-								padding: "3px",
+								padding: "4px",
 							}}
 						>
 							AWESOME
@@ -82,23 +82,23 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 					</p>
 
 					{/* Hit counter and visitor stats - responsive layout */}
-					<div className="flex flex-wrap justify-center items-center gap-2 mb-4 @sm:mb-6">
+					<div className="flex flex-wrap justify-center text-base items-center gap-2 mb-4 @sm:mb-6">
 						<div
-							className="bg-black text-white px-2 py-1 text-xs"
+							className="bg-black text-white px-2 py-1"
 							style={{ fontFamily: "monospace" }}
 						>
 							Visitors: {state.connectionCount}
 						</div>
-						<div className="bg-gray-200 border border-gray-400 px-2 py-1 text-xs">
+						<div className=" border bg-accent-foreground text-secondary px-2 py-1">
 							Last updated: {new Date().toLocaleDateString()}
 						</div>
 					</div>
 
 					{/* Under construction gif - responsive sizing */}
 					<div className="flex justify-center mb-3 @sm:mb-4">
-						<div className="bg-yellow-300 px-2 @sm:px-4 py-1 @sm:py-2 border-2 border-black animate-pulse">
+						<div className="bg-yellow-300 px-2 @sm:px-4 py-1 @sm:py-2 border-2 border-black">
 							<span
-								className="font-bold text-sm @sm:text-base"
+								className="font-bold text-sm @sm:text-base text-red-600"
 								style={{ fontFamily: "'Comic Sans MS', cursive" }}
 							>
 								🚧 UNDER CONSTRUCTION 🚧
