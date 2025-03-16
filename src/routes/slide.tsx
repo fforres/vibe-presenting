@@ -445,7 +445,7 @@ export const SingleSlide = memo(
 				return null;
 			}
 			return slide;
-		}, [generalState?.presentation?.slides, id]);
+		}, [generalState, id]);
 
 		const [state, setState] = useState<SinglePresentationAgentState | null>(
 			null,

@@ -1,4 +1,3 @@
-import { PresentationsInitInputSchema } from "@/agents/message-schemas";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
 import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { useEffect, useState } from "react";

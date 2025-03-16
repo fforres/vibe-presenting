@@ -15,7 +15,7 @@ export const DynamicRouteChange = () => {
 		onStateUpdate(state: PresentationAgentState) {
 			setState(state);
 		},
-		onOpen(event) {
+		onOpen() {
 			agent?.send(
 				JSON.stringify(
 					PresentationsInitInputSchema.parse({

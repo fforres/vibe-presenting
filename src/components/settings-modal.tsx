@@ -26,6 +26,7 @@ import * as React from "react";
 import { useTheme } from "@/features/theme-provider";
 import { useAuth } from "@/hooks/use-auth";
 import { Separator } from "@/components/ui/separator";
+import { RainbowText } from "@/components/rainbow-text";
 
 interface SettingsModalProps {
 	agent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
@@ -214,19 +215,7 @@ export function SettingsModal({
 						className="text-center text-xl font-bold"
 						style={{ fontFamily: "'Comic Sans MS', cursive" }}
 					>
-						<span style={{ color: "#FF0000" }}>V</span>
-						<span style={{ color: "#FF7F00" }}>i</span>
-						<span style={{ color: "#FFFF00" }}>b</span>
-						<span style={{ color: "#00FF00" }}>e</span>
-						<span> </span>
-						<span style={{ color: "#0000FF" }}>S</span>
-						<span style={{ color: "#4B0082" }}>e</span>
-						<span style={{ color: "#9400D3" }}>t</span>
-						<span style={{ color: "#FF0000" }}>t</span>
-						<span style={{ color: "#FF7F00" }}>i</span>
-						<span style={{ color: "#FFFF00" }}>n</span>
-						<span style={{ color: "#00FF00" }}>g</span>
-						<span style={{ color: "#0000FF" }}>s</span>
+						<RainbowText text="Vibe Settings" />
 					</DialogTitle>
 					<DialogDescription className="text-center">
 						Configure your presentation collaboration settings

@@ -13,7 +13,6 @@ import {
 	IncomingMessageSchema,
 	type OutgoingMessage,
 	OutgoingMessageSchema,
-	ToggleCollaborationInputSchema,
 } from "./message-schemas";
 import type { Slide } from "./single-presentation-message-schema";
 
@@ -80,7 +79,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 		this.setState({
 			connectionCount: 0,
 			status: "idle",
-			activeSlide: "why-there-is-ai-first-software-now",
+			activeSlide: null,
 			// activeSlide: null,
 			config: {
 				sidebarNavigation: "inactive",
@@ -524,11 +523,11 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 				// ...
 				const { SinglePresentationAgent } = this.env;
 				const id = generateId();
-				const createdPresentation = this.createPresentation({
-					id,
-					description: parsedMessage.description,
-					name: parsedMessage.name,
-				});
+				// const createdPresentation = this.createPresentation({
+				// 	id,
+				// 	description: parsedMessage.description,
+				// 	name: parsedMessage.name,
+				// });
 				const agent = await getAgentByName(SinglePresentationAgent, id);
 				agent.initialize({
 					type: "init-presentation",
@@ -540,8 +539,6 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 					...this.state,
 				});
 				this.ctx.waitUntil(agent.generateSlides());
-
-				console.log("Created Presentation", id);
 			}
 
 			if (parsedMessage.type === "presentations-init") {
@@ -558,6 +555,14 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 						}),
 					),
 				);
+				// await connection.send(
+				// 	JSON.stringify(
+				// 		AllPresentationsOutputSchema.parse({
+				// 			type: "all-presentations",
+				// 			data: this.state.presentation,
+				// 		}),
+				// 	),
+				// );
 			}
 			if (parsedMessage.type === "set-active-slide") {
 				this.setState({

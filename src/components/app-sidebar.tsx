@@ -1,9 +1,7 @@
-import {
-	PresentationsInitInputSchema,
-	SetActiveSlideInputSchema,
-} from "@/agents/message-schemas";
+import { SetActiveSlideInputSchema } from "@/agents/message-schemas";
 import type { PresentationAgentState } from "@/agents/presentations-agent";
 import { CreatePresentationModal } from "@/components/create-presentation-modal";
+import { RainbowText } from "@/components/rainbow-text";
 import { SettingsModal } from "@/components/settings-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,17 +19,92 @@ import {
 	SidebarRail,
 } from "@/components/ui/sidebar";
 import { useTheme } from "@/features/theme-provider";
+import { useAuth } from "@/hooks/use-auth";
 import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { cn } from "@/lib/utils";
-import {
-	CogIcon,
-	MoonIcon,
-	PlusIcon,
-	SettingsIcon,
-	SunIcon,
-} from "lucide-react";
+import { SettingsIcon } from "lucide-react";
 import type * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+// New components for sidebar buttons
+const SidebarMainButton = ({
+	title,
+	isActive,
+	onClick,
+	showBlink = false,
+}: {
+	title: string;
+	isActive: boolean;
+	onClick?: () => void;
+	showBlink?: boolean;
+}) => {
+	const { theme } = useTheme();
+	const isDarkMode = theme === "dark";
+
+	return (
+		<Button
+			variant={"ghost"}
+			className={cn("font-medium w-full justify-start mb-1 relative", {
+				"cursor-pointer": !!onClick,
+				"cursor-default": !onClick,
+				"bg-gradient-to-r from-blue-100 to-purple-100 border border-blue-300":
+					isActive,
+			})}
+			style={{
+				fontFamily: "'Times New Roman', serif",
+				color: isActive ? "#9400D3" : isDarkMode ? "#4D9FFF" : "#0000EE",
+				textDecoration: "none",
+			}}
+			onClick={onClick}
+			onKeyDown={(e) => {
+				if (e.key === "Enter") {
+					onClick?.();
+				}
+			}}
+		>
+			{title}
+			{title === "New Presentation" && showBlink && (
+				<span className="absolute right-2 top-2 text-xs text-red-600">
+					NEW!
+				</span>
+			)}
+		</Button>
+	);
+};
+
+const SidebarSubButton = ({
+	title,
+	isActive,
+	onClick,
+}: {
+	title: string;
+	isActive: boolean;
+	onClick: () => void;
+}) => {
+	const { theme } = useTheme();
+	const isDarkMode = theme === "dark";
+
+	return (
+		<Button
+			variant={isActive ? "default" : "ghost"}
+			size="sm"
+			className={cn(
+				"font-medium mb-0.5",
+				isActive &&
+					"bg-gradient-to-r from-yellow-100 to-green-100 border border-yellow-300",
+			)}
+			style={{
+				fontFamily: "'Arial', sans-serif",
+				color: isActive ? "#9400D3" : isDarkMode ? "#4D9FFF" : "#0000EE",
+				textDecoration: isActive ? "none" : "underline",
+			}}
+			onClick={onClick}
+		>
+			{title}
+			{isActive && <span className="ml-1">👈</span>}
+		</Button>
+	);
+};
 
 export function AppSidebar({
 	state,
@@ -41,6 +114,7 @@ export function AppSidebar({
 	state: PresentationAgentState;
 	agent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 }) {
+	const { isAdmin } = useAuth();
 	const { theme, setTheme } = useTheme();
 	const [showBlink, setShowBlink] = useState(true);
 	const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -55,6 +129,20 @@ export function AppSidebar({
 		return () => clearInterval(timer);
 	}, []);
 
+	const setActiveSlide = useCallback(
+		(id: string | null) => {
+			if (!isAdmin) {
+				return;
+			}
+			agent?.send(
+				JSON.stringify(
+					SetActiveSlideInputSchema.parse({ type: "set-active-slide", id }),
+				),
+			);
+		},
+		[agent, isAdmin],
+	);
+
 	const data = useMemo(() => {
 		return {
 			navMain: [
@@ -62,14 +150,7 @@ export function AppSidebar({
 					title: "Home",
 					isActive: state.activeSlide === null && !createModalOpen,
 					onClick: () => {
-						agent?.send(
-							JSON.stringify(
-								SetActiveSlideInputSchema.parse({
-									type: "set-active-slide",
-									id: null,
-								}),
-							),
-						);
+						setActiveSlide(null);
 					},
 				},
 				{
@@ -82,11 +163,9 @@ export function AppSidebar({
 				},
 			],
 		};
-	}, [state.presentation, state.activeSlide, agent, createModalOpen]);
+	}, [state.presentation, state.activeSlide, createModalOpen, setActiveSlide]);
 
-	const toggleTheme = () => {
-		setTheme(theme === "dark" ? "light" : "dark");
-	};
+	const isDarkMode = theme === "dark";
 
 	return (
 		<>
@@ -126,32 +205,11 @@ export function AppSidebar({
 								textShadow: "2px 2px 0 #000000",
 							}}
 							onClick={() => {
-								agent?.send(
-									JSON.stringify(
-										SetActiveSlideInputSchema.parse({
-											type: "set-active-slide",
-											id: null,
-										}),
-									),
-								);
+								setActiveSlide(null);
 							}}
 						>
 							<span className="relative z-10">
-								<span style={{ color: "#FF0000" }}>V</span>
-								<span style={{ color: "#FF7F00" }}>i</span>
-								<span style={{ color: "#FFFF00" }}>b</span>
-								<span style={{ color: "#00FF00" }}>e</span>
-								<span> </span>
-								<span style={{ color: "#0000FF" }}>P</span>
-								<span style={{ color: "#4B0082" }}>r</span>
-								<span style={{ color: "#9400D3" }}>e</span>
-								<span style={{ color: "#FF0000" }}>s</span>
-								<span style={{ color: "#FF7F00" }}>e</span>
-								<span style={{ color: "#FFFF00" }}>n</span>
-								<span style={{ color: "#00FF00" }}>t</span>
-								<span style={{ color: "#0000FF" }}>i</span>
-								<span style={{ color: "#4B0082" }}>n</span>
-								<span style={{ color: "#9400D3" }}>g</span>
+								<RainbowText text="Vibe Presenting" />
 							</span>
 							{/* Animated stars on hover */}
 							<span className="absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -186,76 +244,24 @@ export function AppSidebar({
 							{data.navMain.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton asChild>
-										<Button
-											variant={"ghost"}
-											className={cn(
-												"font-medium w-full justify-start mb-1 relative",
-												{
-													"cursor-pointer": !!item?.onClick,
-													"cursor-default": !item?.onClick,
-													"bg-gradient-to-r from-blue-100 to-purple-100 border border-blue-300":
-														item.isActive,
-												},
-											)}
-											style={{
-												fontFamily: "'Times New Roman', serif",
-												color: item.isActive ? "#9400D3" : "#0000EE",
-												textDecoration: "none",
-											}}
+										<SidebarMainButton
+											title={item.title}
+											isActive={item.isActive ?? false}
 											onClick={item?.onClick}
-											onKeyDown={(e) => {
-												if (e.key === "Enter") {
-													item?.onClick?.();
-												}
-											}}
-										>
-											{item.title}
-											{item.title === "New Presentation" && showBlink && (
-												<span className="absolute right-2 top-2 text-xs text-red-600">
-													NEW!
-												</span>
-											)}
-										</Button>
+											showBlink={showBlink}
+										/>
 									</SidebarMenuButton>
 									{item.items?.map((presentation) => (
 										<SidebarMenuSub key={presentation.id}>
 											<SidebarMenuSubItem key={presentation.id}>
 												<SidebarMenuSubButton asChild>
-													<Button
-														variant={
-															presentation.isActive ? "default" : "ghost"
-														}
-														size="sm"
-														className={cn(
-															"font-medium ml-2 mb-1",
-															presentation.isActive &&
-																"bg-gradient-to-r from-yellow-100 to-green-100 border border-yellow-300",
-														)}
-														style={{
-															fontFamily: "'Arial', sans-serif",
-															color: presentation.isActive
-																? "#9400D3"
-																: "#0000EE",
-															textDecoration: presentation.isActive
-																? "none"
-																: "underline",
-														}}
+													<SidebarSubButton
+														title={presentation.title}
+														isActive={presentation.isActive}
 														onClick={() => {
-															agent?.send(
-																JSON.stringify(
-																	SetActiveSlideInputSchema.parse({
-																		type: "set-active-slide",
-																		id: presentation.id,
-																	}),
-																),
-															);
+															setActiveSlide(presentation.id);
 														}}
-													>
-														{presentation.title}
-														{presentation.isActive && (
-															<span className="ml-1">👈</span>
-														)}
-													</Button>
+													/>
 												</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 										</SidebarMenuSub>
@@ -276,9 +282,9 @@ export function AppSidebar({
 									href="https://skyward.ai"
 									target="_blank"
 									rel="noreferrer"
-									className="bg-white/50 hover:bg-white/70 px-2 py-1 rounded border border-gray-400"
+									className="bg-white/50 hover:bg-white/70 py-1 rounded border border-gray-400 px-4"
 								>
-									<span className="font-medium inline-flex items-center gap-1 justify-center">
+									<span className="font-medium inline-flex items-center gap-1 justify-center text-black">
 										By
 										<div className="size-5 shrink-0">
 											{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
@@ -296,9 +302,7 @@ export function AppSidebar({
 												/>
 											</svg>
 										</div>{" "}
-										<span style={{ fontFamily: "'Times New Roman', serif" }}>
-											Skyward
-										</span>
+										<span>Skyward</span>
 									</span>
 								</a>
 							</SidebarMenuButton>
@@ -307,10 +311,10 @@ export function AppSidebar({
 							<Button
 								variant="ghost"
 								size="icon"
-								className="rounded-full h-9 w-9 cursor-pointer bg-white/50 hover:bg-white/70"
+								className="rounded-full size-10 cursor-pointer bg-white/50 hover:bg-white/70"
 								onClick={() => setSettingsModalOpen(true)}
 							>
-								<SettingsIcon className="size-5" />
+								<SettingsIcon className="size-5 text-black" />
 							</Button>
 						</SidebarMenuItem>
 					</SidebarMenu>

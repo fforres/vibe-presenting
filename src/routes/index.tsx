@@ -1,4 +1,5 @@
 import type { PresentationAgentState } from "@/agents/presentations-agent";
+import { RainbowText } from "@/components/rainbow-text";
 
 export const Index = ({ state }: { state: PresentationAgentState }) => {
 	return (
@@ -18,27 +19,12 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 						className="text-4xl @sm:text-6xl font-bold mb-4 @sm:mb-6 break-words"
 						style={{
 							fontFamily: "'Comic Sans MS', cursive, sans-serif",
-							color: "#FF00FF",
 							textShadow: "1px 1px 0 #00FFFF, 2px 2px 0 #0000FF",
 							letterSpacing: "1px",
 							lineHeight: "1.2",
 						}}
 					>
-						<span style={{ color: "red" }}>V</span>
-						<span style={{ color: "orange" }}>i</span>
-						<span style={{ color: "yellow" }}>b</span>
-						<span style={{ color: "green" }}>e</span>
-						<span> </span>
-						<span style={{ color: "blue" }}>P</span>
-						<span style={{ color: "indigo" }}>r</span>
-						<span style={{ color: "violet" }}>e</span>
-						<span style={{ color: "red" }}>s</span>
-						<span style={{ color: "orange" }}>e</span>
-						<span style={{ color: "yellow" }}>n</span>
-						<span style={{ color: "green" }}>t</span>
-						<span style={{ color: "blue" }}>i</span>
-						<span style={{ color: "indigo" }}>n</span>
-						<span style={{ color: "violet" }}>g</span>
+						<RainbowText text="Vibe Presenting" />
 					</h1>
 					{/* Fixed marquee element - continuous animation */}
 					<div className="overflow-hidden mb-4 @sm:mb-6 py-1">
@@ -47,9 +33,9 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 								className="text-base @sm:text-xl font-bold inline-block whitespace-nowrap"
 								style={{ color: "#FF0000" }}
 							>
-								★★★ Welcome to Vibe Presenting! The BEST presentation tool on
-								the web! ★★★ Welcome to Vibe Presenting! The Bestest
-								presentation tool on the web! ★★★
+								★★★ Welcome to Vibe Presenting! The Bestest presentation tool on
+								the The Information Superhighway ! ★★★ Welcome to Vibe
+								Presenting! The Bestest presentation tool on the Cybesrpace! ★★★
 							</span>
 						</div>
 					</div>
