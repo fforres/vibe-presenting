@@ -15,16 +15,17 @@ export const getImage = async ({
 			console.log("Finished 1", Date.now() - initialTime);
 			return result;
 		}),
-		getImage2({ prompt, AI }).then((result) => {
-			console.log("Finished 2", Date.now() - initialTime);
-			return result;
-		}),
-		getImage3({ prompt, AI }).then((result) => {
-			console.log("Finished 3", Date.now() - initialTime);
-			return result;
-		}),
+		// getImage2({ prompt, AI }).then((result) => {
+		// 	console.log("Finished 2", Date.now() - initialTime);
+		// 	return result;
+		// }),
+		// getImage3({ prompt, AI }).then((result) => {
+		// 	console.log("Finished 3", Date.now() - initialTime);
+		// 	return result;
+		// }),
 	]);
 
+	console.log("Got image!");
 	return result;
 };
 export const getImage1 = async ({
@@ -35,9 +36,10 @@ export const getImage1 = async ({
 	AI: Ai;
 }) => {
 	const response = await AI.run(model, {
-		prompt: `You'll generate an image. It will have a 90's web-design aesthetic. Here's your prompt: ${prompt}`,
-		// height: 512,
-		// width: 512,
+		prompt: `You'll generate an image. It will have a 90's web-design aesthetic. Stylized and cartoonish. Here's your prompt: ${prompt}`,
+		negative_prompt: "text",
+		height: 1024,
+		width: 1024,
 	});
 
 	return new Response(response, {
