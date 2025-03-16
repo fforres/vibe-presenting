@@ -23,6 +23,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { usePresentationKeyboardNavigation } from "@/hooks/use-presentation-keyboard-navigation";
 import { Textarea } from "@/components/ui/textarea";
+import { ScalableContainer } from "@/components/scalable-container";
 
 const remarkPlugins = [remarkGfm];
 
@@ -46,6 +47,13 @@ const Markdown = ({ content }: { content: string }) => {
 				td: ({ children }) => (
 					<td className="border border-gray-300 px-4 py-2">{children}</td>
 				),
+				img: ({ src, alt }) => (
+					<img
+						src={src}
+						alt={alt || ""}
+						className="max-w-full h-auto object-contain"
+					/>
+				),
 			}}
 		>
 			{content}
@@ -62,7 +70,7 @@ const SpeakerNotesSheet = ({ notes }: { notes?: string }) => {
 			<SheetContent side="right">
 				<div className="p-4">
 					<h3 className="text-lg font-semibold mb-4">Speaker Notes</h3>
-					<div className="prose prose-sm text-accent-foreground">
+					<div className="prose text-accent-foreground">
 						<Markdown content={notes ?? ""} />
 					</div>
 				</div>
@@ -120,7 +128,7 @@ const SlideImage = memo(
 	({
 		image,
 		alt,
-		className,
+		// className,
 		containerClassName,
 	}: {
 		image: { url?: string; prompt?: string };
@@ -132,11 +140,11 @@ const SlideImage = memo(
 
 		if (image.url) {
 			return (
-				<div className={containerClassName || "relative"}>
+				<div className={cn("relative", containerClassName)}>
 					<img
 						src={image.url}
 						alt={alt || "Slide image"}
-						className={className}
+						className="w-full h-full object-cover"
 						onLoad={() => setIsLoading(false)}
 						onError={() => setIsLoading(false)}
 					/>
@@ -145,28 +153,35 @@ const SlideImage = memo(
 		}
 
 		return (
-			<div className={containerClassName || "relative"}>
+			<div
+				className={cn(
+					"relative",
+					containerClassName ||
+						"relative w-full h-full flex items-center justify-center overflow-hidden",
+					{
+						"bg-gray-100": isLoading,
+					},
+				)}
+			>
 				{isLoading && (
-					<div className="text-center">
-						<div className="animate-pulse mb-2">
-							<SparklesIcon className="h-6 w-6 mx-auto text-indigo-500" />
+					<div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-70 z-10">
+						<div className="text-center">
+							<div className="animate-pulse mb-2">
+								<SparklesIcon className="h-6 w-6 mx-auto text-indigo-500" />
+							</div>
+							<p className="text-sm font-medium text-gray-700">
+								Generating image...
+							</p>
 						</div>
-						<p className="text-sm font-medium text-gray-700">
-							Generating image...
-						</p>
 					</div>
 				)}
 				<img
 					src={`/image/${encodeURIComponent(image.prompt ?? "")}`}
 					alt={alt || "Generated image"}
-					className={className}
+					className="w-full h-full object-cover"
 					onLoad={() => setIsLoading(false)}
 					onError={() => setIsLoading(false)}
 				/>
-				{/* Uncomment if you want to show the prompt
-				<p className="text-xs @sm:text-sm text-gray-600">
-					Image prompt: {image.prompt}
-				</p> */}
 			</div>
 		);
 	},
@@ -190,12 +205,7 @@ const FullSizeImageSlide = memo(
 						"bg-black/50": slideData.title,
 					})}
 				/>
-				<SlideImage
-					image={slideData.image}
-					alt={slideData.title}
-					className="absolute inset-0 w-full h-full object-cover"
-					containerClassName="absolute inset-0 bg-gray-200 flex items-center justify-center"
-				/>
+				<SlideImage image={slideData.image} alt={slideData.title} />
 				<div className="absolute inset-0 z-20 flex flex-col justify-center p-4 @sm:p-6 @md:p-10">
 					<h2 className="text-xl @sm:text-2xl @md:text-3xl font-bold text-white mb-2 @sm:mb-4 drop-shadow-md">
 						{slideData.title}
@@ -231,7 +241,7 @@ const OneTextColumnSlide = memo(
 							{slideData.description}
 						</p>
 					)}
-					<div className="prose prose-sm @sm:prose max-w-none prose-slate">
+					<div className="prose max-w-none prose-slate">
 						<Markdown content={slideData.markdownContent} />
 					</div>
 				</div>
@@ -270,10 +280,10 @@ const TwoTextColumnsSlide = memo(
 					</p>
 				)}
 				<div className="grid grid-cols-1 @sm:grid-cols-2 gap-4 @sm:gap-8 flex-grow overflow-auto">
-					<div className="prose prose-sm @sm:prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 @sm:p-4 rounded-lg">
+					<div className="prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 @sm:p-4 rounded-lg">
 						<Markdown content={slideData.markdownContentLeft} />
 					</div>
-					<div className="prose prose-sm @sm:prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 @sm:p-4 rounded-lg">
+					<div className="prose max-w-none prose-emerald bg-white bg-opacity-70 p-2 @sm:p-4 rounded-lg">
 						<Markdown content={slideData.markdownContentRight} />
 					</div>
 				</div>
@@ -303,7 +313,7 @@ const TwoColumnsWithImageSlide = memo(
 								{slideData.description}
 							</p>
 						)}
-						<div className="prose prose-sm @sm:prose max-w-none prose-amber">
+						<div className="prose max-w-none prose-amber">
 							<Markdown content={slideData.markdownContent} />
 						</div>
 					</div>
@@ -311,8 +321,8 @@ const TwoColumnsWithImageSlide = memo(
 						<SlideImage
 							image={slideData.image}
 							alt={slideData.title}
-							className="max-w-full max-h-full object-contain rounded-lg shadow-md"
-							containerClassName="w-full h-full bg-white bg-opacity-70 flex items-center justify-center p-2 @sm:p-4 rounded-lg border border-amber-200"
+							// className="max-w-full max-h-full object-contain rounded-lg shadow-md"
+							containerClassName="w-full h-full bg-white flex items-center justify-center rounded-lg border border-amber-200"
 						/>
 					</div>
 				</div>
@@ -431,17 +441,6 @@ const UnknownSlideDesign = memo(
 	},
 );
 
-// Set display names for all components
-TitleSlide.displayName = "TitleSlide";
-FullSizeImageSlide.displayName = "FullSizeImageSlide";
-OneTextColumnSlide.displayName = "OneTextColumnSlide";
-TwoTextColumnsSlide.displayName = "TwoTextColumnsSlide";
-TwoColumnsWithImageSlide.displayName = "TwoColumnsWithImageSlide";
-BigImageWithCaptionSlide.displayName = "BigImageWithCaptionSlide";
-BackgroundImageWithTextSlide.displayName = "BackgroundImageWithTextSlide";
-UnknownSlideDesign.displayName = "UnknownSlideDesign";
-SpeakerNotesSheet.displayName = "SpeakerNotesSheet";
-
 // Main SingleSlide component that selects the appropriate slide component
 export const SingleSlide = memo(
 	({
@@ -493,9 +492,9 @@ export const SingleSlide = memo(
 
 		// Render the appropriate slide component based on design with 16:9 aspect ratio wrapper
 		return (
-			<>
-				<div className="w-full h-full max-w-6xl mx-auto relative flex flex-col items-center justify-center">
-					<div className="aspect-video w-full bg-white shadow-lg rounded-lg overflow-hidden">
+			<div className="flex flex-1 items-center justify-center">
+				<div className="aspect-video bg-white shadow-lg rounded-lg overflow-hidden relative">
+					<ScalableContainer designWidth={1280} designHeight={720}>
 						{(() => {
 							switch (slide.design) {
 								case "title":
@@ -554,7 +553,7 @@ export const SingleSlide = memo(
 									return <UnknownSlideDesign slideData={slide} state={state} />;
 							}
 						})()}
-					</div>
+					</ScalableContainer>
 				</div>
 				<div className="flex gap-2 absolute bottom-4 right-4">
 					<SpeakerNotesSheet notes={slide.speakerNotes} />
@@ -562,7 +561,7 @@ export const SingleSlide = memo(
 						<CollaborationSheet />
 					)}
 				</div>
-			</>
+			</div>
 		);
 	},
 );

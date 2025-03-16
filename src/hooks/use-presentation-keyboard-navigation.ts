@@ -4,8 +4,8 @@ import type { PresentationAgentState } from "@/agents/presentations-agent";
 import {
 	NavigateNextSlideInputSchema,
 	NavigatePreviousSlideInputSchema,
-	SetActiveSlideInputSchema,
 } from "@/agents/message-schemas";
+import { useAuth } from "@/hooks/use-auth";
 
 /**
  * Hook to handle keyboard navigation for presentations
@@ -20,10 +20,11 @@ export function usePresentationKeyboardNavigation(
 	slidesAgent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>,
 	enabled = true,
 ) {
+	const { isAdmin } = useAuth();
 	const currentSlideId = generalState.activeSlide;
 
 	useEffect(() => {
-		if (!enabled || !currentSlideId) {
+		if (!enabled || !currentSlideId || !isAdmin) {
 			return;
 		}
 
@@ -57,39 +58,5 @@ export function usePresentationKeyboardNavigation(
 		return () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [slidesAgent, currentSlideId, enabled]);
-}
-
-/**
- * Helper function to determine the next slide ID
- */
-function getNextSlideId(
-	currentId: string,
-	state: PresentationAgentState,
-): string | null {
-	const slides = state.presentation.slides;
-	const currentIndex = slides.findIndex((slide) => slide.id === currentId);
-
-	if (currentIndex === -1 || currentIndex >= slides.length - 1) {
-		return null; // No next slide
-	}
-
-	return slides[currentIndex + 1].id;
-}
-
-/**
- * Helper function to determine the previous slide ID
- */
-function getPreviousSlideId(
-	currentId: string,
-	state: PresentationAgentState,
-): string | null {
-	const slides = state.presentation.slides;
-	const currentIndex = slides.findIndex((slide) => slide.id === currentId);
-
-	if (currentIndex <= 0) {
-		return null; // No previous slide
-	}
-
-	return slides[currentIndex - 1].id;
+	}, [slidesAgent, currentSlideId, enabled, isAdmin]);
 }

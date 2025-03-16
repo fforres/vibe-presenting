@@ -169,7 +169,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						description: "",
 						topic: "FML. What's our Moat then?",
 						markdownContentLeft: `1. ## Si AI estará en todos lados.
-2. ## Si el acceso a "pensar" sera barato.
+2. ## Si el acceso a "pensar" será barato.
 3. ## Si la gente podra crear sus propias soluciones.
 
 						`,
