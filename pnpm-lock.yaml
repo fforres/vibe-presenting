@@ -45,8 +45,8 @@ importers:
         specifier: ^7.4.3
         version: 7.4.3
       agents-sdk:
-        specifier: ^0.0.22
-        version: 0.0.22(@cloudflare/workers-types@4.20250313.0)
+        specifier: ^0.0.35
+        version: 0.0.35(@cloudflare/workers-types@4.20250313.0)
       ai:
         specifier: ^4.1.47
         version: 4.1.61(react@19.0.0)(zod@3.24.2)
@@ -64,7 +64,7 @@ importers:
         version: 4.7.4
       hono-agents:
         specifier: ^0.0.17
-        version: 0.0.17(agents-sdk@0.0.22(@cloudflare/workers-types@4.20250313.0))(hono@4.7.4)
+        version: 0.0.17(agents-sdk@0.0.35(@cloudflare/workers-types@4.20250313.0))(hono@4.7.4)
       lucide-react:
         specifier: ^0.477.0
         version: 0.477.0(react@19.0.0)
@@ -1698,8 +1698,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  agents-sdk@0.0.22:
-    resolution: {integrity: sha512-dDLnEuf4knaLc0RAo7hjWRCs7h2tOzCcqEulF6io+kUZ5AlN6ZTOTkM8bDBtDL5S4gf6FHXUQnZpE1dVgfa4GA==}
+  agents-sdk@0.0.35:
+    resolution: {integrity: sha512-svsscXQc6OGVBJ4CPNHtkmtfGjyYkJWJbGE82n6uqcOdaXMEGf1/SBlWO0ka8V2zXa/0pWQjLY7DBZKa5z8xPA==}
 
   ai@4.1.61:
     resolution: {integrity: sha512-Y9SAyGJEeW23F6C7PSHZXYNEvbH2cqJm0rVW2AoeFaXFT13ttx8rAqs8wz2w466C1UB329yl5PXayFcHqofSEA==}
@@ -2479,8 +2479,8 @@ packages:
   parse-entities@4.0.2:
     resolution: {integrity: sha512-GG2AQYWoLgL877gQIKeRPGO1xF9+eG1ujIb5soS5gPvLQ1y2o8FL90w2QWNdf9I361Mpp7726c+lj3U0qK1uGw==}
 
-  partyserver@0.0.64:
-    resolution: {integrity: sha512-DuEdsGt2kvss6+P517PRY0PgW/C6v3hQaF2XaVCx0ZmLVSAcsYhDjurHvIFwh5Q1Hp5pJ8vvFAEXvfKEZw8Q8Q==}
+  partyserver@0.0.65:
+    resolution: {integrity: sha512-7Kuwm1vX+p1wSL6gW0/nnehZOXYQWNp7Ywushh6n+90tRjtK303unyonQuWlDvZBM3s9GBaVpQA5x3LZ0CLUHw==}
     peerDependencies:
       '@cloudflare/workers-types': ^4.20240729.0
 
@@ -4264,11 +4264,11 @@ snapshots:
 
   acorn@8.14.1: {}
 
-  agents-sdk@0.0.22(@cloudflare/workers-types@4.20250313.0):
+  agents-sdk@0.0.35(@cloudflare/workers-types@4.20250313.0):
     dependencies:
       cron-schedule: 5.0.4
       nanoid: 5.1.4
-      partyserver: 0.0.64(@cloudflare/workers-types@4.20250313.0)
+      partyserver: 0.0.65(@cloudflare/workers-types@4.20250313.0)
       partysocket: 0.0.0-548c226
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
@@ -4739,9 +4739,9 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.4
 
-  hono-agents@0.0.17(agents-sdk@0.0.22(@cloudflare/workers-types@4.20250313.0))(hono@4.7.4):
+  hono-agents@0.0.17(agents-sdk@0.0.35(@cloudflare/workers-types@4.20250313.0))(hono@4.7.4):
     dependencies:
-      agents-sdk: 0.0.22(@cloudflare/workers-types@4.20250313.0)
+      agents-sdk: 0.0.35(@cloudflare/workers-types@4.20250313.0)
       hono: 4.7.4
 
   hono@4.7.4: {}
@@ -5285,7 +5285,7 @@ snapshots:
       is-decimal: 2.0.1
       is-hexadecimal: 2.0.1
 
-  partyserver@0.0.64(@cloudflare/workers-types@4.20250313.0):
+  partyserver@0.0.65(@cloudflare/workers-types@4.20250313.0):
     dependencies:
       '@cloudflare/workers-types': 4.20250313.0
       nanoid: 5.1.4

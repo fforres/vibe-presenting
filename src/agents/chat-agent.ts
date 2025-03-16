@@ -4,6 +4,7 @@ import type { Schedule } from "agents-sdk";
 import { AIChatAgent } from "agents-sdk/ai-chat-agent";
 import {
 	type StreamTextOnFinishCallback,
+	type ToolSet,
 	createDataStreamResponse,
 	generateId,
 	streamText,
@@ -20,8 +21,9 @@ export class Chat extends AIChatAgent<Env> {
 	 * @param onFinish - Callback function executed when streaming completes
 	 */
 
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	async onChatMessage(onFinish: StreamTextOnFinishCallback<any>) {
+	onChatMessage(
+		onFinish: StreamTextOnFinishCallback<ToolSet>,
+	): Promise<Response | undefined> {
 		// Create a streaming response that handles both text and tool outputs
 		return agentContext.run(this, async () => {
 			const dataStreamResponse = createDataStreamResponse({
@@ -56,10 +58,6 @@ export class Chat extends AIChatAgent<Env> {
 						onError: (error) => {
 							console.error("onError", error);
 							// onFinish({ error });
-						},
-						onFinish: (...args) => {
-							console.log("onFinish", args);
-							onFinish(...args);
 						},
 						maxSteps: 10,
 					});
