@@ -11,6 +11,9 @@
 	"assets": {
 		"directory": "public"
 	},
+	"dev": {
+		"ip": "127.0.0.1",
+	},
 	"ai": {
 		"binding": "AI"
 	},

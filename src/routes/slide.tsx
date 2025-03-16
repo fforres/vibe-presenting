@@ -53,7 +53,6 @@ const Markdown = ({ content }: { content: string }) => {
 	);
 };
 
-// Speaker Notes Sheet component
 const SpeakerNotesSheet = ({ notes }: { notes?: string }) => {
 	return (
 		<Sheet>
@@ -63,7 +62,7 @@ const SpeakerNotesSheet = ({ notes }: { notes?: string }) => {
 			<SheetContent side="right">
 				<div className="p-4">
 					<h3 className="text-lg font-semibold mb-4">Speaker Notes</h3>
-					<div className="prose prose-sm">
+					<div className="prose prose-sm text-accent-foreground">
 						<Markdown content={notes ?? ""} />
 					</div>
 				</div>
@@ -72,7 +71,6 @@ const SpeakerNotesSheet = ({ notes }: { notes?: string }) => {
 	);
 };
 
-// Speaker Notes Sheet component
 const CollaborationSheet = () => {
 	return (
 		<Sheet>
@@ -501,26 +499,53 @@ export const SingleSlide = memo(
 						{(() => {
 							switch (slide.design) {
 								case "title":
-									return <TitleSlide slideData={slide} state={state} />;
+									return (
+										<TitleSlide key={id} slideData={slide} state={state} />
+									);
 								case "full-size-image":
-									return <FullSizeImageSlide slideData={slide} state={state} />;
+									return (
+										<FullSizeImageSlide
+											key={id}
+											slideData={slide}
+											state={state}
+										/>
+									);
 								case "one-text-column":
-									return <OneTextColumnSlide slideData={slide} state={state} />;
+									return (
+										<OneTextColumnSlide
+											key={id}
+											slideData={slide}
+											state={state}
+										/>
+									);
 								case "two-text-columns":
 									return (
-										<TwoTextColumnsSlide slideData={slide} state={state} />
+										<TwoTextColumnsSlide
+											key={id}
+											slideData={slide}
+											state={state}
+										/>
 									);
 								case "two-columns-with-image":
 									return (
-										<TwoColumnsWithImageSlide slideData={slide} state={state} />
+										<TwoColumnsWithImageSlide
+											key={id}
+											slideData={slide}
+											state={state}
+										/>
 									);
 								case "big-image-with-caption":
 									return (
-										<BigImageWithCaptionSlide slideData={slide} state={state} />
+										<BigImageWithCaptionSlide
+											key={id}
+											slideData={slide}
+											state={state}
+										/>
 									);
 								case "background-image-with-text":
 									return (
 										<BackgroundImageWithTextSlide
+											key={id}
 											slideData={slide}
 											state={state}
 										/>
