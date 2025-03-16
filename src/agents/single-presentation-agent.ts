@@ -284,8 +284,6 @@ Presentation Description: ${description}`,
 			...(message.title && { title: message.title }),
 			...(message.topic && { topic: message.topic }),
 			...(message.description && { description: message.description }),
-			...(message.bulletPoints && { bulletPoints: message.bulletPoints }),
-			...(message.imagePrompt && { imagePrompt: message.imagePrompt }),
 		};
 
 		// Update the presentation content

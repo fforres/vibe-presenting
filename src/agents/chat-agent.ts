@@ -59,6 +59,11 @@ export class Chat extends AIChatAgent<Env> {
 							console.error("onError", error);
 							// onFinish({ error });
 						},
+						onFinish: (...args) => {
+							console.log("onFinish", args);
+							// @ts-expect-error fix types
+							onFinish(...args);
+						},
 						maxSteps: 10,
 					});
 
