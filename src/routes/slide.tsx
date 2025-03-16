@@ -117,6 +117,65 @@ const TitleSlide = memo(
 	},
 );
 
+// Shared SlideImage component
+const SlideImage = memo(
+	({
+		image,
+		alt,
+		className,
+		containerClassName,
+	}: {
+		image: { url?: string; prompt?: string };
+		alt?: string;
+		className?: string;
+		containerClassName?: string;
+	}) => {
+		const [isLoading, setIsLoading] = useState(true);
+
+		if (image.url) {
+			return (
+				<div className={containerClassName || "relative"}>
+					<img
+						src={image.url}
+						alt={alt || "Slide image"}
+						className={className}
+						onLoad={() => setIsLoading(false)}
+						onError={() => setIsLoading(false)}
+					/>
+				</div>
+			);
+		}
+
+		return (
+			<div className={containerClassName || "relative"}>
+				{isLoading && (
+					<div className="text-center">
+						<div className="animate-pulse mb-2">
+							<SparklesIcon className="h-6 w-6 mx-auto text-indigo-500" />
+						</div>
+						<p className="text-sm font-medium text-gray-700">
+							Generating image...
+						</p>
+					</div>
+				)}
+				<img
+					src={`/image/${encodeURIComponent(image.prompt ?? "")}`}
+					alt={alt || "Generated image"}
+					className={className}
+					onLoad={() => setIsLoading(false)}
+					onError={() => setIsLoading(false)}
+				/>
+				{/* Uncomment if you want to show the prompt
+				<p className="text-xs @sm:text-sm text-gray-600">
+					Image prompt: {image.prompt}
+				</p> */}
+			</div>
+		);
+	},
+);
+
+SlideImage.displayName = "SlideImage";
+
 // Full-size image slide component
 const FullSizeImageSlide = memo(
 	({
@@ -133,25 +192,12 @@ const FullSizeImageSlide = memo(
 						"bg-black/50": slideData.title,
 					})}
 				/>
-				{slideData.image?.url ? (
-					<img
-						src={slideData.image.url}
-						alt={slideData.title}
-						className="absolute inset-0 w-full h-full object-cover"
-					/>
-				) : slideData.image?.url ? (
-					<img
-						src={slideData.image.url}
-						alt={slideData.title}
-						className="absolute inset-0 w-full h-full object-cover"
-					/>
-				) : (
-					<div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-						<p className="text-gray-600 text-sm @sm:text-base p-2 text-center">
-							Image prompt: {slideData.image?.prompt}
-						</p>
-					</div>
-				)}
+				<SlideImage
+					image={slideData.image}
+					alt={slideData.title}
+					className="absolute inset-0 w-full h-full object-cover"
+					containerClassName="absolute inset-0 bg-gray-200 flex items-center justify-center"
+				/>
 				<div className="absolute inset-0 z-20 flex flex-col justify-center p-4 @sm:p-6 @md:p-10">
 					<h2 className="text-xl @sm:text-2xl @md:text-3xl font-bold text-white mb-2 @sm:mb-4 drop-shadow-md">
 						{slideData.title}
@@ -193,19 +239,12 @@ const OneTextColumnSlide = memo(
 				</div>
 				{slideData.image && (
 					<div className="mt-2 @sm:mt-4 h-24 @sm:h-40">
-						{slideData.image?.url ? (
-							<img
-								src={slideData.image.url}
-								alt={slideData.title}
-								className="h-full object-contain"
-							/>
-						) : (
-							<div className="h-full bg-gray-100 flex items-center justify-center p-2 rounded-lg border border-gray-200">
-								<p className="text-xs @sm:text-sm text-gray-600">
-									Image prompt: {slideData.image?.prompt}
-								</p>
-							</div>
-						)}
+						<SlideImage
+							image={slideData.image}
+							alt={slideData.title}
+							className="h-full object-contain"
+							containerClassName="h-full bg-gray-100 flex items-center justify-center p-2 rounded-lg border border-gray-200"
+						/>
 					</div>
 				)}
 			</div>
@@ -271,19 +310,12 @@ const TwoColumnsWithImageSlide = memo(
 						</div>
 					</div>
 					<div className="flex items-center justify-center mt-4 @sm:mt-0">
-						{slideData.image?.url ? (
-							<img
-								src={slideData.image.url}
-								alt={slideData.title}
-								className="max-w-full max-h-full object-contain rounded-lg shadow-md"
-							/>
-						) : (
-							<div className="w-full h-full bg-white bg-opacity-70 flex items-center justify-center p-2 @sm:p-4 rounded-lg border border-amber-200">
-								<p className="text-xs @sm:text-sm text-amber-700">
-									Image prompt: {slideData.image?.prompt}
-								</p>
-							</div>
-						)}
+						<SlideImage
+							image={slideData.image}
+							alt={slideData.title}
+							className="max-w-full max-h-full object-contain rounded-lg shadow-md"
+							containerClassName="w-full h-full bg-white bg-opacity-70 flex items-center justify-center p-2 @sm:p-4 rounded-lg border border-amber-200"
+						/>
 					</div>
 				</div>
 			</div>
@@ -306,19 +338,12 @@ const BigImageWithCaptionSlide = memo(
 					{slideData.title}
 				</h2>
 				<div className="flex-grow flex items-center justify-center p-2 @sm:p-4">
-					{slideData.image?.url ? (
-						<img
-							src={slideData.image.url}
-							alt={slideData.title}
-							className="max-h-full object-contain rounded-lg shadow-md"
-						/>
-					) : (
-						<div className="w-full h-full bg-white bg-opacity-70 flex items-center justify-center p-4 rounded-lg border border-purple-200">
-							<p className="text-sm @sm:text-base text-purple-700">
-								Image prompt: {slideData.image?.prompt}
-							</p>
-						</div>
-					)}
+					<SlideImage
+						image={slideData.image}
+						alt={slideData.title}
+						className="max-w-full max-h-full object-contain rounded-lg shadow-md"
+						containerClassName="w-full h-full bg-white bg-opacity-70 flex items-center justify-center p-2 @sm:p-4 rounded-lg border border-amber-200"
+					/>
 				</div>
 				<div className="p-4 @sm:p-6 bg-white bg-opacity-80">
 					<p className="text-base @sm:text-lg text-center text-purple-800">
@@ -355,19 +380,12 @@ const BackgroundImageWithTextSlide = memo(
 
 		return (
 			<div className="relative h-full">
-				{slideData.image?.url ? (
-					<img
-						src={slideData.image.url}
-						alt={slideData.title}
-						className="absolute inset-0 w-full h-full object-cover"
-					/>
-				) : (
-					<div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-						<p className="text-gray-600 text-sm @sm:text-base p-2 text-center">
-							Image prompt: {slideData.image?.prompt}
-						</p>
-					</div>
-				)}
+				<SlideImage
+					image={slideData.image}
+					alt={slideData.title}
+					className="absolute inset-0 w-full h-full object-cover"
+					containerClassName="absolute inset-0 bg-gray-200 flex items-center justify-center"
+				/>
 				<div className="absolute inset-0 bg-black bg-opacity-40 z-10" />
 				<div
 					className={`absolute inset-0 z-20 flex flex-col justify-center ${textPositionClasses} p-4 @sm:p-6 @md:p-10`}

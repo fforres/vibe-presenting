@@ -79,7 +79,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 		this.setState({
 			connectionCount: 0,
 			status: "idle",
-			activeSlide: null,
+			activeSlide: "wtf-is-an-agent",
 			// activeSlide: null,
 			config: {
 				sidebarNavigation: "inactive",

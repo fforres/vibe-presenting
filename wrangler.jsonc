@@ -11,6 +11,9 @@
 	"assets": {
 		"directory": "public"
 	},
+	"ai": {
+		"binding": "AI"
+	},
 	"durable_objects": {
 		"bindings": [
 			{
