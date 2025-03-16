@@ -12,12 +12,7 @@ import type {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { cn } from "@/lib/utils";
-import {
-	LightbulbIcon,
-	MessageSquareText,
-	SparklesIcon,
-	WandIcon,
-} from "lucide-react";
+import { LightbulbIcon, SparklesIcon } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
