@@ -100,7 +100,6 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 							// biome-ignore lint/a11y/useValidAnchor: <explanation>
 							href="#"
 							className="text-blue-600 underline hover:no-underline text-sm @sm:text-base"
-							style={{ fontFamily: "'Times New Roman', serif" }}
 						>
 							📝 Sign our guestbook!
 						</a>
@@ -108,7 +107,6 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 						<a
 							href="mailto:felipe@skyward.ai"
 							className="text-blue-600 underline hover:no-underline text-sm @sm:text-base"
-							style={{ fontFamily: "'Times New Roman', serif" }}
 						>
 							📧 Email the webmaster
 						</a>

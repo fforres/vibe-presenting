@@ -51,7 +51,6 @@ const SidebarMainButton = ({
 					isActive,
 			})}
 			style={{
-				fontFamily: "'Times New Roman', serif",
 				color: isActive ? "#9400D3" : isDarkMode ? "#4D9FFF" : "#0000EE",
 				textDecoration: "none",
 			}}

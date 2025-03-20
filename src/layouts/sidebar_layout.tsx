@@ -87,30 +87,18 @@ export default function SidebarLayout({
 							<BreadcrumbList className="bg-white/80 px-2 py-1 rounded border border-gray-400">
 								{state.activeSlide ? (
 									<>
-										<BreadcrumbItem className="hidden md:block">
-											<BreadcrumbLink
-												href="#"
-												className="text-blue-800 hover:text-blue-600 font-bold underline"
-												style={{ fontFamily: "'Times New Roman', serif" }}
-											>
-												Presentation
-											</BreadcrumbLink>
-										</BreadcrumbItem>
-										<BreadcrumbSeparator className="hidden md:block text-purple-800">
-											→
-										</BreadcrumbSeparator>
 										<BreadcrumbItem>
 											<BreadcrumbPage
 												className="font-bold"
 												style={{
-													fontFamily: "'Comic Sans MS', cursive",
+													fontFamily: "monospace",
 													color: "#9400D3",
 												}}
 											>
 												{
 													state.presentation.slides.find(
 														(slide) => slide.id === state.activeSlide,
-													)?.title
+													)?.topic
 												}
 												{showBlink && (
 													<span className="ml-1 text-red-600 animate-pulse">
