@@ -12,7 +12,9 @@ export const DynamicRouteChange = () => {
 	const [state, setState] = useState<PresentationAgentState | null>(null);
 	const agent = useSkywardAgent({
 		agent: "presentations",
+		id: "fintoc-presentation",
 		onStateUpdate(state: PresentationAgentState) {
+			console.log("YOOOOOO UPDATED STATE", state);
 			setState(state);
 		},
 		onOpen() {

@@ -73,6 +73,25 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			connectionCount: Math.max(this.state.connectionCount - 1, 0),
 		});
 	}
+
+	getSlide(slideId: string) {
+		return this.state.presentation.slides.find((slide) => slide.id === slideId);
+	}
+
+	async updateSlideContent(slideId: string, content: Slide) {
+		console.log("Holy shit, updating");
+		await this.setState({
+			...this.state,
+			presentation: {
+				...this.state.presentation,
+				slides: this.state.presentation.slides.map((slide) =>
+					slide.id === slideId ? content : slide,
+				),
+			},
+		});
+
+		console.log(this.state.presentation.slides);
+	}
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	constructor(env: any, agent: any) {
 		super(env, agent);
@@ -83,7 +102,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			// activeSlide: null,
 			config: {
 				sidebarNavigation: "inactive",
-				collaboration: "inactive",
+				collaboration: "active",
 				speakerNotes: "private",
 			},
 			presentation: {

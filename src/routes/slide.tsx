@@ -22,6 +22,7 @@ import { ScalableContainer } from "@/components/scalable-container";
 import { defaultTheme } from "@/lib/slide-theme";
 import type { SlideTheme, SlideThemes } from "@/lib/slide-theme";
 import { useTheme } from "@/features/theme-provider";
+import { CollaborationSheet } from "@/components/agent-mode/collaboration-sheet";
 
 const remarkPlugins = [remarkGfm];
 
@@ -71,26 +72,6 @@ const SpeakerNotesSheet = ({ notes }: { notes?: string }) => {
 					<div className="prose prose-lg text-accent-foreground">
 						<Markdown content={notes ?? ""} />
 					</div>
-				</div>
-			</SheetContent>
-		</Sheet>
-	);
-};
-
-const CollaborationSheet = () => {
-	return (
-		<Sheet>
-			<SheetTrigger className=" z-30 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100 transition-all border shadow-2xl">
-				<SparklesIcon className="h-5 w-5 text-gray-700" />
-			</SheetTrigger>
-			<SheetContent side="right">
-				<div className="p-4 flex flex-col flex-1 h-full">
-					<h3 className="text-lg font-semibold mb-4">Collaboration Mode 🔥</h3>
-					<div className="flex flex-1">{/* s */}</div>
-					<Textarea
-						className="resize-none"
-						placeholder="Que no te quedó claro?"
-					/>
 				</div>
 			</SheetContent>
 		</Sheet>
@@ -476,7 +457,7 @@ export const SingleSlide = memo(
 				return null;
 			}
 			return slide;
-		}, [generalState, id]);
+		}, [generalState?.presentation?.slides, id]);
 
 		const [state, setState] = useState<SinglePresentationAgentState | null>(
 			null,
@@ -568,7 +549,7 @@ export const SingleSlide = memo(
 				<div className="flex gap-2 absolute bottom-4 right-4">
 					<SpeakerNotesSheet notes={slide.speakerNotes} />
 					{generalState.config.collaboration === "active" && (
-						<CollaborationSheet />
+						<CollaborationSheet slideId={id} />
 					)}
 				</div>
 			</div>

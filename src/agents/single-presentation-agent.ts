@@ -6,7 +6,6 @@ import {
 	type PresentationContent,
 	PresentationUpdatedOutputSchema,
 	type ReorderSlidesSchema,
-	type SinglePresentationAgentState,
 	SinglePresentationIncomingMessageSchema,
 	type SinglePresentationOutgoingMessage,
 	SinglePresentationOutgoingMessageSchema,
@@ -17,48 +16,43 @@ import type { Env } from "@/server";
 import { createOpenAI } from "@ai-sdk/openai";
 import {
 	Agent,
+	getAgentByName,
 	type Connection,
 	type ConnectionContext,
 	type WSMessage,
 } from "agents-sdk";
-import { generateId, streamObject } from "ai";
+import {
+	generateId,
+	generateObject,
+	generateText,
+	tool,
+	streamObject,
+} from "ai";
 import { z } from "zod";
 /**
  * SinglePresentation Agent implementation that handles presentation content generation and management
  */
-export class SinglePresentationAgent extends Agent<
-	Env,
-	SinglePresentationAgentState
-> {
+
+export type ChatAgentState = {
+	connections: number;
+	messages: { isAdmin: boolean; message: string; id: string }[];
+};
+export class SinglePresentationAgent extends Agent<Env, ChatAgentState> {
 	connections: Record<string, Connection<unknown>> = {};
+	openai = createOpenAI({
+		apiKey: this.env.OPENAI_API_KEY,
+		//   baseURL: this.env.GATEWAY_BASE_URL,
+	});
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	constructor(env: any, agent: any) {
 		super(env, agent);
 		this.setState({
-			connectionCount: 0,
-			presentationId: null,
-			content: null,
-			status: "initializing",
-			history: [],
+			connections: 0,
+			messages: [],
 		});
 	}
 
-	initialize(message: z.infer<typeof InitPresentationSchema>) {
-		this.setStatus("initializing");
-		// Update state
-		this.setState({
-			...this.state,
-			presentationId: message.presentationId,
-			content: {
-				createdAt: Date.now(),
-				updatedAt: Date.now(),
-				name: message.name,
-				description: message.description,
-				slides: [],
-			},
-		});
-	}
 	onConnect(
 		connection: Connection,
 		ctx: ConnectionContext,
@@ -67,10 +61,10 @@ export class SinglePresentationAgent extends Agent<
 		this.connections[connection.id] = connection;
 		this.setState({
 			...this.state,
-			connectionCount: this.state.connectionCount + 1,
+			connections: this.state.connections + 1,
 		});
-		// console.log("onConnect", connection, ctx);
 	}
+
 	onClose(
 		connection: Connection,
 		code: number,
@@ -81,392 +75,145 @@ export class SinglePresentationAgent extends Agent<
 		delete this.connections[connection.id];
 		this.setState({
 			...this.state,
-			connectionCount: Math.max(this.state.connectionCount - 1, 0),
-		});
-	}
-
-	async generateSlides() {
-		console.log("generating slides");
-		this.setStatus("loading");
-		const name = this.state.content?.name;
-		const description = this.state.content?.description;
-		const openai = createOpenAI({
-			apiKey: this.env.OPENAI_API_KEY,
-		});
-		const { partialObjectStream } = streamObject({
-			model: openai("gpt-4o"),
-			system: `You are a presentation expert that helps create well-structured presentations.
-You will be given a presentation name and description.
-
-You will then generate a well-structured presentation slides.
-Each slide should have a title, topic, description, bullet points, and an image prompt.
-
-The presentation should be well-structured and easy to follow.
-The presentation should be 10-15 slides long.
-The presentation should be 10-15 minutes long.
-The presentation should be well-structured and easy to follow.
-
-I need to not create generic slides but actual topics that I should be talking and discussing. Like, tell me what I should be saying.
-
-`,
-			messages: [
-				{
-					role: "user",
-					content: `Presentation Name: ${name}\n
-Presentation Description: ${description}`,
-				},
-			],
-			schema: z.object({
-				slides: z.array(SlideSchema),
-			}),
-		});
-
-		for await (const chunk of partialObjectStream) {
-			console.log("chunk", chunk);
-			const slides = chunk.slides ?? [];
-			this.setState({
-				...this.state,
-				content: {
-					...(this.state.content ? this.state.content : {}),
-					// @ts-expect-error It's hard to type this.
-					slides: slides,
-				},
-			});
-		}
-
-		console.log("content");
-		console.log(JSON.stringify(this.state.content));
-		console.log("slides");
-		console.log(JSON.stringify(this.state.content?.slides));
-	}
-
-	setStatus(status: SinglePresentationAgentState["status"]) {
-		console.log("setting status", status);
-		this.setState({
-			...this.state,
-			status,
+			connections: this.state.connections - 1,
 		});
 	}
 
 	async onMessage(connection: Connection<unknown>, message: WSMessage) {
-		const messageString = JSON.parse(message.toString());
-		await this.handleMessage(connection, messageString);
-	}
+		const messageObject = JSON.parse(message.toString()) as {
+			type: "message" | "consolidate-messages";
+			userId: string;
+			slideId: string;
+			isAdmin: boolean;
+			message: string;
+		};
+		console.log("messageObject", messageObject);
 
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	async handleMessage(connection: Connection<unknown>, message: any) {
-		try {
-			// Parse and validate the incoming message
-			const parsedMessage =
-				SinglePresentationIncomingMessageSchema.parse(message);
-			this.setStatus("loading");
-
-			console.log("parsedMessage", parsedMessage);
-
-			// Add to history
-			const messageId = generateId();
+		if (messageObject.isAdmin) {
 			this.setState({
 				...this.state,
-				history: [
-					...this.state.history,
+				messages: [
+					...this.state.messages,
 					{
-						id: messageId,
-						type: parsedMessage.type,
-						content: JSON.stringify(parsedMessage),
-						timestamp: Date.now(),
+						isAdmin: messageObject.isAdmin,
+						message: messageObject.message,
+						id: generateId(),
 					},
 				],
 			});
-
-			// Handle different message types
-			switch (parsedMessage.type) {
-				// case "init-presentation":
-				// 	await this.handleInitPresentation(connection, parsedMessage);
-				// 	break;
-
-				case "analyze-text":
-					await this.handleAnalyzeText(connection, parsedMessage, messageId);
-					break;
-
-				case "update-slide":
-					await this.handleUpdateSlide(connection, parsedMessage);
-					break;
-
-				case "reorder-slides":
-					await this.handleReorderSlides(connection, parsedMessage);
-					break;
-
-				case "delete-slide":
-					await this.handleDeleteSlide(connection, parsedMessage);
-					break;
-
-				// case "generate-new-slide":
-				// 	await this.handleGenerateNewSlide(
-				// 		connection,
-				// 		parsedMessage,
-				// 		messageId,
-				// 	);
-				// 	break;
-			}
-		} catch (error) {
-			// Handle validation errors
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data:
-							error instanceof Error ? error.message : "Invalid message format",
-					}),
-				),
+			// Handle presentation updates with LLM analysis
+			const slidesAgent = await getAgentByName(
+				this.env.Presentations,
+				"fintoc-presentation",
 			);
-		}
-	}
 
-	async handleAnalyzeText(
-		connection: Connection<unknown>,
-		message: z.infer<typeof AnalyzeTextSchema>,
-		messageId: string,
-	) {
-		if (!this.state.content) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data: "No presentation initialized. Send init-presentation first.",
-					}),
-				),
-			);
-			return;
-		}
+			const slideContent = await slidesAgent.getSlide(messageObject.slideId);
 
-		const openai = createOpenAI({
-			apiKey: this.env.OPENAI_API_KEY,
-		});
-	}
+			console.log("slideContent", slideContent);
+			try {
+				const result = await generateText({
+					model: this.openai("gpt-4o-mini"),
+					prompt: `
+You are an expert at analyzing feedback on presentation slides, and determining if the feedback requires some changes in the presentation slide.
+You will receive:
+- A bunch of feedback messages.
+- Content of a presentation slide.
 
-	async handleUpdateSlide(
-		connection: Connection<unknown>,
-		message: z.infer<typeof UpdateSlideSchema>,
-	) {
-		if (!this.state.content) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data: "No presentation initialized. Send init-presentation first.",
-					}),
-				),
-			);
-			return;
-		}
+- You need to determine if the feedback requires some changes in the presentation slide.
+- You will compare the feedback with the content of the slide.
+- If it does, you need to generate more detailed explanation of the slide, and call the tool "update-slide" with the updated slide content.
 
-		// Find the slide to update
-		const slideIndex = this.state.content.slides.findIndex(
-			(s) => s.id === message.slideId,
-		);
+<existing-slide>
+${JSON.stringify(slideContent, null, 2)}
+</existing-slide>
 
-		if (slideIndex === -1) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data: `Slide with ID ${message.slideId} not found`,
-					}),
-				),
-			);
-			return;
-		}
+<feedback>
+${this.state.messages
+	.map((message) => {
+		return `
+  <message>
+  <user-id>${message.id}</user-id>
+  <message>${message.message}</message>
+  </message>
+  `;
+	})
+	.join("\n")}
+</feedback>
 
-		// Update the slide
-		const updatedSlides = [...this.state.content.slides];
-		updatedSlides[slideIndex] = {
-			...updatedSlides[slideIndex],
-			...(message.title && { title: message.title }),
-			...(message.topic && { topic: message.topic }),
-			...(message.description && { description: message.description }),
-		};
+Available tools:
+- update-slide: Updates the content of a slide
+  Parameters:
+    - slideId: string (ID of the slide to update)
+    - content: object (The updated slide content following the SlideSchema)
 
-		// Update the presentation content
-		const updatedContent: PresentationContent = {
-			...this.state.content,
-			slides: updatedSlides,
-			updatedAt: Date.now(),
-		};
-
-		// Update state
-		this.setState({
-			...this.state,
-			content: updatedContent,
-		});
-
-		// Send response
-		await connection.send(
-			JSON.stringify(
-				PresentationUpdatedOutputSchema.parse({
-					type: "presentation-updated",
-					data: updatedContent,
-				}),
-			),
-		);
-	}
-
-	async handleReorderSlides(
-		connection: Connection<unknown>,
-		message: z.infer<typeof ReorderSlidesSchema>,
-	) {
-		if (!this.state.content) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data: "No presentation initialized. Send init-presentation first.",
-					}),
-				),
-			);
-			return;
-		}
-
-		// Validate that all slide IDs exist
-		const slideIds = new Set(this.state.content.slides.map((s) => s.id));
-		for (const id of message.slideIds) {
-			if (!slideIds.has(id)) {
-				await connection.send(
-					JSON.stringify(
-						ErrorOutputSchema.parse({
-							type: "error",
-							data: `Slide with ID ${id} not found`,
+`,
+					tools: {
+						"update-slide": tool({
+							description: "Updates the content of a slide",
+							parameters: z.object({
+								slideId: z.string().describe("The ID of the slide to update"),
+								content: SlideSchema.describe("The updated slide content"),
+							}),
+							execute: async ({ slideId, content }) => {
+								const theSlideAgent = await getAgentByName(
+									this.env.Presentations,
+									"fintoc-presentation",
+								);
+								console.log("theSlideAgent", theSlideAgent);
+								await theSlideAgent.updateSlideContent(slideId, content);
+								console.log(
+									"FINAL SLIDE",
+									await theSlideAgent.getSlide(slideId),
+								);
+							},
 						}),
-					),
-				);
-				return;
+					},
+				});
+			} catch (error) {
+				console.log("error in presentation update handling", error);
 			}
-		}
-
-		// Create a map of slides by ID
-		const slidesMap = new Map(this.state.content.slides.map((s) => [s.id, s]));
-
-		// Create reordered slides array
-		const reorderedSlides = message.slideIds.map((id, index) => {
-			const slide = slidesMap.get(id);
-			if (!slide) {
-				throw new Error(`Slide with ID ${id} not found`);
-			}
-			return {
-				...slide,
-				order: index,
-			};
-		});
-
-		// Add any slides that weren't in the reorder list at the end
-		const reorderedIds = new Set(message.slideIds);
-		const remainingSlides = this.state.content.slides
-			.filter((s) => !reorderedIds.has(s.id))
-			.map((s, i) => ({
-				...s,
-				order: reorderedSlides.length + i,
-			}));
-
-		const allSlides = [...reorderedSlides, ...remainingSlides];
-
-		// Update the presentation content
-		const updatedContent: PresentationContent = {
-			...this.state.content,
-			slides: allSlides,
-			updatedAt: Date.now(),
-		};
-
-		// Update state
-		this.setState({
-			...this.state,
-			content: updatedContent,
-		});
-
-		// Send response
-		await connection.send(
-			JSON.stringify(
-				PresentationUpdatedOutputSchema.parse({
-					type: "presentation-updated",
-					data: updatedContent,
-				}),
-			),
-		);
-	}
-
-	async handleDeleteSlide(
-		connection: Connection<unknown>,
-		message: z.infer<typeof DeleteSlideSchema>,
-	) {
-		if (!this.state.content) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data: "No presentation initialized. Send init-presentation first.",
-					}),
-				),
-			);
 			return;
 		}
 
-		// Find the slide to delete
-		const slideIndex = this.state.content.slides.findIndex(
-			(s) => s.id === message.slideId,
-		);
+		// Validate incoming message format
+		try {
+			const result = await generateObject({
+				model: this.openai("gpt-4o-mini"),
+				system: `
+          You are an assistant expert in validating that text is safe for work. You will be given a message. On many languages. Particularly spanish and english. And you will need to validate that the message is safe for work. If it is not, you will need to return a message saying that the message is not safe for work.
+        `,
+				messages: [
+					{
+						role: "user",
+						content: messageObject.message,
+					},
+				],
+				schema: z.object({
+					valid: z.boolean(),
+				}),
+			});
 
-		if (slideIndex === -1) {
-			await connection.send(
-				JSON.stringify(
-					ErrorOutputSchema.parse({
-						type: "error",
-						data: `Slide with ID ${message.slideId} not found`,
-					}),
-				),
-			);
+			const message = result.object.valid
+				? messageObject.message
+				: `Message from connection ${connection.id} contains inappropriate content`;
+			// If message passes moderation, add to state
+			this.setState({
+				...this.state,
+				messages: [
+					...this.state.messages,
+					{ isAdmin: messageObject.isAdmin, message, id: generateId() },
+				],
+			});
+		} catch (error) {
+			// Send error message back to the connection
+			console.log("error", error);
 			return;
 		}
-
-		// Remove the slide
-		const updatedSlides = this.state.content.slides.filter(
-			(s) => s.id !== message.slideId,
-		);
-
-		// Reorder remaining slides
-		const reorderedSlides = updatedSlides.map((slide, index) => ({
-			...slide,
-			order: index,
-		}));
-
-		// Update the presentation content
-		const updatedContent: PresentationContent = {
-			...this.state.content,
-			slides: reorderedSlides,
-			updatedAt: Date.now(),
-		};
-
-		// Update state
-		this.setState({
-			...this.state,
-			content: updatedContent,
-		});
-
-		// Send response
-		await connection.send(
-			JSON.stringify(
-				PresentationUpdatedOutputSchema.parse({
-					type: "presentation-updated",
-					data: updatedContent,
-				}),
-			),
-		);
 	}
 
-	broadcastMessage(message: SinglePresentationOutgoingMessage) {
-		const validatedMessage =
-			SinglePresentationOutgoingMessageSchema.parse(message);
-		const messageString = JSON.stringify(validatedMessage);
-
+	broadcastMessage(message: string) {
 		for (const connectionId in this.connections) {
-			this.connections[connectionId].send(messageString);
+			this.connections[connectionId].send(message);
 		}
 	}
 }
