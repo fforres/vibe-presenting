@@ -6,7 +6,7 @@ Vibe Presenting is a RADICAL (& IN PROGRESS) tool that helps you create, manage 
 
 ## 📼 Demo
 
-[Watch the demo video](./vibe-presenting.mp4)
+https://github.com/user-attachments/assets/2ffe2698-5ba0-4f3c-a429-7772825e67e8
 
 ## ✨ Features
 
