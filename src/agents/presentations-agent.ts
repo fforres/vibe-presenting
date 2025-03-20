@@ -55,6 +55,403 @@ export type PresentationAgentState = {
 	};
 	presentation: Presentation;
 };
+
+const defaultState: PresentationAgentState = {
+	connectionCount: 0,
+	status: "idle",
+	// activeSlide: "wtf-is-an-agent",
+	activeSlide: null,
+	config: {
+		sidebarNavigation: "inactive",
+		collaboration: "inactive",
+		// collaboration: "active",
+		speakerNotes: "private",
+	},
+	presentation: {
+		id: generateId(),
+		// id: generateId(),
+		name: "Arquitectura de aplicaciones en un mundo post AI",
+		description: presentationDescription,
+		createdAt: Date.now(),
+		slides: [
+			{
+				id: "Hi",
+				title: "Hi 👋",
+				topic: "Hi",
+				// "Ideas, patterns and Rants for deveopint AI-First software. (Thoughts around Sync Engines, Edge Inference and LLMs) ",
+				// Nueva propuesta: Veremos ideas y patrones modernos para el desarrollo de aplicaciones "AI First" aprovechando Sync Engines, Edge Inference y modelos de lenguaje. Exploraremos casos prácticos que facilitan escalabilidad horizontal sin afectar negativamente en performance. Una solución concreta para desarrolladores.
+				speakerNotes: "Say hi to the audience",
+				design: "title",
+			},
+			{
+				id: "sobre-mi",
+				title: "Hola, soy Felipe Torres 👋",
+				topic: "Sobre mi",
+				markdownContent: `
+- *A.K.A. FForres*
+- CTO @ [Skyward.AI](https://skyward.ai)
+- (Previously, @ [OpenAI](https://openai.com), [Brex](https://brex.com), [Segment](https://segment.com))
+- 1 Esposa, 2 Gatos
+- ❤️: AI, The Web, JS, TS, good UX, local-first.
+- 😡: Crypto/Scams,
+
+### Socials
+- ~~X:~~ Twitter [twitter.com/fforres](https://twitter.com/fforres)
+- [github.com/fforres](https://github.com/fforres)
+- [linkedin.com/in/fforres](https://linkedin.com/in/fforres)
+						`,
+				image: {
+					url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/6cb81b67-8c30-49de-3d9b-e06361a90600/public",
+				},
+				speakerNotes: "",
+				design: "two-columns-with-image",
+			},
+			{
+				id: "el-landing",
+				title: "Arquitectura de aplicaciones en un mundo post AI",
+				subtitle:
+					"(Cosas que aprendí construyendo Skyward.AI, y pa donde veo que va la cosa)",
+				topic: "El landing",
+				description:
+					"Ideas, patrones y 'Rants' sobre desarrollar software AI-First. (Pensamientos al rededor de `Sync Engines`, `el Edge` y `LLMs`) ",
+				// "Ideas, patterns and Rants for deveopint AI-First software. (Thoughts around Sync Engines, Edge Inference and LLMs) ",
+				// Nueva propuesta: Veremos ideas y patrones modernos para el desarrollo de aplicaciones "AI First" aprovechando Sync Engines, Edge Inference y modelos de lenguaje. Exploraremos casos prácticos que facilitan escalabilidad horizontal sin afectar negativamente en performance. Una solución concreta para desarrolladores.
+				speakerNotes: "",
+				design: "title",
+			},
+			{
+				id: "thesis-1",
+				title: "Implementar AI === Implementar una base de datos",
+				topic: "Thesis 1",
+				subtitle: "Thesis 1",
+				speakerNotes: "",
+				design: "title",
+			},
+			{
+				id: "thesis-2",
+				title:
+					"El accesso a deeeeeeeep reasoning models va ser (estúpidamente) barato.",
+				topic: "Thesis 2",
+				subtitle: "Thesis 2",
+				speakerNotes: "",
+				design: "title",
+			},
+			{
+				id: "thesis-3",
+				title: `Gente "no-dev" va a crear software a medida.`,
+				topic: "Thesis 3",
+				subtitle: "Thesis 3",
+				speakerNotes: "",
+				design: "title",
+			},
+			{
+				id: "so-what",
+				title: "Como diferencio mi software de la competencia?",
+				description: "",
+				topic: "FML. What's our Moat then?",
+				markdownContent: `
+### Entonces:
+
+1. ### Si AI estará en todos lados.
+2. ### Si el acceso a "pensar" será barato.
+3. ### Si la gente podra crear sus propias soluciones.
+
+## 🤔🤔🤔
+## Cual es el MOAT?
+						`,
+				image: {
+					prompt:
+						"An image of a person thinking deeply Even a bit disheartened. They are a javascript developer so put some js/ts books around. This is important. And they are thinking about the future of software.",
+				},
+				design: "two-columns-with-image",
+			},
+			{
+				id: "agents",
+				title: "Agents",
+				topic: "Agents",
+				subtitle: "An 'AI-First' way to build software",
+				speakerNotes: "",
+				design: "title",
+			},
+			// asdadss
+			{
+				id: "wtf-is-ai-first",
+				title: "Que diablos es AI-First‽‽",
+				topic: "WTF is AI-First ‽‽",
+				markdownContent: `
+- ### IA es el componente fundamental de la solucion.
+- ### No es una característica añadida, sino el núcleo de la arquitectura.
+- ### Un problema: Falta de determinismo en la AI generativa.
+- ### Agent-Based
+`,
+				image: {
+					prompt:
+						"Modern AI application architecture diagram with neural networks integrated into core systems",
+				},
+				speakerNotes: "",
+				design: "two-columns-with-image",
+			},
+
+			{
+				id: "wtf-is-an-agent",
+				title: "¿Qué diablos es un Agent?",
+				topic: "WTF is an Agent?",
+				markdownContent: `
+### Un programa autónomo que puede:
+  - Interactuar con su entorno
+  - Obtener data de fuentes externas
+  - Realizar acciones (MCP anyone?)
+
+### Características :
+  - **"Razonamiento" (LLMs para decidir)** ✨
+  - Herramientas predefinidas (APIs, BDD, agentes)
+  - Autonomía (opera sin intervención constante)
+  - **Persistencia (mantiene estado)** ✨
+`,
+				image: {
+					prompt:
+						"Diagram showing an AI agent system with perception, reasoning, and action components interacting with various tools and APIs",
+				},
+				speakerNotes:
+					"Un agent es fundamentalmente diferente de un simple chatbot o una aplicación tradicional con IA. Es un sistema autónomo que combina la capacidad de razonamiento de los LLMs con la habilidad de interactuar con herramientas externas y mantener un estado persistente. Los agents pueden trabajar en segundo plano, tomar decisiones complejas y ejecutar tareas sin necesidad de supervisión constante. Esto los hace ideales para automatizar flujos de trabajo complejos que antes requerían intervención humana.",
+				design: "two-columns-with-image",
+			},
+			{
+				id: "is-there-actually-a-moat",
+				title: "Entonces... Hay un Moat?",
+				description: "",
+				topic: "Entonces... Hay un Moat?",
+				markdownContent: `
+
+# Si
+
+# 1. Data Privada
+# 2. Buen UX
+# 3. Buen AX
+						`,
+				image: {
+					prompt: "A diagram of a moat with a drawbridge and a castle on top",
+				},
+				design: "two-columns-with-image",
+			},
+			{
+				id: "good-ux-for-ai-first-software",
+				title: "Buen UX / Buen AX (AI-First Software)",
+				topic: "Good UX / Good AX (AI-First Software)",
+				description: "",
+				markdownContentLeft: `
+### UX — User Experience
+- Entender y priorizar las necesidades y objetivos del usuario.
+- Resuelve?
+- Es simple de usar? Es facil de entender?
+- Es eficiente/es rapido?
+            `,
+				markdownContentRight: `
+### AX — Agent Experience
+Lo mismo que hace bueno al software tradicional...pero para agentes.
+- Mathias Billmann (CEO Netlify)
+- [Introducing AX: Why Agent Experience Matters](https://biilmann.blog/articles/introducing-ax/)
+- [The Era of Agent Experience (AX)](https://www.netlify.com/blog/the-era-of-agent-experience-ax/)
+
+> La experiencia que los agentes tienen, cuando trabajan con el contenido que producimos, o los sistemas que exponemos.
+
+`,
+				design: "two-text-columns",
+			},
+			{
+				id: "separator",
+				title: "====== <br /> ======",
+				topic: "====== <br /> ======",
+				subtitle: "Preguntas? Consultas? Reclamos?",
+				design: "title",
+			},
+			{
+				id: "summary",
+				title: "Consolidando ideas",
+				topic: "Summary",
+				description: "",
+				markdownContentLeft: `
+### Tenemos que:
+- AI va a ser base de muchisimo software.
+- LLMs habilitan crear software "on-demand".
+- AI-First software va en subida.
+- Agentes es el core de AI-First software.
+- Todo esto implica muchísimos más agentes.
+- Tenemos Moats de un buen software de AI.
+
+`,
+				markdownContentRight: `
+### En Skyward.AI dijimos:
+- Que es lo mas frustrante de trabajar con Llms.
+- Que no es tan frustrante, pero que nos gustaría que pasara.
+- Que es lo que nos encanta de trabajar con Llms.
+- En el panorama futuro. Que debería cambiar?
+`,
+				design: "two-text-columns",
+			},
+			{
+				id: "good-ux-ax-is-not-a-nice-to-have",
+				title: "Buen UX y AX son jugadas de arquitectura",
+				subtitle: "Y performance",
+				topic: "Good UX y AX no son 'nice-to-have'",
+				speakerNotes: "",
+				design: "title",
+			},
+			{
+				id: "lets-talk-architecture",
+				title: "¿El Edge?",
+				topic: "¿El Edge?",
+				speakerNotes: "",
+				design: "title",
+			},
+			{
+				id: "lets-talk-architecture-2",
+				title: "¿El Edge?",
+				subtitle:
+					"Paradigma de computación distribuida. Compute y storage se mueven más cerca de la fuente de datos. (AKA... no estan en un US-WEST-1).",
+				topic: "¿El Edge? (What is it?)",
+				speakerNotes: "",
+				design: "title",
+			},
+			{
+				id: "cloudflare-edge",
+				title: "",
+				topic: "Cloudflare",
+				speakerNotes: "",
+				image: {
+					url: "https://analyticsindiamag.com/wp-content/uploads/2024/03/CF_MetaImage_1200x628-1.png",
+				},
+				design: "full-size-image",
+			},
+			{
+				id: "Architectura-Workers",
+				title: "Que son los Cloudflare Workers?",
+				topic: "Cloudflare Workers",
+				description:
+					"'Isolados' de V8, que corren en el Edge de Cloudflare. (2017)",
+				markdownContent: `
+- Serverless en el Edge.
+- No hay "US-WEST-1", tiene un solo location. "Earth"
+- Un request es un worker. (No se comparte estado entre requests)
+- JavaScript/WASM (Python y Rust en Beta)
+- Escala muy muy rápido.
+- Barato (100K requests/month al dia Gratis. 10M/Mes por 5 USD).
+						`,
+				image: {
+					url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/8b656f37-cbb0-44ef-490e-afbed7f84500/public",
+				},
+				speakerNotes: "",
+				design: "two-columns-with-image",
+			},
+			{
+				id: "Durable Objects",
+				title: "Que son los Durable Objects?",
+				topic: "Durable Objects",
+				description:
+					"Tipo de 'worker' que se ejecuta en el Edge de Cloudflare. (2021)",
+				markdownContent: `
+- Es un tipo de worker.
+- Se instancia como una clase.
+- Cada instancia de la clase tiene un ID unico en el mundo.
+- Tienen sockets. Timers.
+- Cada Durable Object tiene un "durable storage" asociado. (POJO o SQLite)
+
+Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
+				image: {
+					url: "https://cf-assets.www.cloudflare.com/zkvhlag99gkb/41hmxqTyMhQIZ7scR0xi17/bee0d4adde9913c3c2495e1a0f37c109/Earth-desktop-background-copy-2_2x.png",
+				},
+				speakerNotes: "",
+				design: "two-columns-with-image",
+			},
+			{
+				id: "separator 2",
+				title: "====== <br /> 2 ======",
+				topic: "====== <br /> 2 ======",
+				subtitle: "Preguntas? Consultas? Reclamos?",
+				design: "title",
+			},
+			{
+				id: "summary 2",
+				title: "Consolidando ideas",
+				topic: "Summary",
+				markdownContent: `
+- Agentes:
+    - Logica de negocios encapsulada
+    - Persistencia (mantiene estado)
+- Lo mas frustrante de LLMs es la latencia.
+- UX/AX no son negociables para nuestros usuarios.
+- Desbloquear buen UX/AX son architecture plays.
+- Cloudflare tiene las infaestructura para reducir latencia y escalar estupidamente.
+
+... Metamos agentes en Cloudflare!
+
+`,
+				image: {
+					url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/99d59b22-756d-4e18-c00a-549b7ad8e000/public",
+				},
+				design: "two-columns-with-image",
+			},
+			{
+				id: "story-time",
+				title: "Story Time",
+				subtitle: "Cloudflare Launchpad + Rita",
+				topic: "Story Time",
+				design: "title",
+			},
+			{
+				id: "boom-synnergy",
+				title: "Boom! Sinergy!",
+				topic: "Boom! Sinergy!",
+				image: {
+					url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/99d59b22-756d-4e18-c00a-549b7ad8e000/public",
+				},
+				caption: `
+        const agent = new DurableObject()
+  `,
+				design: "big-image-with-caption",
+			},
+			{
+				id: "tradeoffs",
+				title: "Tradeoffs",
+				topic: "Tradeoffs",
+				description: "",
+				markdownContent: `
+- Hay que pensar en sistemas distribuidos
+  - Max 1000 Subrequest Limits (a D1/R2/Fetch/Other Workers)
+- Hay que pensar en serverless
+- 1 request = 1 server. (Pero de verdad, no como en Lambdas)
+- Low-ish Level APIs. (AsyncLocalStorage)
+- No FS API.
+- Hay que preocuparse de performance.
+  - Debe iniciar en menos de 400ms.
+  - 128mb de memoria x request.
+  - 10mb por Script.
+
+            `,
+				image: {
+					url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/8d35bab5-7f6b-4726-5cff-1e0d0ec4e500/public",
+				},
+				design: "two-columns-with-image",
+			},
+			{
+				id: "code-example",
+				title: "Code Example",
+				subtitle: "Fuck it, lets look at some example",
+				topic: "Code Example",
+				description: "",
+				design: "title",
+			},
+			{
+				id: "11",
+				title: "Conclusion and Q&A",
+				topic: "Conclusion",
+				description: "",
+				speakerNotes: "",
+				design: "title",
+			},
+		] satisfies Slide[],
+	},
+};
 /**
  * Chat Agent implementation that handles real-time AI chat interactions
  */
@@ -128,403 +525,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 		if (this.state) {
 			return;
 		}
-		this.setState({
-			connectionCount: 0,
-			status: "idle",
-			// activeSlide: "wtf-is-an-agent",
-			activeSlide: null,
-			config: {
-				sidebarNavigation: "inactive",
-				collaboration: "inactive",
-				// collaboration: "active",
-				speakerNotes: "private",
-			},
-			presentation: {
-				id: generateId(),
-				// id: generateId(),
-				name: "Arquitectura de aplicaciones en un mundo post AI",
-				description: presentationDescription,
-				createdAt: Date.now(),
-				slides: [
-					{
-						id: "Hi",
-						title: "Hi 👋",
-						topic: "Hi",
-						// "Ideas, patterns and Rants for deveopint AI-First software. (Thoughts around Sync Engines, Edge Inference and LLMs) ",
-						// Nueva propuesta: Veremos ideas y patrones modernos para el desarrollo de aplicaciones "AI First" aprovechando Sync Engines, Edge Inference y modelos de lenguaje. Exploraremos casos prácticos que facilitan escalabilidad horizontal sin afectar negativamente en performance. Una solución concreta para desarrolladores.
-						speakerNotes: "Say hi to the audience",
-						design: "title",
-					},
-					{
-						id: "sobre-mi",
-						title: "Hola, soy Felipe Torres 👋",
-						topic: "Sobre mi",
-						markdownContent: `
-- *A.K.A. FForres*
-- CTO @ [Skyward.AI](https://skyward.ai)
-- (Previously, @ [OpenAI](https://openai.com), [Brex](https://brex.com), [Segment](https://segment.com))
-- 1 Esposa, 2 Gatos
-- ❤️: AI, The Web, JS, TS, good UX, local-first.
-- 😡: Crypto/Scams,
-
-### Socials
-- ~~X:~~ Twitter [twitter.com/fforres](https://twitter.com/fforres)
-- [github.com/fforres](https://github.com/fforres)
-- [linkedin.com/in/fforres](https://linkedin.com/in/fforres)
-						`,
-						image: {
-							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/6cb81b67-8c30-49de-3d9b-e06361a90600/public",
-						},
-						speakerNotes: "",
-						design: "two-columns-with-image",
-					},
-					{
-						id: "el-landing",
-						title: "Arquitectura de aplicaciones en un mundo post AI",
-						subtitle:
-							"(Cosas que aprendí construyendo Skyward.AI, y pa donde veo que va la cosa)",
-						topic: "El landing",
-						description:
-							"Ideas, patrones y 'Rants' sobre desarrollar software AI-First. (Pensamientos al rededor de `Sync Engines`, `el Edge` y `LLMs`) ",
-						// "Ideas, patterns and Rants for deveopint AI-First software. (Thoughts around Sync Engines, Edge Inference and LLMs) ",
-						// Nueva propuesta: Veremos ideas y patrones modernos para el desarrollo de aplicaciones "AI First" aprovechando Sync Engines, Edge Inference y modelos de lenguaje. Exploraremos casos prácticos que facilitan escalabilidad horizontal sin afectar negativamente en performance. Una solución concreta para desarrolladores.
-						speakerNotes: "",
-						design: "title",
-					},
-					{
-						id: "thesis-1",
-						title: "Implementar AI === Implementar una base de datos",
-						topic: "Thesis 1",
-						subtitle: "Thesis 1",
-						speakerNotes: "",
-						design: "title",
-					},
-					{
-						id: "thesis-2",
-						title:
-							"El accesso a deeeeeeeep reasoning models va ser (estúpidamente) barato.",
-						topic: "Thesis 2",
-						subtitle: "Thesis 2",
-						speakerNotes: "",
-						design: "title",
-					},
-					{
-						id: "thesis-3",
-						title: `Gente "no-dev" va a crear software a medida.`,
-						topic: "Thesis 3",
-						subtitle: "Thesis 3",
-						speakerNotes: "",
-						design: "title",
-					},
-					{
-						id: "so-what",
-						title: "Como diferencio mi software de la competencia?",
-						description: "",
-						topic: "FML. What's our Moat then?",
-						markdownContent: `
-### Entonces:
-
-1. ### Si AI estará en todos lados.
-2. ### Si el acceso a "pensar" será barato.
-3. ### Si la gente podra crear sus propias soluciones.
-
-## 🤔🤔🤔
-## Cual es el MOAT?
-						`,
-						image: {
-							prompt:
-								"An image of a person thinking deeply Even a bit disheartened. They are a javascript developer so put some js/ts books around. This is important. And they are thinking about the future of software.",
-						},
-						design: "two-columns-with-image",
-					},
-					{
-						id: "agents",
-						title: "Agents",
-						topic: "Agents",
-						subtitle: "An 'AI-First' way to build software",
-						speakerNotes: "",
-						design: "title",
-					},
-					// asdadss
-					{
-						id: "wtf-is-ai-first",
-						title: "Que diablos es AI-First‽‽",
-						topic: "WTF is AI-First ‽‽",
-						markdownContent: `
-- ### IA es el componente fundamental de la solucion.
-- ### No es una característica añadida, sino el núcleo de la arquitectura.
-- ### Un problema: Falta de determinismo en la AI generativa.
-- ### Agent-Based
-`,
-						image: {
-							prompt:
-								"Modern AI application architecture diagram with neural networks integrated into core systems",
-						},
-						speakerNotes: "",
-						design: "two-columns-with-image",
-					},
-
-					{
-						id: "wtf-is-an-agent",
-						title: "¿Qué diablos es un Agent?",
-						topic: "WTF is an Agent?",
-						markdownContent: `
-### Un programa autónomo que puede:
-  - Interactuar con su entorno
-  - Obtener data de fuentes externas
-  - Realizar acciones (MCP anyone?)
-
-### Características :
-  - **"Razonamiento" (LLMs para decidir)** ✨
-  - Herramientas predefinidas (APIs, BDD, agentes)
-  - Autonomía (opera sin intervención constante)
-  - **Persistencia (mantiene estado)** ✨
-`,
-						image: {
-							prompt:
-								"Diagram showing an AI agent system with perception, reasoning, and action components interacting with various tools and APIs",
-						},
-						speakerNotes:
-							"Un agent es fundamentalmente diferente de un simple chatbot o una aplicación tradicional con IA. Es un sistema autónomo que combina la capacidad de razonamiento de los LLMs con la habilidad de interactuar con herramientas externas y mantener un estado persistente. Los agents pueden trabajar en segundo plano, tomar decisiones complejas y ejecutar tareas sin necesidad de supervisión constante. Esto los hace ideales para automatizar flujos de trabajo complejos que antes requerían intervención humana.",
-						design: "two-columns-with-image",
-					},
-					{
-						id: "is-there-actually-a-moat",
-						title: "Entonces... Hay un Moat?",
-						description: "",
-						topic: "Entonces... Hay un Moat?",
-						markdownContent: `
-
-# Si
-
-# 1. Data Privada
-# 2. Buen UX
-# 3. Buen AX
-						`,
-						image: {
-							prompt:
-								"A diagram of a moat with a drawbridge and a castle on top",
-						},
-						design: "two-columns-with-image",
-					},
-					{
-						id: "good-ux-for-ai-first-software",
-						title: "Buen UX / Buen AX (AI-First Software)",
-						topic: "Good UX / Good AX (AI-First Software)",
-						description: "",
-						markdownContentLeft: `
-### UX — User Experience
-- Entender y priorizar las necesidades y objetivos del usuario.
-- Resuelve?
-- Es simple de usar? Es facil de entender?
-- Es eficiente/es rapido?
-            `,
-						markdownContentRight: `
-### AX — Agent Experience
-Lo mismo que hace bueno al software tradicional...pero para agentes.
-- Mathias Billmann (CEO Netlify)
-- [Introducing AX: Why Agent Experience Matters](https://biilmann.blog/articles/introducing-ax/)
-- [The Era of Agent Experience (AX)](https://www.netlify.com/blog/the-era-of-agent-experience-ax/)
-
-> La experiencia que los agentes tienen, cuando trabajan con el contenido que producimos, o los sistemas que exponemos.
-
-`,
-						design: "two-text-columns",
-					},
-					{
-						id: "separator",
-						title: "====== <br /> ======",
-						topic: "====== <br /> ======",
-						subtitle: "Preguntas? Consultas? Reclamos?",
-						design: "title",
-					},
-					{
-						id: "summary",
-						title: "Consolidando ideas",
-						topic: "Summary",
-						description: "",
-						markdownContentLeft: `
-### Tenemos que:
-- AI va a ser base de muchisimo software.
-- LLMs habilitan crear software "on-demand".
-- AI-First software va en subida.
-- Agentes es el core de AI-First software.
-- Todo esto implica muchísimos más agentes.
-- Tenemos Moats de un buen software de AI.
-
-`,
-						markdownContentRight: `
-### En Skyward.AI dijimos:
-- Que es lo mas frustrante de trabajar con Llms.
-- Que no es tan frustrante, pero que nos gustaría que pasara.
-- Que es lo que nos encanta de trabajar con Llms.
-- En el panorama futuro. Que debería cambiar?
-`,
-						design: "two-text-columns",
-					},
-					{
-						id: "good-ux-ax-is-not-a-nice-to-have",
-						title: "Buen UX y AX son jugadas de arquitectura",
-						subtitle: "Y performance",
-						topic: "Good UX y AX no son 'nice-to-have'",
-						speakerNotes: "",
-						design: "title",
-					},
-					{
-						id: "lets-talk-architecture",
-						title: "¿El Edge?",
-						topic: "¿El Edge?",
-						speakerNotes: "",
-						design: "title",
-					},
-					{
-						id: "lets-talk-architecture-2",
-						title: "¿El Edge?",
-						subtitle:
-							"Paradigma de computación distribuida. Compute y storage se mueven más cerca de la fuente de datos. (AKA... no estan en un US-WEST-1).",
-						topic: "¿El Edge? (What is it?)",
-						speakerNotes: "",
-						design: "title",
-					},
-					{
-						id: "cloudflare-edge",
-						title: "",
-						topic: "Cloudflare",
-						speakerNotes: "",
-						image: {
-							url: "https://analyticsindiamag.com/wp-content/uploads/2024/03/CF_MetaImage_1200x628-1.png",
-						},
-						design: "full-size-image",
-					},
-					{
-						id: "Architectura-Workers",
-						title: "Que son los Cloudflare Workers?",
-						topic: "Cloudflare Workers",
-						description:
-							"'Isolados' de V8, que corren en el Edge de Cloudflare. (2017)",
-						markdownContent: `
-- Serverless en el Edge.
-- No hay "US-WEST-1", tiene un solo location. "Earth"
-- Un request es un worker. (No se comparte estado entre requests)
-- JavaScript/WASM (Python y Rust en Beta)
-- Escala muy muy rápido.
-- Barato (100K requests/month al dia Gratis. 10M/Mes por 5 USD).
-						`,
-						image: {
-							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/8b656f37-cbb0-44ef-490e-afbed7f84500/public",
-						},
-						speakerNotes: "",
-						design: "two-columns-with-image",
-					},
-					{
-						id: "Durable Objects",
-						title: "Que son los Durable Objects?",
-						topic: "Durable Objects",
-						description:
-							"Tipo de 'worker' que se ejecuta en el Edge de Cloudflare. (2021)",
-						markdownContent: `
-- Es un tipo de worker.
-- Se instancia como una clase.
-- Cada instancia de la clase tiene un ID unico en el mundo.
-- Tienen sockets. Timers.
-- Cada Durable Object tiene un "durable storage" asociado. (POJO o SQLite)
-
-Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
-						image: {
-							url: "https://cf-assets.www.cloudflare.com/zkvhlag99gkb/41hmxqTyMhQIZ7scR0xi17/bee0d4adde9913c3c2495e1a0f37c109/Earth-desktop-background-copy-2_2x.png",
-						},
-						speakerNotes: "",
-						design: "two-columns-with-image",
-					},
-					{
-						id: "separator 2",
-						title: "====== <br /> 2 ======",
-						topic: "====== <br /> 2 ======",
-						subtitle: "Preguntas? Consultas? Reclamos?",
-						design: "title",
-					},
-					{
-						id: "summary 2",
-						title: "Consolidando ideas",
-						topic: "Summary",
-						markdownContent: `
-- Agentes:
-    - Logica de negocios encapsulada
-    - Persistencia (mantiene estado)
-- Lo mas frustrante de LLMs es la latencia.
-- UX/AX no son negociables para nuestros usuarios.
-- Desbloquear buen UX/AX son architecture plays.
-- Cloudflare tiene las infaestructura para reducir latencia y escalar estupidamente.
-
-... Metamos agentes en Cloudflare!
-
-`,
-						image: {
-							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/99d59b22-756d-4e18-c00a-549b7ad8e000/public",
-						},
-						design: "two-columns-with-image",
-					},
-					{
-						id: "story-time",
-						title: "Story Time",
-						subtitle: "Cloudflare Launchpad + Rita",
-						topic: "Story Time",
-						design: "title",
-					},
-					{
-						id: "boom-synnergy",
-						title: "Boom! Sinergy!",
-						topic: "Boom! Sinergy!",
-						image: {
-							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/99d59b22-756d-4e18-c00a-549b7ad8e000/public",
-						},
-						caption: `
-        const agent = new DurableObject()
-  `,
-						design: "big-image-with-caption",
-					},
-					{
-						id: "tradeoffs",
-						title: "Tradeoffs",
-						topic: "Tradeoffs",
-						description: "",
-						markdownContent: `
-- Hay que pensar en sistemas distribuidos
-  - Max 1000 Subrequest Limits (a D1/R2/Fetch/Other Workers)
-- Hay que pensar en serverless
-- 1 request = 1 server. (Pero de verdad, no como en Lambdas)
-- Low-ish Level APIs. (AsyncLocalStorage)
-- No FS API.
-- Hay que preocuparse de performance.
-  - Debe iniciar en menos de 400ms.
-  - 128mb de memoria x request.
-  - 10mb por Script.
-
-            `,
-						image: {
-							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/8d35bab5-7f6b-4726-5cff-1e0d0ec4e500/public",
-						},
-						design: "two-columns-with-image",
-					},
-					{
-						id: "code-example",
-						title: "Code Example",
-						subtitle: "Fuck it, lets look at some example",
-						topic: "Code Example",
-						description: "",
-						design: "title",
-					},
-					{
-						id: "11",
-						title: "Conclusion and Q&A",
-						topic: "Conclusion",
-						description: "",
-						speakerNotes: "",
-						design: "title",
-					},
-				] satisfies Slide[],
-			},
-		});
+		this.setState(defaultState);
 	}
 	// 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	// 	constructor(env: any, agent: any) {
@@ -1019,6 +1020,7 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
   - A bunch of feedback messages.
   - Content of a presentation slide.
 
+  - If the admin is asking to reset the slide, you need to call the tool "reset-slide" with the slideId. This is important.
   - You need to determine if the feedback requires some changes in the presentation slide.
   - You will compare the feedback with the content of the slide.
   - If it does, you need to generate more detailed explanation of the slide, and call the tool "update-slide" with the updated slide content.
@@ -1049,8 +1051,16 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
     Parameters:
       - slideId: string (ID of the slide to update)
 
+  - reset:
+    Parameters:
+      - slideId: string (ID of the slide to reset)
+      - Should reset the slide to the initial content
+
 You musst follow the current JSON slide schema
   ${JSON.stringify(slideSchema.shape, null, 2)}
+
+The admin message is:
+${parsedMessage.message}
 
   `,
 						tools: {
@@ -1082,6 +1092,23 @@ You musst follow the current JSON slide schema
 										},
 									});
 									console.log("FINAL SLIDE", await getSlide(slideId));
+								},
+							}),
+							"reset-slide": tool({
+								description: "Resets the slide to the initial content",
+								parameters: z.object({
+									slideId: z.string().describe("The ID of the slide to reset"),
+								}),
+								execute: async ({ slideId }) => {
+									console.log("Resetting slide", slideId);
+									// await resetSlide(slideId);
+									await this.setState({
+										...this.state,
+										presentation: {
+											...this.state.presentation,
+											slides: defaultState.presentation.slides,
+										},
+									});
 								},
 							}),
 						},

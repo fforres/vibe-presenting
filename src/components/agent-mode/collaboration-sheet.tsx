@@ -68,6 +68,7 @@ export const CollaborationSheet = ({
 						type: "consolidate-messages",
 						isAdmin,
 						slideId,
+						message: agentInput,
 					} satisfies typeof ConsolidateInputSchema._type),
 				),
 			);

@@ -64,6 +64,7 @@ export const NavigatePreviousSlideInputSchema = z.object({
 export const ConsolidateInputSchema = z.object({
 	type: z.literal("consolidate-messages"),
 	isAdmin: z.boolean(),
+	message: z.string(),
 	slideId: z.string(),
 });
 
