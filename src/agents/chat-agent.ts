@@ -51,15 +51,15 @@ export class Chat extends AIChatAgent<Env> {
 					messages: processedMessages,
 					tools,
 					onChunk: (chunk) => {
-						console.log("onChunk", chunk);
+						// console.log("onChunk", chunk);
 						// dataStream.append(chunk);
 					},
 					onError: (error) => {
-						console.error("onError", error);
+						// console.error("onError", error);
 						// onFinish({ error });
 					},
 					onFinish: (...args) => {
-						console.log("onFinish", args);
+						// console.log("onFinish", args);
 						// @ts-expect-error fix types
 						onFinish(...args);
 					},

@@ -1,33 +1,14 @@
-import {
-	type AnalyzeTextSchema,
-	type DeleteSlideSchema,
-	ErrorOutputSchema,
-	type InitPresentationSchema,
-	type PresentationContent,
-	PresentationUpdatedOutputSchema,
-	type ReorderSlidesSchema,
-	SinglePresentationIncomingMessageSchema,
-	type SinglePresentationOutgoingMessage,
-	SinglePresentationOutgoingMessageSchema,
-	SlideSchema,
-	type UpdateSlideSchema,
-} from "@/agents/single-presentation-message-schema";
+import { SlideSchema } from "@/agents/single-presentation-message-schema";
 import type { Env } from "@/server";
 import { createOpenAI } from "@ai-sdk/openai";
 import {
 	Agent,
-	getAgentByName,
 	type Connection,
 	type ConnectionContext,
 	type WSMessage,
+	getAgentByName,
 } from "agents-sdk";
-import {
-	generateId,
-	generateObject,
-	generateText,
-	tool,
-	streamObject,
-} from "ai";
+import { generateId, generateObject, generateText, tool } from "ai";
 import { z } from "zod";
 /**
  * SinglePresentation Agent implementation that handles presentation content generation and management
@@ -79,6 +60,10 @@ export class SinglePresentationAgent extends Agent<Env, ChatAgentState> {
 		});
 	}
 
+	getMessages() {
+		return this.state.messages;
+	}
+
 	async onMessage(connection: Connection<unknown>, message: WSMessage) {
 		const messageObject = JSON.parse(message.toString()) as {
 			type: "message" | "consolidate-messages";
@@ -101,77 +86,7 @@ export class SinglePresentationAgent extends Agent<Env, ChatAgentState> {
 					},
 				],
 			});
-			// Handle presentation updates with LLM analysis
-			const slidesAgent = await getAgentByName(
-				this.env.Presentations,
-				"fintoc-presentation",
-			);
 
-			const slideContent = await slidesAgent.getSlide(messageObject.slideId);
-
-			console.log("slideContent", slideContent);
-			try {
-				const result = await generateText({
-					model: this.openai("gpt-4o-mini"),
-					prompt: `
-You are an expert at analyzing feedback on presentation slides, and determining if the feedback requires some changes in the presentation slide.
-You will receive:
-- A bunch of feedback messages.
-- Content of a presentation slide.
-
-- You need to determine if the feedback requires some changes in the presentation slide.
-- You will compare the feedback with the content of the slide.
-- If it does, you need to generate more detailed explanation of the slide, and call the tool "update-slide" with the updated slide content.
-
-<existing-slide>
-${JSON.stringify(slideContent, null, 2)}
-</existing-slide>
-
-<feedback>
-${this.state.messages
-	.map((message) => {
-		return `
-  <message>
-  <user-id>${message.id}</user-id>
-  <message>${message.message}</message>
-  </message>
-  `;
-	})
-	.join("\n")}
-</feedback>
-
-Available tools:
-- update-slide: Updates the content of a slide
-  Parameters:
-    - slideId: string (ID of the slide to update)
-    - content: object (The updated slide content following the SlideSchema)
-
-`,
-					tools: {
-						"update-slide": tool({
-							description: "Updates the content of a slide",
-							parameters: z.object({
-								slideId: z.string().describe("The ID of the slide to update"),
-								content: SlideSchema.describe("The updated slide content"),
-							}),
-							execute: async ({ slideId, content }) => {
-								const theSlideAgent = await getAgentByName(
-									this.env.Presentations,
-									"fintoc-presentation",
-								);
-								console.log("theSlideAgent", theSlideAgent);
-								await theSlideAgent.updateSlideContent(slideId, content);
-								console.log(
-									"FINAL SLIDE",
-									await theSlideAgent.getSlide(slideId),
-								);
-							},
-						}),
-					},
-				});
-			} catch (error) {
-				console.log("error in presentation update handling", error);
-			}
 			return;
 		}
 

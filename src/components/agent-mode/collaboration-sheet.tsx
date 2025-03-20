@@ -1,3 +1,5 @@
+import { ConsolidateInputSchema } from "@/agents/message-schemas";
+import type { PresentationAgentState } from "@/agents/presentations-agent";
 import type { ChatAgentState } from "@/agents/single-presentation-agent";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -9,8 +11,10 @@ import { useState } from "react";
 
 export const CollaborationSheet = ({
 	slideId,
+	slidesAgent,
 }: {
 	slideId: string;
+	slidesAgent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 }) => {
 	const { userId, isAdmin } = useAuth();
 	const [agentInput, setAgentInput] = useState("");
@@ -57,6 +61,17 @@ export const CollaborationSheet = ({
 				message: agentInput,
 			}),
 		);
+		if (isAdmin) {
+			slidesAgent.send(
+				JSON.stringify(
+					ConsolidateInputSchema.parse({
+						type: "consolidate-messages",
+						isAdmin,
+						slideId,
+					} satisfies typeof ConsolidateInputSchema._type),
+				),
+			);
+		}
 		setAgentInput("");
 	};
 
@@ -101,7 +116,9 @@ export const CollaborationSheet = ({
 						placeholder="Que no te quedó claro?"
 					/>
 					<div className="flex justify-end pt-4">
-						<Button onClick={handleSubmit}>Send</Button>
+						<Button type="button" onClick={handleSubmit}>
+							Send
+						</Button>
 					</div>
 				</div>
 			</SheetContent>

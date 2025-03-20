@@ -30,6 +30,8 @@ export const DynamicRouteChange = () => {
 			const parsedMessage = OutgoingMessageSchema.parse(
 				JSON.parse(message.data),
 			);
+
+			console.log("PARSED MESSAGE", parsedMessage);
 			if (parsedMessage.type === "initial-connections") {
 				setState((prev) => {
 					if (!prev) {
@@ -38,6 +40,24 @@ export const DynamicRouteChange = () => {
 					return {
 						...prev,
 						connectionCount: parsedMessage.data.connectionCount,
+					};
+				});
+			}
+			if (parsedMessage.type === "updated-slide") {
+				setState((prev) => {
+					if (!prev) {
+						return null;
+					}
+					return {
+						...prev,
+						presentation: {
+							...prev.presentation,
+							slides: prev.presentation.slides.map((slide) =>
+								slide.id === parsedMessage.data.slideId
+									? parsedMessage.data.slide
+									: slide,
+							),
+						},
 					};
 				});
 			}

@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { cn } from "@/lib/utils";
 import { LightbulbIcon, SparklesIcon } from "lucide-react";
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { usePresentationKeyboardNavigation } from "@/hooks/use-presentation-keyboard-navigation";
@@ -446,6 +446,7 @@ export const SingleSlide = memo(
 		generalState: PresentationAgentState;
 		slidesAgent: ReturnType<typeof useSkywardAgent<PresentationAgentState>>;
 	}) => {
+		console.log("id", id);
 		const { theme: currentTheme } = useTheme();
 		const isDark = currentTheme === "dark";
 
@@ -463,13 +464,19 @@ export const SingleSlide = memo(
 			null,
 		);
 
-		useSkywardAgent<SinglePresentationAgentState>({
+		const agent = useSkywardAgent<SinglePresentationAgentState>({
 			agent: "single-presentation-agent",
 			name: id,
 			onStateUpdate(newState: SinglePresentationAgentState) {
 				setState(newState);
 			},
 		});
+
+		useEffect(() => {
+			return () => {
+				agent.close();
+			};
+		}, [agent]);
 
 		// Add keyboard navigation
 		usePresentationKeyboardNavigation(
@@ -549,7 +556,7 @@ export const SingleSlide = memo(
 				<div className="flex gap-2 absolute bottom-4 right-4">
 					<SpeakerNotesSheet notes={slide.speakerNotes} />
 					{generalState.config.collaboration === "active" && (
-						<CollaborationSheet slideId={id} />
+						<CollaborationSheet slideId={id} slidesAgent={slidesAgent} />
 					)}
 				</div>
 			</div>

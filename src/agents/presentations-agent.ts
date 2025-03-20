@@ -7,14 +7,17 @@ import {
 	type WSMessage,
 	getAgentByName,
 } from "agents-sdk";
-import { generateId } from "ai";
+import { generateId, generateText, tool } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
 import {
 	AllPresentationsOutputSchema,
 	IncomingMessageSchema,
 	type OutgoingMessage,
 	OutgoingMessageSchema,
+	UpdatedSlideOutputSchema,
 } from "./message-schemas";
-import type { Slide } from "./single-presentation-message-schema";
+import { SlideSchema, type Slide } from "./single-presentation-message-schema";
+import { z } from "zod";
 
 export type ScheduledItem = {
 	id: string;
@@ -48,6 +51,10 @@ export type PresentationAgentState = {
 export class Presentations extends Agent<Env, PresentationAgentState> {
 	conversations: Record<string, DurableObjectStub<Chat>> = {};
 	connections: Record<string, Connection<unknown>> = {};
+	openai = createOpenAI({
+		apiKey: this.env.OPENAI_API_KEY,
+		//   baseURL: this.env.GATEWAY_BASE_URL,
+	});
 	onConnect(
 		connection: Connection,
 		ctx: ConnectionContext,
@@ -90,6 +97,17 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			},
 		});
 
+		this.broadcast(
+			JSON.stringify(
+				UpdatedSlideOutputSchema.parse({
+					type: "updated-slide",
+					data: {
+						slideId,
+						slide: content,
+					},
+				} satisfies typeof UpdatedSlideOutputSchema._type),
+			),
+		);
 		console.log(this.state.presentation.slides);
 	}
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -98,11 +116,11 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 		this.setState({
 			connectionCount: 0,
 			status: "idle",
-			activeSlide: "wtf-is-an-agent",
-			// activeSlide: null,
+			// activeSlide: "wtf-is-an-agent",
+			activeSlide: null,
 			config: {
 				sidebarNavigation: "inactive",
-				collaboration: "active",
+				collaboration: "inactive",
 				speakerNotes: "private",
 			},
 			presentation: {
@@ -540,28 +558,96 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 			const parsedMessage = IncomingMessageSchema.parse(message);
 			this.setStatus("loading");
 
-			if (parsedMessage.type === "create-presentation") {
-				// Handle create-  message
+			if (parsedMessage.type === "consolidate-messages") {
+				// Handle consolidate-messages message
 				// ...
+				console.log("Consolidando");
 				const { SinglePresentationAgent } = this.env;
-				const id = generateId();
-				// const createdPresentation = this.createPresentation({
-				// 	id,
-				// 	description: parsedMessage.description,
-				// 	name: parsedMessage.name,
-				// });
-				const agent = await getAgentByName(SinglePresentationAgent, id);
-				agent.initialize({
-					type: "init-presentation",
-					presentationId: id,
-					description: parsedMessage.description,
-					name: parsedMessage.name,
-				});
-				this.setState({
-					...this.state,
-				});
-				this.ctx.waitUntil(agent.generateSlides());
+				const agent = await getAgentByName(
+					SinglePresentationAgent,
+					parsedMessage.slideId,
+				);
+				const messages = await agent.getMessages();
+				const slideContent = await this.getSlide(parsedMessage.slideId);
+				try {
+					const result = await generateText({
+						model: this.openai("gpt-4o-mini"),
+						prompt: `
+  You are an expert at analyzing feedback on presentation slides, and determining if the feedback requires some changes in the presentation slide.
+  You will receive:
+  - A bunch of feedback messages.
+  - Content of a presentation slide.
+
+  - You need to determine if the feedback requires some changes in the presentation slide.
+  - You will compare the feedback with the content of the slide.
+  - If it does, you need to generate more detailed explanation of the slide, and call the tool "update-slide" with the updated slide content.
+
+  <existing-slide>
+  ${JSON.stringify(slideContent, null, 2)}
+  </existing-slide>
+
+  <feedback>
+  ${messages
+		.map((message) => {
+			return `
+    <message>
+    <user-id>${message.id}</user-id>
+    <message>${message.message}</message>
+    </message>
+    `;
+		})
+		.join("\n")}
+  </feedback>
+
+  Available tools:
+  - update-slide: Updates the content of a slide
+    Parameters:
+      - slideId: string (ID of the slide to update)
+      - content: object (The updated slide content following the SlideSchema)
+
+  `,
+						tools: {
+							"update-slide": tool({
+								description: "Updates the content of a slide",
+								parameters: z.object({
+									slideId: z.string().describe("The ID of the slide to update"),
+									content: SlideSchema.describe("The updated slide content"),
+								}),
+								execute: async ({ slideId, content }) => {
+									await this.updateSlideContent(slideId, content);
+									console.log("FINAL SLIDE", await this.getSlide(slideId));
+								},
+							}),
+						},
+					});
+				} catch (error) {
+					console.log("error in presentation update handling", error);
+				}
+				return;
 			}
+
+			// if (parsedMessage.type === "create-presentation") {
+			// 	// Handle create-  message
+			// 	// ...
+			// 	const { SinglePresentationAgent } = this.env;
+			// 	const id = generateId();
+			// 	// const createdPresentation = this.createPresentation({
+			// 	// 	id,
+			// 	// 	description: parsedMessage.description,
+			// 	// 	name: parsedMessage.name,
+			// 	// });
+			// 	const agent = await getAgentByName(SinglePresentationAgent, id);
+			// 	agent.initialize({
+			// 		type: "init-presentation",
+			// 		presentationId: id,
+			// 		description: parsedMessage.description,
+			// 		name: parsedMessage.name,
+			// 	});
+			// 	this.setState({
+			// 		...this.state,
+			// 	});
+			// 	this.ctx.waitUntil(agent.generateSlides());
+			// }
 
 			if (parsedMessage.type === "presentations-init") {
 				// Handle all-conversations message

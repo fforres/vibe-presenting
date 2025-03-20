@@ -1,3 +1,4 @@
+import { SlideSchema } from "@/agents/single-presentation-message-schema";
 import { z } from "zod";
 
 // Define the ScheduledItem schema first since it's used in multiple message types
@@ -60,9 +61,16 @@ export const NavigatePreviousSlideInputSchema = z.object({
 	currentSlideId: z.string(),
 });
 
+export const ConsolidateInputSchema = z.object({
+	type: z.literal("consolidate-messages"),
+	isAdmin: z.boolean(),
+	slideId: z.string(),
+});
+
 // Combined input message schema
 export const IncomingMessageSchema = z.discriminatedUnion("type", [
 	ScheduleInputSchema,
+	ConsolidateInputSchema,
 	DeleteScheduleInputSchema,
 	CreatePresentationInputSchema,
 	SetActiveSlideInputSchema,
@@ -121,9 +129,18 @@ export const ConfigUpdatedOutputSchema = z.object({
 	}),
 });
 
+export const UpdatedSlideOutputSchema = z.object({
+	type: z.literal("updated-slide"),
+	data: z.object({
+		slideId: z.string(),
+		slide: SlideSchema,
+	}),
+});
+
 // Combined output message schema
 export const OutgoingMessageSchema = z.discriminatedUnion("type", [
 	SchedulesOutputSchema,
+	UpdatedSlideOutputSchema,
 	RunScheduleOutputSchema,
 	ErrorOutputSchema,
 	ScheduleOutputSchema,
