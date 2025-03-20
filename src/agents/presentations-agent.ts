@@ -84,6 +84,13 @@ const defaultState: PresentationAgentState = {
 				design: "title",
 			},
 			{
+				id: "vibe-presenting.bman.dev",
+				title: "vibe-presenting.bman.dev",
+				topic: "vibe-presenting.bman.dev",
+				speakerNotes: "",
+				design: "title",
+			},
+			{
 				id: "sobre-mi",
 				title: "Hola, soy Felipe Torres 👋",
 				topic: "Sobre mi",
