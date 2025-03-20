@@ -93,7 +93,6 @@ const SidebarSubButton = ({
 					"bg-gradient-to-r from-yellow-100 to-green-100 border border-yellow-300",
 			)}
 			style={{
-				fontFamily: "'Arial', sans-serif",
 				color: isActive ? "#9400D3" : isDarkMode ? "#4D9FFF" : "#0000EE",
 				textDecoration: isActive ? "none" : "underline",
 			}}
@@ -191,13 +190,17 @@ export function AppSidebar({
 					background: "linear-gradient(135deg, #f5f5f5, #e0e0ff)",
 				}}
 			>
-				<SidebarHeader className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 border-b-2 border-black">
+				<SidebarHeader
+					className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 border-b-2 border-black"
+					style={{
+						fontFamily: "'Comic Sans MS', cursive",
+					}}
+				>
 					<div className="flex items-center gap-2 justify-start p-2">
 						<Button
 							variant="link"
 							className="px-2 py-2 m-0 relative group"
 							style={{
-								fontFamily: "'Comic Sans MS', cursive",
 								fontSize: "1.25rem",
 								fontWeight: "bold",
 								color: "#FFFFFF",

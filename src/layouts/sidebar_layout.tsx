@@ -112,7 +112,6 @@ export default function SidebarLayout({
 									<BreadcrumbPage
 										className="font-bold"
 										style={{
-											fontFamily: "'Comic Sans MS', cursive",
 											color: "#9400D3",
 										}}
 									>

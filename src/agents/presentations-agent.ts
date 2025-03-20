@@ -328,7 +328,7 @@ Lo mismo que hace bueno al software tradicional...pero para agentes.
 						topic: "Summary",
 						description: "",
 						markdownContentLeft: `
-### Tenemos que
+### Tenemos que:
 - AI va a ser base de muchisimo software.
 - LLMs habilitan crear software "on-demand".
 - AI-First software va en subida.
@@ -338,7 +338,7 @@ Lo mismo que hace bueno al software tradicional...pero para agentes.
 
 `,
 						markdownContentRight: `
-### El equipo @ Skyward.AI analizó:
+### En Skyward.AI dijimos:
 - Que es lo mas frustrante de trabajar con Llms.
 - Que no es tan frustrante, pero que nos gustaría que pasara.
 - Que es lo que nos encanta de trabajar con Llms.
@@ -493,7 +493,7 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 					{
 						id: "code-example",
 						title: "Code Example",
-						subtitle: "Fuck it, lets look at some code",
+						subtitle: "Fuck it, lets look at some example",
 						topic: "Code Example",
 						description: "",
 						design: "title",
