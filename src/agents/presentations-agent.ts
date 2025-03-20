@@ -135,8 +135,8 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 			activeSlide: null,
 			config: {
 				sidebarNavigation: "inactive",
-				// collaboration: "inactive",
-				collaboration: "active",
+				collaboration: "inactive",
+				// collaboration: "active",
 				speakerNotes: "private",
 			},
 			presentation: {
