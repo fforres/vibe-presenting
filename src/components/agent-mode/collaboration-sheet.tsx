@@ -116,7 +116,13 @@ export const CollaborationSheet = ({
 						placeholder="Que no te quedó claro?"
 					/>
 					<div className="flex justify-end pt-4">
-						<Button type="button" onClick={handleSubmit}>
+						<Button
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								handleSubmit();
+							}}
+						>
 							Send
 						</Button>
 					</div>

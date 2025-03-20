@@ -12,7 +12,6 @@ export const DynamicRouteChange = () => {
 	const [state, setState] = useState<PresentationAgentState | null>(null);
 	const agent = useSkywardAgent({
 		agent: "presentations",
-		id: "fintoc-presentation",
 		onStateUpdate(state: PresentationAgentState) {
 			console.log("YOOOOOO UPDATED STATE", state);
 			setState(state);
@@ -26,42 +25,41 @@ export const DynamicRouteChange = () => {
 				),
 			);
 		},
-		onMessage(message) {
-			const parsedMessage = OutgoingMessageSchema.parse(
-				JSON.parse(message.data),
-			);
-
-			console.log("PARSED MESSAGE", parsedMessage);
-			if (parsedMessage.type === "initial-connections") {
-				setState((prev) => {
-					if (!prev) {
-						return null;
-					}
-					return {
-						...prev,
-						connectionCount: parsedMessage.data.connectionCount,
-					};
-				});
-			}
-			if (parsedMessage.type === "updated-slide") {
-				setState((prev) => {
-					if (!prev) {
-						return null;
-					}
-					return {
-						...prev,
-						presentation: {
-							...prev.presentation,
-							slides: prev.presentation.slides.map((slide) =>
-								slide.id === parsedMessage.data.slideId
-									? parsedMessage.data.slide
-									: slide,
-							),
-						},
-					};
-				});
-			}
-		},
+		// onMessage(message) {
+		// 	const parsedMessage = OutgoingMessageSchema.parse(
+		// 		JSON.parse(message.data),
+		// 	);
+		// 	console.log("PARSED MESSAGE", parsedMessage);
+		// 	if (parsedMessage.type === "initial-connections") {
+		// 		setState((prev) => {
+		// 			if (!prev) {
+		// 				return null;
+		// 			}
+		// 			return {
+		// 				...prev,
+		// 				connectionCount: parsedMessage.data.connectionCount,
+		// 			};
+		// 		});
+		// 	}
+		// 	if (parsedMessage.type === "updated-slide") {
+		// 		setState((prev) => {
+		// 			if (!prev) {
+		// 				return null;
+		// 			}
+		// 			return {
+		// 				...prev,
+		// 				presentation: {
+		// 					...prev.presentation,
+		// 					slides: prev.presentation.slides.map((slide) =>
+		// 						slide.id === parsedMessage.data.slideId
+		// 							? parsedMessage.data.slide
+		// 							: slide,
+		// 					),
+		// 				},
+		// 			};
+		// 		});
+		// 	}
+		// },
 	});
 
 	useEffect(() => {

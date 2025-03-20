@@ -181,7 +181,7 @@ export function SettingsModal({
 		React.useState(collaborationEnabled);
 	const { theme, setTheme } = useTheme();
 	const isDarkMode = theme === "dark";
-	const { isLoggedIn } = useAuth();
+	const { isAdmin } = useAuth();
 
 	React.useEffect(() => {
 		setIsCollaborationEnabled(collaborationEnabled);
@@ -224,16 +224,18 @@ export function SettingsModal({
 
 				<div className="grid gap-4 py-4">
 					{/* Login Section */}
-					<SettingsItem
-						id="collaboration-mode"
-						icon={UsersIcon}
-						title="Agent Mode"
-						description="Enable vibe-presenting's agent mode."
-						checked={isCollaborationEnabled}
-						onCheckedChange={() =>
-							setIsCollaborationEnabled(!isCollaborationEnabled)
-						}
-					/>
+					{isAdmin && (
+						<SettingsItem
+							id="collaboration-mode"
+							icon={UsersIcon}
+							title="Agent Mode"
+							description="Enable vibe-presenting's agent mode."
+							checked={isCollaborationEnabled}
+							onCheckedChange={() =>
+								setIsCollaborationEnabled(!isCollaborationEnabled)
+							}
+						/>
+					)}
 
 					<SettingsItem
 						id="theme-mode"
