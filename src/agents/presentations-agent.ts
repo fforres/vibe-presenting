@@ -129,7 +129,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						id: "el-landing",
 						title: "Arquitectura de aplicaciones en un mundo post AI",
 						subtitle:
-							"(Ranteos. Cosas que aprendí construyendo Skyward.AI, y pa donde veo que va la cosa)",
+							"(Cosas que aprendí construyendo Skyward.AI, y pa donde veo que va la cosa)",
 						topic: "El landing",
 						description:
 							"Ideas, patrones y 'Rants' sobre desarrollar software AI-First. (Pensamientos al rededor de `Sync Engines`, `el Edge` y `LLMs`) ",
@@ -149,7 +149,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 					{
 						id: "thesis-2",
 						title:
-							"El accesso a deep-reasoning models va ser (estúpidamente) barato.",
+							"El accesso a deeeeeeeep reasoning models va ser (estúpidamente) barato.",
 						topic: "Thesis 2",
 						subtitle: "Thesis 2",
 						speakerNotes: "",
@@ -168,50 +168,29 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						title: "Como diferencio mi software de la competencia?",
 						description: "",
 						topic: "FML. What's our Moat then?",
-						markdownContentLeft: `1. ## Si AI estará en todos lados.
-2. ## Si el acceso a "pensar" será barato.
-3. ## Si la gente podra crear sus propias soluciones.
+						markdownContent: `
+### Entonces:
 
-						`,
-						markdownContentRight: `
-# 🤔🤔🤔
-# Cual es el MOAT?
+1. ### Si AI estará en todos lados.
+2. ### Si el acceso a "pensar" será barato.
+3. ### Si la gente podra crear sus propias soluciones.
 
+## 🤔🤔🤔
+## Cual es el MOAT?
 						`,
-						design: "two-text-columns",
+						image: {
+							prompt:
+								"An image of a person thinking deeply Even a bit disheartened. They are a javascript developer so put some js/ts books around. This is important. And they are thinking about the future of software.",
+						},
+						design: "two-columns-with-image",
 					},
 					{
 						id: "agents",
 						title: "Agents",
 						topic: "Agents",
-						subtitle: "The 'AI-First' way to build software",
+						subtitle: "An 'AI-First' way to build software",
 						speakerNotes: "",
 						design: "title",
-					},
-					{
-						id: "wtf-is-an-agent",
-						title: "¿Qué diablos es un Agent?",
-						topic: "WTF is an Agent?",
-						markdownContent: `
-### Un programa autónomo que puede:
-  - Interactuar con su entorno
-  - Obtener data de fuentes externas
-  - Usar esa data para realizar acciones
-  - (MCP)
-
-### Características :
-  - "Razonamiento" (LLMs para decidir)
-  - Herramientas predefinidas (APIs, BDD, agentes)
-  - Autonomía (opera sin intervención constante)
-  - Persistencia (mantiene estado)
-`,
-						image: {
-							prompt:
-								"Diagram showing an AI agent system with perception, reasoning, and action components interacting with various tools and APIs",
-						},
-						speakerNotes:
-							"Un agent es fundamentalmente diferente de un simple chatbot o una aplicación tradicional con IA. Es un sistema autónomo que combina la capacidad de razonamiento de los LLMs con la habilidad de interactuar con herramientas externas y mantener un estado persistente. Los agents pueden trabajar en segundo plano, tomar decisiones complejas y ejecutar tareas sin necesidad de supervisión constante. Esto los hace ideales para automatizar flujos de trabajo complejos que antes requerían intervención humana.",
-						design: "two-columns-with-image",
 					},
 					// asdadss
 					{
@@ -231,6 +210,31 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						speakerNotes: "",
 						design: "two-columns-with-image",
 					},
+
+					{
+						id: "wtf-is-an-agent",
+						title: "¿Qué diablos es un Agent?",
+						topic: "WTF is an Agent?",
+						markdownContent: `
+### Un programa autónomo que puede:
+  - Interactuar con su entorno
+  - Obtener data de fuentes externas
+  - Realizar acciones (MCP anyone?)
+
+### Características :
+  - **"Razonamiento" (LLMs para decidir)** ✨
+  - Herramientas predefinidas (APIs, BDD, agentes)
+  - Autonomía (opera sin intervención constante)
+  - **Persistencia (mantiene estado)** ✨
+`,
+						image: {
+							prompt:
+								"Diagram showing an AI agent system with perception, reasoning, and action components interacting with various tools and APIs",
+						},
+						speakerNotes:
+							"Un agent es fundamentalmente diferente de un simple chatbot o una aplicación tradicional con IA. Es un sistema autónomo que combina la capacidad de razonamiento de los LLMs con la habilidad de interactuar con herramientas externas y mantener un estado persistente. Los agents pueden trabajar en segundo plano, tomar decisiones complejas y ejecutar tareas sin necesidad de supervisión constante. Esto los hace ideales para automatizar flujos de trabajo complejos que antes requerían intervención humana.",
+						design: "two-columns-with-image",
+					},
 					{
 						id: "is-there-actually-a-moat",
 						title: "Entonces... Hay un Moat?",
@@ -238,11 +242,11 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						topic: "Entonces... Hay un Moat?",
 						markdownContent: `
 
-### Si, y es:
+# Si
 
-## 1. Data Privada
-## 2. Buen UX
-## 3. Buen AX
+# 1. Data Privada
+# 2. Buen UX
+# 3. Buen AX
 						`,
 						image: {
 							prompt:
@@ -257,7 +261,6 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 						description: "",
 						markdownContentLeft: `
 ### UX — User Experience
-Lo mismo que hace bueno al software tradicional.
 - Entender y priorizar las necesidades y objetivos del usuario.
 - Resuelve?
 - Es simple de usar? Es facil de entender?
@@ -265,6 +268,7 @@ Lo mismo que hace bueno al software tradicional.
             `,
 						markdownContentRight: `
 ### AX — Agent Experience
+Lo mismo que hace bueno al software tradicional...pero para agentes.
 - Mathias Billmann (CEO Netlify)
 - [Introducing AX: Why Agent Experience Matters](https://biilmann.blog/articles/introducing-ax/)
 - [The Era of Agent Experience (AX)](https://www.netlify.com/blog/the-era-of-agent-experience-ax/)
@@ -276,8 +280,8 @@ Lo mismo que hace bueno al software tradicional.
 					},
 					{
 						id: "separator",
-						title: "====== BREAK ======",
-						topic: "====== BREAK ======",
+						title: "====== <br /> ======",
+						topic: "====== <br /> ======",
 						subtitle: "Preguntas? Consultas? Reclamos?",
 						design: "title",
 					},
@@ -293,8 +297,7 @@ Lo mismo que hace bueno al software tradicional.
 - AI-First software va en subida.
 - Agentes es el core de AI-First software.
 - Todo esto implica muchísimos más agentes.
-- Los Moats de un buen software de AI son:
-  - Data Privada, buen UX y buen AX
+- Tenemos Moats de un buen software de AI.
 
 `,
 						markdownContentRight: `
@@ -325,7 +328,7 @@ Lo mismo que hace bueno al software tradicional.
 						id: "lets-talk-architecture-2",
 						title: "¿El Edge?",
 						subtitle:
-							"Es un paradigma de computación distribuida. El compute y storage se mueven más cerca de la fuente de datos. (Y no estan en un US-WEST-1).",
+							"Paradigma de computación distribuida. Compute y storage se mueven más cerca de la fuente de datos. (AKA... no estan en un US-WEST-1).",
 						topic: "¿El Edge? (What is it?)",
 						speakerNotes: "",
 						design: "title",
@@ -355,7 +358,7 @@ Lo mismo que hace bueno al software tradicional.
 - Barato (100K requests/month al dia Gratis. 10M/Mes por 5 USD).
 						`,
 						image: {
-							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/c41afd99-e02c-41ed-be78-042f436b7400/public",
+							url: "https://imagedelivery.net/Cus4FWn40G3bInNzY0Wl9A/8b656f37-cbb0-44ef-490e-afbed7f84500/public",
 						},
 						speakerNotes: "",
 						design: "two-columns-with-image",
@@ -382,8 +385,8 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 					},
 					{
 						id: "separator 2",
-						title: "====== BREAK 2 ======",
-						topic: "====== BREAK 2 ======",
+						title: "====== <br /> 2 ======",
+						topic: "====== <br /> 2 ======",
 						subtitle: "Preguntas? Consultas? Reclamos?",
 						design: "title",
 					},
@@ -453,7 +456,7 @@ Cuento corto:  Durable Objects habilitan "Stateful Serverless".`,
 					{
 						id: "code-example",
 						title: "Code Example",
-						subtitle: "Fuck it, let look at some code",
+						subtitle: "Fuck it, lets look at some code",
 						topic: "Code Example",
 						description: "",
 						design: "title",

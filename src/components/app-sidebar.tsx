@@ -44,7 +44,7 @@ const SidebarMainButton = ({
 	return (
 		<Button
 			variant={"ghost"}
-			className={cn("font-medium w-full justify-start mb-1 relative", {
+			className={cn("font-bold w-full justify-start mb-1 relative text-base", {
 				"cursor-pointer": !!onClick,
 				"cursor-default": !onClick,
 				"bg-gradient-to-r from-blue-100 to-purple-100 border border-blue-300":
@@ -89,7 +89,7 @@ const SidebarSubButton = ({
 			variant={isActive ? "default" : "ghost"}
 			size="sm"
 			className={cn(
-				"font-medium mb-0.5",
+				"font-bold mb-0.5 text-base",
 				isActive &&
 					"bg-gradient-to-r from-yellow-100 to-green-100 border border-yellow-300",
 			)}
@@ -249,6 +249,7 @@ export function AppSidebar({
 											isActive={item.isActive ?? false}
 											onClick={item?.onClick}
 											showBlink={showBlink}
+											className
 										/>
 									</SidebarMenuButton>
 									{item.items?.map((presentation) => (

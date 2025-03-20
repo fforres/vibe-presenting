@@ -6,40 +6,42 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 		<div className="w-full max-w-3xl mx-auto space-y-6 flex flex-col justify-center h-full">
 			{/* Animated rainbow border - responsive padding */}
 			<div
-				className="border-4 @sm:border-8 border-dashed p-2 @sm:p-4"
+				className="border-4 @sm:border-8 border-dashed py-8 text-center"
 				style={{
 					borderImageSource:
-						"linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)",
+						"conic-gradient(from var(--angle), red, orange, yellow, green, blue, indigo, violet, red)",
 					borderImageSlice: 1,
+					borderImageWidth: "10px",
+					animation: "rotate-border 6s linear infinite",
 				}}
 			>
-				<div className="text-center">
-					{/* Retro font and styling - responsive text size */}
-					<h1
-						className="text-4xl @sm:text-6xl font-bold mb-4 @sm:mb-6 break-words"
-						style={{
-							fontFamily: "'Comic Sans MS', cursive, sans-serif",
-							textShadow: "1px 1px 0 #00FFFF, 2px 2px 0 #0000FF",
-							letterSpacing: "1px",
-							lineHeight: "1.2",
-						}}
-					>
-						<RainbowText text="Vibe Presenting" />
-					</h1>
-					{/* Fixed marquee element - continuous animation */}
-					<div className="overflow-hidden mb-4 @sm:mb-6 py-1">
-						<div className="marquee-container">
-							<span
-								className="text-base @sm:text-xl font-bold inline-block whitespace-nowrap"
-								style={{ color: "#FF0000" }}
-							>
-								★★★ Welcome to Vibe Presenting! The Bestest presentation tool on
-								the The Information Superhighway ! ★★★ Welcome to Vibe
-								Presenting! The Bestest presentation tool on the Cybesrpace! ★★★
-							</span>
-						</div>
+				{/* Retro font and styling - responsive text size */}
+				<h1
+					className="text-4xl @sm:text-6xl font-bold mb-4 @sm:mb-6 break-words px-6"
+					style={{
+						fontFamily: "'Comic Sans MS', cursive, sans-serif",
+						textShadow: "1px 1px 0 #00FFFF, 2px 2px 0 #0000FF",
+						letterSpacing: "1px",
+						lineHeight: "1.2",
+					}}
+				>
+					<RainbowText text="Vibe Presenting" animated />
+				</h1>
+				{/* Fixed marquee element - continuous animation */}
+				<div className="overflow-hidden mb-4 @sm:mb-6 py-1">
+					<div className="marquee-container">
+						<span
+							className="text-base @sm:text-xl font-bold inline-block whitespace-nowrap"
+							style={{ color: "#FF0000" }}
+						>
+							★★★ Welcome to Vibe Presenting! The Bestest presentation tool on
+							the The Information Superhighway ! ★★★ Welcome to Vibe Presenting!
+							The Bestest presentation tool on the Cybesrpace! ★★★
+						</span>
 					</div>
+				</div>
 
+				<div className="flex flex-col gap-4 px-4">
 					<p
 						className="mb-4 @sm:mb-6 font-bold text-xl leading-relaxed"
 						style={{ fontFamily: "'Courier New', monospace" }}
@@ -54,7 +56,6 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 						>
 							RADICAL
 						</span>{" "}
-						tool that helps you create and manage{" "}
 						<span
 							style={{
 								color: "#00FFFF",
@@ -62,9 +63,10 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
 								padding: "4px",
 							}}
 						>
-							AWESOME
+							(& IN PROGRESS)
 						</span>{" "}
-						presentations!
+						tool that helps you create, manage and adapt presentations using AI
+						Agents.
 					</p>
 
 					{/* Hit counter and visitor stats - responsive layout */}
@@ -135,6 +137,18 @@ export const Index = ({ state }: { state: PresentationAgentState }) => {
           .marquee-container {
             animation: marquee-scroll 15s linear infinite;
           }
+        }
+
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        @keyframes rotate-border {
+            to {
+                --angle: 360deg;
+            }
         }
       `}</style>
 		</div>

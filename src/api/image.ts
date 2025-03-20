@@ -38,7 +38,7 @@ export const getImage1 = async ({
 	const response = await AI.run(
 		model,
 		{
-			prompt: `You'll generate an image. It will have a 90's web-design aesthetic. Stylized and cartoonish. Here's your prompt: ${prompt}`,
+			prompt: `You'll generate an image. Stylized and cartoonish. Here's your prompt: ${prompt}`,
 			negative_prompt: "text",
 			height: 1024,
 			width: 1024,
