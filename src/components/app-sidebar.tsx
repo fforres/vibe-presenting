@@ -22,7 +22,7 @@ import { useTheme } from "@/features/theme-provider";
 import { useAuth } from "@/hooks/use-auth";
 import type { useSkywardAgent } from "@/hooks/use-skyward-agent";
 import { cn } from "@/lib/utils";
-import { SettingsIcon } from "lucide-react";
+import { GithubIcon, SettingsIcon } from "lucide-react";
 import type * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -305,6 +305,22 @@ export function AppSidebar({
 										</div>{" "}
 										<span>Skyward</span>
 									</span>
+								</a>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+						<SidebarMenuItem className="flex-1">
+							<SidebarMenuButton
+								size="lg"
+								className="rounded-full size-10 cursor-pointer bg-white/50 hover:bg-white/70 text-center flex items-center justify-center"
+								asChild
+							>
+								<a
+									href="https://github.com/fforres/vibe-presenting"
+									target="_blank"
+									rel="noreferrer"
+									className="bg-white/50 hover:bg-white/70 py-1 rounded border border-gray-400 px-4"
+								>
+									<GithubIcon className="size-5 text-black" />
 								</a>
 							</SidebarMenuButton>
 						</SidebarMenuItem>

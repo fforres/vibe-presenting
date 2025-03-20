@@ -534,13 +534,7 @@ export const SingleSlide = memo(
 										/>
 									);
 								case "two-text-columns":
-									return (
-										<TwoTextColumnsSlide
-											key={id}
-											slideData={slide}
-											state={state}
-										/>
-									);
+									return <TwoTextColumnsSlide key={id} slideData={slide} />;
 								case "two-columns-with-image":
 									return (
 										<TwoColumnsWithImageSlide
