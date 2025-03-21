@@ -28,6 +28,9 @@ export class SinglePresentationAgent extends Agent<Env, ChatAgentState> {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	constructor(env: any, agent: any) {
 		super(env, agent);
+		if (this.state) {
+			return;
+		}
 		this.setState({
 			connections: 0,
 			messages: [],
