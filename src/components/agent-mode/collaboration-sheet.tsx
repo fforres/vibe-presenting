@@ -52,6 +52,9 @@ export const CollaborationSheet = ({
 	// });
 
 	const handleSubmit = () => {
+		if (agentInput.trim() === "") {
+			return;
+		}
 		agent.send(
 			JSON.stringify({
 				type: "message",
@@ -74,6 +77,16 @@ export const CollaborationSheet = ({
 			);
 		}
 		setAgentInput("");
+	};
+
+	const handleReset = () => {
+		agent.send(
+			JSON.stringify({
+				isAdmin,
+				slideId,
+				type: "reset-messages",
+			}),
+		);
 	};
 
 	return (
@@ -116,8 +129,9 @@ export const CollaborationSheet = ({
 						className="resize-none"
 						placeholder="Que no te quedó claro?"
 					/>
-					<div className="flex justify-end pt-4">
+					<div className="flex justify-end pt-4 gap-4">
 						<Button
+							disabled={agentInput.trim() === ""}
 							type="button"
 							onClick={(e) => {
 								e.preventDefault();
@@ -126,6 +140,17 @@ export const CollaborationSheet = ({
 						>
 							Send
 						</Button>
+						{isAdmin && (
+							<Button
+								type="button"
+								onClick={(e) => {
+									e.preventDefault();
+									handleReset();
+								}}
+							>
+								Reset
+							</Button>
+						)}
 					</div>
 				</div>
 			</SheetContent>

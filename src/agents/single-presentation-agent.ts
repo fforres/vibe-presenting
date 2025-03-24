@@ -69,7 +69,7 @@ export class SinglePresentationAgent extends Agent<Env, ChatAgentState> {
 
 	async onMessage(connection: Connection<unknown>, message: WSMessage) {
 		const messageObject = JSON.parse(message.toString()) as {
-			type: "message" | "consolidate-messages";
+			type: "message" | "consolidate-messages" | "reset-messages";
 			userId: string;
 			slideId: string;
 			isAdmin: boolean;
@@ -89,7 +89,13 @@ export class SinglePresentationAgent extends Agent<Env, ChatAgentState> {
 					},
 				],
 			});
-
+			console.log("messageObject.type", messageObject.type);
+			if (messageObject.type === "reset-messages") {
+				this.setState({
+					...this.state,
+					messages: [],
+				});
+			}
 			return;
 		}
 

@@ -995,7 +995,7 @@ export class Presentations extends Agent<Env, PresentationAgentState> {
 					(message) => message.isAdmin === false,
 				);
 				console.log("MESSAGES obtained", messages);
-				const { getSlide } = this;
+				const { getSlide, setState } = this;
 				console.log("Getting slide");
 				const slideContent = this.state.presentation.slides.find(
 					(slide) => slide.id === parsedMessage.slideId,
@@ -1117,7 +1117,7 @@ ${parsedMessage.message}
 								execute: async ({ slideId }) => {
 									console.log("Resetting slide", slideId);
 									// await resetSlide(slideId);
-									await this.setState({
+									await setState({
 										...this.state,
 										presentation: {
 											...this.state.presentation,
